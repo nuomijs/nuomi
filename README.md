@@ -1,1 +1,3 @@
-# nuomi
+```
+npm i --save nuomi
+```
