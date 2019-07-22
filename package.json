@@ -1,0 +1,37 @@
+{
+  "name": "nuomi",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "repository": "git@github.com:nuomijs/nuomi.git",
+  "author": "yinjiazeng <yinjiazeng@163.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "redux": "^4.0.1"
+  },
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@nuofe/eslint-config-common": "5.8.0",
+    "babel-core": "^6.26.3",
+    "cross-env": "^5.2.0",
+    "prettier": "^1.18.2",
+    "rollup": "^1.16.4",
+    "rollup-plugin-babel": "^4.3.3",
+    "typescript": "^3.5.2",
+    "webpack": "^4.36.1",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*{.css,.js,.json,.less,.mjs,.ts}\"",
+    "lint": "npm run format && eslint --fix --ext \".js,.mjs,.ts\" .",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib"
+  }
+}
