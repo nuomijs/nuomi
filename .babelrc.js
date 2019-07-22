@@ -11,6 +11,9 @@ module.exports = {
         modules: BABEL_ENV === 'cjs' ? 'cjs' : false,
       },
     ],
+    '@babel/preset-react',
   ],
-  plugins: [].filter(Boolean),
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+  ],
 };

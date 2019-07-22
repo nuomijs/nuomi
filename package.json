@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "redux": "^4.0.1"
@@ -18,11 +19,14 @@
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/node": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "@nuofe/eslint-config-common": "5.8.0",
     "babel-core": "^6.26.3",
     "cross-env": "^5.2.0",
     "prettier": "^1.18.2",
+    "rimraf": "^2.6.3",
     "rollup": "^1.16.4",
     "rollup-plugin-babel": "^4.3.3",
     "typescript": "^3.5.2",
@@ -32,6 +36,6 @@
   "scripts": {
     "format": "prettier --write \"**/*{.css,.js,.json,.less,.mjs,.ts}\"",
     "lint": "npm run format && eslint --fix --ext \".js,.mjs,.ts\" .",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib"
+    "build": "rimraf lib && cross-env BABEL_ENV=cjs babel src --out-dir lib"
   }
 }
