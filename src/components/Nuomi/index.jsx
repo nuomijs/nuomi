@@ -45,7 +45,7 @@ class Nuomi extends React.PureComponent {
   render() {
     const { loaded, props } = this.state;
     if (loaded) {
-      return <BaseNuomi ref={this.ref} {...props} store={this.store} />;
+      return <BaseNuomi {...props} ref={this.ref} store={this.store} />;
     }
     return null;
   }

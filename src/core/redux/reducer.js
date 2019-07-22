@@ -3,11 +3,16 @@ import store from './store';
 
 const reducers = {};
 
-export const createReducer = (key, reducer) => {
-  reducers[key] = reducer;
-  return combineReducers({
-    ...reducers,
-  });
+const replaceReducer = () => {
+  store.replaceReducer(combineReducers(reducers));
 };
 
-export const removeReducer = () => {};
+export const createReducer = (key, reducer) => {
+  reducers[key] = reducer;
+  replaceReducer();
+};
+
+export const removeReducer = (key) => {
+  delete reducers[key];
+  replaceReducer();
+};

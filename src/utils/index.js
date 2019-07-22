@@ -12,6 +12,8 @@ export const isObject = (obj) => obj && isType('Object')(obj);
 
 export const isArray = Array.isArray || isType('Array');
 
+export const isNative = (obj) => /native code/.test(obj.toString()) && typeof obj !== 'undefined';
+
 export const extend = (...args) => {
   const [object, newObject] = [...args];
   let currentObject = {};
