@@ -4,6 +4,7 @@ module.exports = {
     'consistent-return': 'off',
     'no-unused-vars': 'off',
     'no-unused-expressions': 'off',
+    'class-methods-use-this': 'off',
   },
   env: {
     browser: true,

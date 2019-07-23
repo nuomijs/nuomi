@@ -15,7 +15,7 @@ export const isArray = Array.isArray || isType('Array');
 export const isNative = (obj) => /native code/i.test(obj.toString()) && typeof obj !== 'undefined';
 
 export const extend = (...args) => {
-  const [object, newObject] = [...args];
+  const [object, newObject] = args;
   let currentObject = {};
   if (isObject(newObject)) {
     const { state, data, reducers, ...rest } = newObject;

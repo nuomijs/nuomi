@@ -6,20 +6,28 @@ import { matchPath } from '../../core/router';
 
 class Route extends React.PureComponent {
   static defaultProps = {
+    path: '/',
     wrapper: false,
   };
 
   static propTypes = {
+    path: PropTypes.string,
     wrapper: PropTypes.bool,
   };
 
   static wrappers = [];
+
+  static paths = {};
 
   constructor(...args) {
     super(...args);
     this.store = {};
     this.wrapperRef = React.createRef();
     this.routeComponent = null;
+    const { path } = this.props;
+    if (!Route.paths[path]) {
+      Route.paths[path] = this;
+    }
   }
 
   componentDidMount() {
@@ -45,28 +53,34 @@ class Route extends React.PureComponent {
   }
 
   render() {
+    const { path, wrapper } = this.props;
+    // 重复的path将不被渲染
+    if (Route.paths[path] !== this) {
+      return null;
+    }
     return (
       <RouterContext.Consumer>
         {({ location }) => {
-          const { path, wrapper } = this.props;
-          const match = matchPath(location, path);
-          if (match) {
-            this.visibleWrapperHandler();
-          }
-          if (wrapper && this.routeComponent) {
-            return this.routeComponent;
-          }
-          if (match) {
-            const routeComponent = <NuomiRoute {...this.props} store={this.store} />;
-            if (wrapper) {
-              this.routeComponent = (
-                <div ref={this.wrapperRef} className="nuomi-route-wrapper">
-                  {routeComponent}
-                </div>
-              );
+          if (location) {
+            const match = matchPath(location, path);
+            if (match) {
+              this.visibleWrapperHandler();
+            }
+            if (wrapper && this.routeComponent) {
               return this.routeComponent;
             }
-            return routeComponent;
+            if (match) {
+              const routeComponent = <NuomiRoute {...this.props} store={this.store} />;
+              if (wrapper) {
+                this.routeComponent = (
+                  <div ref={this.wrapperRef} className="nuomi-route-wrapper">
+                    {routeComponent}
+                  </div>
+                );
+                return this.routeComponent;
+              }
+              return routeComponent;
+            }
           }
           return null;
         }}
