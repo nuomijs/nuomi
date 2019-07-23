@@ -1,66 +1,77 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-/* eslint-disable no-unused-vars */
-import BaseRoute from '../BaseRoute';
-import Nuomi from '../Nuomi';
+import NuomiRoute from '../NuomiRoute';
+import RouterContext from '../RouterContext';
+import { matchPath } from '../../core/router';
 
-class Route extends Nuomi {
+class Route extends React.PureComponent {
   static defaultProps = {
     wrapper: false,
-    onBefore: null,
   };
 
   static propTypes = {
     wrapper: PropTypes.bool,
-    onBefore: PropTypes.func,
   };
+
+  static wrappers = [];
 
   constructor(...args) {
     super(...args);
     this.store = {};
-    const { async, ...rest } = this.props;
-    this.ref = createRef();
-    this.wrapperRef = createRef();
-    this.state = {
-      loaded: typeof async !== 'function',
-      visible: false,
-      props: { ...rest },
-    };
+    this.wrapperRef = React.createRef();
+    this.routeComponent = null;
   }
 
   componentDidMount() {
-    const { props } = this;
-    if (props.onBefore) {
-      const before = props.onBefore(() => {
-        this.visibleHandler();
-      });
-      if (before === true) {
-        this.visibleHandler();
-      }
-    } else {
-      this.visibleHandler();
+    const { current } = this.wrapperRef;
+    if (current) {
+      Route.wrappers.push(current);
     }
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
+    const { current } = this.wrapperRef;
+    if (current) {
+      Route.wrappers = Route.wrappers.filter((wrapper) => wrapper !== current);
+    }
   }
 
-  visibleHandler() {
-    this.loadProps();
+  visibleWrapperHandler() {
+    const { current } = this.wrapperRef;
+    Route.wrappers.forEach((wrapper) => {
+      const elem = wrapper;
+      elem.style.display = current === elem ? 'block' : 'none';
+    });
   }
 
   render() {
-    const { loaded, visible, props } = this.state;
-    const { wrapper } = props;
-    if (loaded && visible) {
-      const RouteComponent = <BaseRoute ref={this.ref} {...props} store={this.store} />;
-      if (wrapper) {
-        return <div ref={this.wrapperRef}>{RouteComponent}</div>;
-      }
-      return RouteComponent;
-    }
-    return null;
+    return (
+      <RouterContext.Consumer>
+        {({ location }) => {
+          const { path, wrapper } = this.props;
+          const match = matchPath(location, path);
+          if (match) {
+            this.visibleWrapperHandler();
+          }
+          if (wrapper && this.routeComponent) {
+            return this.routeComponent;
+          }
+          if (match) {
+            const routeComponent = <NuomiRoute {...this.props} store={this.store} />;
+            if (wrapper) {
+              this.routeComponent = (
+                <div ref={this.wrapperRef} className="nuomi-route-wrapper">
+                  {routeComponent}
+                </div>
+              );
+              return this.routeComponent;
+            }
+            return routeComponent;
+          }
+          return null;
+        }}
+      </RouterContext.Consumer>
+    );
   }
 }
 

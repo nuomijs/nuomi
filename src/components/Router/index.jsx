@@ -1,46 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import RouterContext from '../RouterContext';
+import { createRouter, listener, removeListener } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
-    prefix: '#!',
+    redirect: null,
   };
 
   static propTypes = {
-    prefix: PropTypes.string.isRequired,
-  };
-
-  static childContextTypes = {
-    routerPrefix: PropTypes.string,
+    redirect: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   };
 
   constructor(...args) {
     super(...args);
+    const { location } = createRouter();
+    this.state = { location };
     this.listener();
   }
 
-  getChildContext() {
-    const { prefix } = this.props;
-    return {
-      routerPrefix: prefix,
-    };
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('hashchange', this.hashchange);
-  }
-
-  hashchange() {
-    //
-  }
-
   listener() {
-    window.addEventListener('hashchange', this.hashchange);
+    listener((location) => {
+      this.setState({
+        location,
+      });
+    });
+  }
+
+  /* eslint-disable class-methods-use-this */
+  componentWillUnmount() {
+    removeListener();
   }
 
   render() {
     const { children } = this.props;
-    return children;
+    const { location } = this.state;
+    const value = { location };
+    return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
   }
 }
 

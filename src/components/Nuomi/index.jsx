@@ -1,5 +1,4 @@
 import React, { createRef } from 'react';
-/* eslint-disable no-unused-vars */
 import BaseNuomi from '../BaseNuomi';
 import { removeReducer } from '../../core/redux/reducer';
 
@@ -26,19 +25,24 @@ class Nuomi extends React.PureComponent {
     }
   }
 
-  loadProps() {
+  loadProps(cb) {
     const { async, ...rest } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
       async((props) => {
-        this.setState({
-          loaded: true,
-          props: {
-            ...rest,
-            ...props,
+        this.setState(
+          {
+            loaded: true,
+            props: {
+              ...rest,
+              ...props,
+            },
           },
-        });
+          cb,
+        );
       });
+    } else {
+      cb && cb();
     }
   }
 
