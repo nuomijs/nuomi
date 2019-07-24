@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RouterContext from '../RouterContext';
-import { createRouter } from '../../core/router';
+import { createRouter, location as routerLocation } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
     prefix: '',
-    redirect: null,
+    redirect: '/',
+    entry: '/',
   };
 
   static propTypes = {
@@ -24,6 +25,10 @@ class Router extends React.PureComponent {
   }
 
   setLocation(location) {
+    const { entry } = this.props;
+    if (!location.pathname && entry) {
+      routerLocation(entry);
+    }
     this.state.location = location;
   }
 

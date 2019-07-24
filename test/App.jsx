@@ -6,7 +6,7 @@ class App extends React.PureComponent {
     return (
       <Nuomi>
         <Router>
-          <Route path="/" wrapper>1</Route>
+          <Route path="/" wrapper entry>1</Route>
           <Route path="/a/" wrapper>2</Route>
           <Route path="/b/" wrapper>3</Route>
         </Router>

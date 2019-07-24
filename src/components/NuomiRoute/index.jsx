@@ -12,10 +12,13 @@ class NuomiRoute extends Nuomi {
     onBefore: PropTypes.func,
   };
 
+  static wrappers = [];
+
   constructor(...args) {
     super(...args);
     const { async, ...rest } = this.props;
     this.ref = React.createRef();
+    this.wrapperRef = React.createRef();
     this.state = {
       loaded: typeof async !== 'function',
       visible: false,
@@ -24,6 +27,11 @@ class NuomiRoute extends Nuomi {
   }
 
   componentDidMount() {
+    const { current } = this.wrapperRef;
+    if (current) {
+      NuomiRoute.wrappers.push(current);
+    }
+    this.visibleWrapperHandler();
     this.loadProps(() => {
       const { props } = this.state;
       if (props.onBefore) {
@@ -40,14 +48,39 @@ class NuomiRoute extends Nuomi {
     });
   }
 
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    const { current } = this.wrapperRef;
+    if (current) {
+      NuomiRoute.wrappers = NuomiRoute.wrappers.filter((wrapper) => wrapper !== current);
+    }
+  }
+
   visible() {
     this.setState({ visible: true });
   }
 
+  visibleWrapperHandler() {
+    const { current } = this.wrapperRef;
+    NuomiRoute.wrappers.forEach((wrapper) => {
+      const elem = wrapper;
+      elem.style.display = current === elem ? 'block' : 'none';
+    });
+  }
+
   render() {
     const { props, visible, loaded } = this.state;
+    const { wrapper } = this.props;
+    const routeComponent = <BaseRoute ref={this.ref} {...props} />;
+    if (wrapper) {
+      return (
+        <div ref={this.wrapperRef} className="nuomi-route-wrapper">
+          {loaded && visible && routeComponent}
+        </div>
+      );
+    }
     if (loaded && visible) {
-      return <BaseRoute ref={this.ref} {...props} />;
+      return routeComponent;
     }
     return null;
   }

@@ -55,7 +55,7 @@ function parser(path) {
 }
 
 function merge(...args) {
-  return replacePath(args.filter((path) => !!path).join('/'));
+  return normalize(args.filter((path) => !!path).join('/'));
 }
 
 parser.normalize = normalize;
