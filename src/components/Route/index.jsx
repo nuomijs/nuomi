@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NuomiRoute from '../NuomiRoute';
 import RouterContext from '../RouterContext';
-import { matchPath } from '../../core/router';
+import { matchPath, savePath, removePath } from '../../core/router';
+import parser from '../../utils/parser';
 
 class Route extends React.PureComponent {
   static defaultProps = {
@@ -17,16 +18,15 @@ class Route extends React.PureComponent {
 
   static wrappers = [];
 
-  static paths = {};
-
   constructor(...args) {
     super(...args);
     this.store = {};
     this.wrapperRef = React.createRef();
     this.routeComponent = null;
+    this.state = { allow: false };
     const { path } = this.props;
-    if (!Route.paths[path]) {
-      Route.paths[path] = this;
+    if (savePath(path)) {
+      this.state.allow = true;
     }
   }
 
@@ -39,6 +39,11 @@ class Route extends React.PureComponent {
 
   componentWillUnmount() {
     const { current } = this.wrapperRef;
+    const { allow } = this.state;
+    const { path } = this.props;
+    if (allow) {
+      removePath(path);
+    }
     if (current) {
       Route.wrappers = Route.wrappers.filter((wrapper) => wrapper !== current);
     }
@@ -54,33 +59,32 @@ class Route extends React.PureComponent {
 
   render() {
     const { path, wrapper } = this.props;
+    const { allow } = this.state;
     // 重复的path将不被渲染
-    if (Route.paths[path] !== this) {
+    if (!allow) {
       return null;
     }
     return (
       <RouterContext.Consumer>
         {({ location }) => {
-          if (location) {
-            const match = matchPath(location, path);
-            if (match) {
-              this.visibleWrapperHandler();
-            }
-            if (wrapper && this.routeComponent) {
+          const match = matchPath(location, path);
+          if (match) {
+            this.visibleWrapperHandler();
+          }
+          if (!location.reload && wrapper && this.routeComponent) {
+            return this.routeComponent;
+          }
+          if (match) {
+            const routeComponent = <NuomiRoute {...this.props} store={this.store} />;
+            if (wrapper) {
+              this.routeComponent = (
+                <div ref={this.wrapperRef} className="nuomi-route-wrapper">
+                  {routeComponent}
+                </div>
+              );
               return this.routeComponent;
             }
-            if (match) {
-              const routeComponent = <NuomiRoute {...this.props} store={this.store} />;
-              if (wrapper) {
-                this.routeComponent = (
-                  <div ref={this.wrapperRef} className="nuomi-route-wrapper">
-                    {routeComponent}
-                  </div>
-                );
-                return this.routeComponent;
-              }
-              return routeComponent;
-            }
+            return routeComponent;
           }
           return null;
         }}

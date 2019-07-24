@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RouterContext from '../RouterContext';
-import { createRouter, listener } from '../../core/router';
+import { createRouter } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
-    prefix: '/',
+    prefix: '',
     redirect: null,
   };
 
   static propTypes = {
+    prefix: PropTypes.string,
     redirect: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   };
 
@@ -17,17 +18,19 @@ class Router extends React.PureComponent {
     super(...args);
     this.state = {};
     const { prefix } = this.props;
-    this.destroyRouter = createRouter({ prefix });
+    this.destroyRouter = createRouter({ prefix }, (location) => {
+      this.setLocation(location);
+    });
   }
 
-  componentDidmount() {
-    if (this.destroyRouter) {
-      listener((location) => {
-        this.setState({
-          location,
-        });
-      });
-    }
+  setLocation(location) {
+    this.state.location = location;
+  }
+
+  componentDidMount() {
+    this.setLocation = (location) => {
+      this.setState({ location });
+    };
   }
 
   componentWillUnmount() {

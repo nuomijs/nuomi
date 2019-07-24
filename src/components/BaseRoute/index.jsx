@@ -5,10 +5,10 @@ import BaseNuomi from '../BaseNuomi';
 class BaseRoute extends BaseNuomi {
   static defaultProps = {
     id: null,
-    state: null,
-    data: null,
-    store: null,
-    reducers: null,
+    state: {},
+    data: {},
+    store: {},
+    reducers: {},
     effects: null,
     render: null,
     onData: null,

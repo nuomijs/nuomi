@@ -1,11 +1,15 @@
-import { isFunction } from '../../utils';
+import { isFunction, isArray, isObject, parser } from '../../utils';
 
 // 监听列表
 let listeners = [];
-// 路由是否被创建过
-let created = false;
 // hash前缀，紧跟在#后面的符号
-let prefix = '/';
+let prefix = '';
+// location额外的数据
+let extraData = {};
+// 路由器回调
+let createdListener = null;
+// path对应的正则集合
+const pathRegexps = {};
 
 function back() {
   window.history.back();
@@ -15,19 +19,84 @@ function forward() {
   window.history.forward();
 }
 
-function hashchange() {
-
+function hashPrefix() {
+  return `#${prefix}`;
 }
 
-export function location(...args) {
-  if (!args.length) {
+function getLocation() {
+  const hashPath = window.location.hash.substr(hashPrefix().length);
+  return parser(hashPath);
+}
 
+function getMergeLocation() {
+  const mergeLocation = { ...getLocation(), ...extraData };
+  // 临时数据，仅用一次
+  extraData = {};
+  return mergeLocation;
+}
+
+function hashchange() {
+  // 当刷新路由的时候，无需执行用户自己的监听器
+  if (createdListener && extraData.reload) {
+    createdListener(getMergeLocation());
   } else {
-    let [path, data, isReload] = args;
+    let currentLocation = null;
+    listeners.forEach((callback) => {
+      if (callback === createdListener) {
+        callback(getMergeLocation());
+      } else {
+        if (!currentLocation) {
+          currentLocation = getLocation();
+        }
+        callback(currentLocation);
+      }
+    });
+    currentLocation = null;
   }
 }
 
-export function removeListener(...args) {
+function location(...args) {
+  if (!args.length) {
+    return getLocation();
+  }
+  let path = args[0];
+  const data = args[1];
+  let isReload = args[2];
+  if (path && (typeof path === 'string' || typeof path === 'object')) {
+    if (isArray(path)) {
+      path = '';
+    } else if (isObject(path)) {
+      path = '';
+    }
+  } else {
+    path = null;
+  }
+  if (path) {
+    if (typeof data === 'boolean') {
+      isReload = data;
+    }
+    if (isReload === true) {
+      extraData.reload = true;
+    }
+    if (isObject(data) || isFunction(data)) {
+      extraData.data = data;
+    }
+    const hash = hashPrefix() + path;
+    if (hash !== window.location.hash) {
+      window.location.hash = hash;
+      // hash相同时强制执行回调
+    } else if (isReload === true) {
+      hashchange();
+    }
+  }
+}
+
+function reload() {
+  const { url } = getLocation();
+  location(url, true);
+}
+
+function removeListener(...args) {
   // 移除所有
   if (!args.length) {
     listeners = [];
@@ -36,7 +105,7 @@ export function removeListener(...args) {
   }
 }
 
-export function listener(callback) {
+function listener(callback) {
   if (isFunction(callback)) {
     listeners.push(callback);
     // 执行一次
@@ -48,13 +117,15 @@ export function listener(callback) {
   return () => {};
 }
 
-export function createRouter({ prefix: hashPrefix }) {
-  if (!created) {
-    prefix = hashPrefix;
-    created = true;
+function createRouter({ prefix: routerPrefix }, callback) {
+  if (!createdListener) {
+    prefix = routerPrefix;
+    createdListener = callback;
+    listeners.push(createdListener);
+    createdListener(getMergeLocation());
     window.addEventListener('hashchange', hashchange);
     return () => {
-      created = false;
+      createdListener = null;
       window.removeEventListener('hashchange', hashchange);
       removeListener();
     };
@@ -62,9 +133,33 @@ export function createRouter({ prefix: hashPrefix }) {
   return null;
 }
 
-export function matchPath() {}
+function matchPath(currentLocation, path) {
+  const normalPath = parser.normalize(path);
+  const pathRegexp = pathRegexps[normalPath];
+  if (pathRegexp) {
+    return pathRegexp.test(currentLocation.pathname);
+  }
+  return false;
+}
 
-export function reload() {}
+function savePath(path) {
+  const normalPath = parser.normalize(path);
+  if (!pathRegexps[normalPath]) {
+    pathRegexps[normalPath] = parser.toRegexp(normalPath);
+    return true;
+  }
+  return false;
+}
+
+function removePath(path) {
+  delete pathRegexps[parser.normalize(path)];
+}
+
+function getParams(currentLocation, path) {
+  return {};
+}
+
+export { location, listener, createRouter, reload, matchPath, savePath, removePath, getParams };
 
 export default {
   listener,

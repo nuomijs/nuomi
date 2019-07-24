@@ -8,9 +8,9 @@ import EffectsProxy from '../../utils/EffectsProxy';
 class BaseNuomi extends React.PureComponent {
   static defaultProps = {
     id: null,
-    state: null,
-    store: null,
-    reducers: null,
+    state: {},
+    store: {},
+    reducers: {},
     effects: null,
     render: null,
     onInit: null,
@@ -46,7 +46,7 @@ class BaseNuomi extends React.PureComponent {
 
   createStore() {
     const { store, effects: createEffects, reducers } = this.props;
-    const effects = createEffects();
+    const effects = createEffects ? createEffects() || {} : {};
     store.dispatch = async ({ type, payload }) => {
       if (type.indexOf('/') === -1) {
         if (isObject(effects) && isFunction(effects[type])) {
@@ -121,10 +121,11 @@ class BaseNuomi extends React.PureComponent {
 
   render() {
     const { props } = this;
+    const { children } = props;
     if (props.render) {
-      return props.render();
+      return props.render(children);
     }
-    return null;
+    return children || null;
   }
 }
 

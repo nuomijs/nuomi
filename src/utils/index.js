@@ -53,3 +53,5 @@ export const extend = (...args) => {
   }
   return currentObject;
 };
+
+export { default as parser } from './parser';
