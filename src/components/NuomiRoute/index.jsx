@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
 import Nuomi from '../Nuomi';
+import RouterContext from '../RouterContext';
+import { isFunction } from '../../utils';
 
 class NuomiRoute extends Nuomi {
   static defaultProps = {
@@ -70,8 +72,23 @@ class NuomiRoute extends Nuomi {
 
   render() {
     const { props, visible, loaded } = this.state;
-    const { wrapper } = this.props;
-    const routeComponent = <BaseRoute ref={this.ref} {...props} />;
+    const { wrapper, store } = props;
+    let propsData = props.data;
+    const routeComponent = (
+      <RouterContext.Consumer>
+        {({ location: { reload, data } }) => {
+          if (isFunction(data)) {
+
+          } else {
+            propsData = {
+              ...propsData,
+              ...data,
+            }
+          }
+          return <BaseRoute ref={this.ref} {...props} data={propsData} />;
+        }}
+      </RouterContext.Consumer>
+    );
     if (wrapper) {
       return (
         <div ref={this.wrapperRef} className="nuomi-route-wrapper">

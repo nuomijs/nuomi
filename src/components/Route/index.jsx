@@ -54,7 +54,11 @@ class Route extends React.PureComponent {
             return this.routeComponent;
           }
           if (match) {
-            this.routeComponent = <NuomiRoute {...this.props} store={this.store} ref={this.ref} />;
+            this.routeComponent = (
+              <RouterContext.Provider value={{ location }}>
+                <NuomiRoute {...this.props} store={this.store} ref={this.ref} />
+              </RouterContext.Provider>
+            );
             return this.routeComponent;
           }
           return null;
