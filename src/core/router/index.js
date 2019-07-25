@@ -155,11 +155,38 @@ function removePath(path) {
   delete pathRegexps[parser.normalize(path)];
 }
 
-function getParams(currentLocation, path) {
+function getParams({ pathname }, path) {
+  const normalPath = parser.normalize(path);
+  const pathRegexp = pathRegexps[normalPath];
+  if (pathRegexp) {
+    const pathnameMatch = pathname.match(pathRegexp);
+    const pathMatch = path.match(/\/:([^/]+)/g);
+    const params = {};
+    if (pathnameMatch && pathMatch) {
+      pathMatch.forEach((param, i) => {
+        const name = param.replace(/^\/:/, '');
+        const value = pathnameMatch[i + 1];
+        if (value !== undefined) {
+          params[name] = value;
+        }
+      });
+    }
+    return params;
+  }
   return {};
 }
 
-export { location, listener, createRouter, reload, matchPath, savePath, removePath, getParams };
+export {
+  getLocation,
+  location,
+  listener,
+  createRouter,
+  reload,
+  matchPath,
+  savePath,
+  removePath,
+  getParams,
+};
 
 export default {
   listener,

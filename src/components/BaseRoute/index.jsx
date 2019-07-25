@@ -19,30 +19,27 @@ class BaseRoute extends BaseNuomi {
     onLeave: PropTypes.func,
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { store, reload } = nextProps;
-    // 刷新页面会重新创建reducer
-    if (store.id && reload === true && reload !== prevState.reload) {
-      this.createReducer();
-    }
-    return { reload: false };
-  }
-
   constructor(...args) {
     super(...args);
-    const { props } = this;
-    const { store, path } = props;
-    this.state = { reload: false };
+    const { store, path } = this.props;
     if (!store.id) {
       this.createStore();
       this.createReducer();
-      this.state.reload = true;
     }
     this.unListener = listener((location) => {
+      const { props } = this;
       if (props.onChange && matchPath(location, path)) {
         props.onChange();
       }
     });
+  }
+
+  /* eslint-disable camelcase */
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { store } = this.props;
+    if (store.id && nextProps.reload === true) {
+      this.createReducer(nextProps);
+    }
   }
 
   componentWillUnmount() {

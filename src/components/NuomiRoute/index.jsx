@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
 import RouterContext from '../RouterContext';
 import { isFunction, isObject } from '../../utils';
+import { getParams } from '../../core/router';
 
 class NuomiRoute extends React.PureComponent {
   static propTypes = {
@@ -89,8 +90,10 @@ class NuomiRoute extends React.PureComponent {
     let propsData = props.data;
     const routeComponent = (
       <RouterContext.Consumer>
-        {({ location: { data, reload } }) => {
+        {({ location }) => {
+          const { data, reload, ...rest } = location;
           const extraProps = {};
+          rest.params = getParams(rest, props.path);
           if (isFunction(data)) {
             extraProps.routerLocationCallback = data;
           } else if (isObject(data)) {
@@ -102,7 +105,9 @@ class NuomiRoute extends React.PureComponent {
           if (reload) {
             extraProps.reload = reload;
           }
-          return <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} />;
+          return (
+            <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
+          );
         }}
       </RouterContext.Consumer>
     );

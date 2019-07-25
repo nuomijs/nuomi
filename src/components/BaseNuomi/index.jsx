@@ -18,6 +18,7 @@ class BaseNuomi extends React.PureComponent {
   };
 
   static childContextTypes = {
+    nuomiStore: PropTypes.object,
     sourceProps: PropTypes.object,
   };
 
@@ -36,7 +37,9 @@ class BaseNuomi extends React.PureComponent {
   }
 
   getChildContext() {
+    const { store } = this.props;
     return {
+      nuomiStore: store,
       sourceProps: this.props,
     };
   }
@@ -50,7 +53,7 @@ class BaseNuomi extends React.PureComponent {
 
   createStore() {
     const { store, effects: createEffects, reducers } = this.props;
-    const effects = createEffects ? createEffects() || {} : {};
+    const effects = createEffects ? createEffects() : null;
 
     store.id = this.getId();
 
@@ -110,13 +113,12 @@ class BaseNuomi extends React.PureComponent {
   }
 
   createReducer() {
-    const { props } = this;
-    const { store, state: defaultState, reducers } = props;
+    const { store, state: defaultState, reducers } = this.props;
     createReducer(store.id, (state = defaultState, action) => {
       const { type } = action;
-      const typePre = `${store.id}/`;
-      if (type.indexOf(typePre) === 0) {
-        const key = type.replace(typePre, '');
+      const typePrefix = `${store.id}/`;
+      if (type.indexOf(typePrefix) === 0) {
+        const key = type.replace(typePrefix, '');
         if (reducers[key]) {
           return reducers[key](state, action);
         }
