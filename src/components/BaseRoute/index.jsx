@@ -21,31 +21,26 @@ class BaseRoute extends BaseNuomi {
 
   constructor(...args) {
     super(...args);
-    const { store, path, reload } = this.props;
+    const { store, reload } = this.props;
     if (!store.id) {
       this.createStore();
       this.createReducer();
     } else if (reload === true) {
-      this.checkReload(this.props);
+      this.checkResetState(this.props);
     }
-    this.unListener = listener((location) => {
-      const { props } = this;
-      if (props.onChange && matchPath(location, path)) {
-        props.onChange();
-      }
-    });
+    this.routerChange();
   }
 
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.checkReload(nextProps);
+    const { props } = this;
+    this.checkResetState(nextProps);
+    if (nextProps.location !== props.location) {
+      this.routerChange();
+    }
   }
 
-  componentWillUnmount() {
-    this.unListener();
-  }
-
-  checkReload(nextProps) {
+  checkResetState(nextProps) {
     const { store, state } = this.props;
     if (store.id && nextProps.reload === true) {
       store.dispatch({
@@ -53,6 +48,13 @@ class BaseRoute extends BaseNuomi {
         payload: state,
       });
       this.initialize();
+    }
+  }
+
+  routerChange() {
+    const { props } = this;
+    if (props.onChange) {
+      props.onChange();
     }
   }
 

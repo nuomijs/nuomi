@@ -14,7 +14,6 @@ export default {
     return <Layout />;
   },
   onInit() {
-    console.log(111)
     this.store.dispatch({
       type: '$getList',
     });

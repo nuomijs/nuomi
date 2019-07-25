@@ -4,24 +4,14 @@ import layout from './layout';
 import pages from './pages';
 
 class App extends React.Component {
-  state = {};
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ destroy: true });
-    }, 5000);
-  }
-
   render() {
     return (
       <Nuomi {...layout}>
-        {this.state.destroy !== true && (
-          <Router entry="/">
-            {pages.map((route) => (
-              <Route key={route.path} {...route} />
-            ))}
-          </Router>
-        )}
+        <Router entry="/">
+          {pages.map((route) => (
+            <Route key={route.path} {...route} />
+          ))}
+        </Router>
       </Nuomi>
     );
   }

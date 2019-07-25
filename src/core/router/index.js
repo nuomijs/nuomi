@@ -37,22 +37,18 @@ function getMergeLocation() {
 
 function hashchange() {
   // 当刷新路由的时候，无需执行用户自己的监听器
-  if (createdListener && extraData.reload) {
-    createdListener(getMergeLocation());
-  } else {
-    let currentLocation = null;
-    listeners.forEach((callback) => {
-      if (callback === createdListener) {
-        callback(getMergeLocation());
-      } else {
-        if (!currentLocation) {
-          currentLocation = getLocation();
-        }
-        callback(currentLocation);
+  let currentLocation = null;
+  listeners.forEach((callback) => {
+    if (callback === createdListener) {
+      callback(getMergeLocation());
+    } else {
+      if (!currentLocation) {
+        currentLocation = getLocation();
       }
-    });
-    currentLocation = null;
-  }
+      callback(currentLocation);
+    }
+  });
+  currentLocation = null;
 }
 
 function location(...args) {
