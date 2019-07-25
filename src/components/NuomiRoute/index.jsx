@@ -2,14 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
 import RouterContext from '../RouterContext';
-import { isFunction, isObject, extend } from '../../utils';
-import { getProps } from '../../core/nuomi';
+import { isFunction, isObject } from '../../utils';
 
 class NuomiRoute extends React.PureComponent {
-  static defaultProps = {
-    onBefore: null,
-  };
-
   static propTypes = {
     onBefore: PropTypes.func,
   };
@@ -25,7 +20,7 @@ class NuomiRoute extends React.PureComponent {
     this.state = {
       loaded: !isAsync,
       visible: false,
-      props: isAsync ? rest : extend(getProps(), rest),
+      props: rest,
     };
   }
 
@@ -59,7 +54,7 @@ class NuomiRoute extends React.PureComponent {
         this.setState(
           {
             loaded: true,
-            props: extend(getProps(), { ...rest, ...props }),
+            props: { ...rest, ...props },
           },
           cb,
         );
@@ -94,14 +89,20 @@ class NuomiRoute extends React.PureComponent {
     let propsData = props.data;
     const routeComponent = (
       <RouterContext.Consumer>
-        {({ location: { data } }) => {
-          if (isObject(data)) {
+        {({ location: { data, reload } }) => {
+          const extraProps = {};
+          if (isFunction(data)) {
+            extraProps.routerLocationCallback = data;
+          } else if (isObject(data)) {
             propsData = {
               ...propsData,
               ...data,
             };
           }
-          return <BaseRoute ref={this.ref} {...props} data={propsData} />;
+          if (reload) {
+            extraProps.reload = reload;
+          }
+          return <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} />;
         }}
       </RouterContext.Consumer>
     );

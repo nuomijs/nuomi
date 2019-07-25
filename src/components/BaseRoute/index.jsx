@@ -1,39 +1,64 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import BaseNuomi from '../BaseNuomi';
-import RouterContext from '../RouterContext';
-import { isFunction } from '../../utils';
+import { listener, matchPath } from '../../core/router';
 
 class BaseRoute extends BaseNuomi {
-  static defaultProps = {
-    id: null,
-    state: {},
-    data: {},
-    store: {},
-    reducers: {},
-    effects: null,
-    render: null,
-    onData: null,
-    onInit: null,
-    onChange: null,
-    onLeave: null,
+  static propTypes = {
+    id: PropTypes.string,
+    wrapper: PropTypes.bool,
+    reload: PropTypes.bool,
+    state: PropTypes.object,
+    data: PropTypes.object,
+    store: PropTypes.object,
+    reducers: PropTypes.object,
+    effects: PropTypes.func,
+    render: PropTypes.func,
+    onBefore: PropTypes.func,
+    onInit: PropTypes.func,
+    onChange: PropTypes.func,
+    onLeave: PropTypes.func,
   };
 
-  static propTypes = {};
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { store, reload } = nextProps;
+    // 刷新页面会重新创建reducer
+    if (store.id && reload === true && reload !== prevState.reload) {
+      this.createReducer();
+    }
+    return { reload: false };
+  }
 
-  render() {
+  constructor(...args) {
+    super(...args);
     const { props } = this;
-    const children = props.render ? props.render() : props.children;
-    return (
-      <RouterContext.Consumer>
-        {({ location: { data, reload } }) => {
-          if (isFunction(data)) {
+    const { store, path } = props;
+    this.state = { reload: false };
+    if (!store.id) {
+      this.createStore();
+      this.createReducer();
+      this.state.reload = true;
+    }
+    this.unListener = listener((location) => {
+      if (props.onChange && matchPath(location, path)) {
+        props.onChange();
+      }
+    });
+  }
 
-          }
-          return children || null;
-        }}
-      </RouterContext.Consumer>
-    );
+  componentWillUnmount() {
+    this.unListener();
+  }
+
+  createReducer() {
+    super.createReducer();
+    const { props } = this;
+    const { routerLocationCallback } = props;
+    if (routerLocationCallback) {
+      routerLocationCallback(props);
+    }
+    if (props.onInit) {
+      props.onInit();
+    }
   }
 }
 

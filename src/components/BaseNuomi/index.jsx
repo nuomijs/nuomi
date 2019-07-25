@@ -6,17 +6,16 @@ import { isObject, isFunction } from '../../utils';
 import EffectsProxy from '../../utils/EffectsProxy';
 
 class BaseNuomi extends React.PureComponent {
-  static defaultProps = {
-    id: null,
-    state: {},
-    store: {},
-    reducers: {},
-    effects: null,
-    render: null,
-    onInit: null,
+  static propTypes = {
+    id: PropTypes.string,
+    state: PropTypes.object,
+    data: PropTypes.object,
+    store: PropTypes.object,
+    reducers: PropTypes.object,
+    effects: PropTypes.func,
+    render: PropTypes.func,
+    onInit: PropTypes.func,
   };
-
-  static propTypes = {};
 
   static childContextTypes = {
     sourceProps: PropTypes.object,
@@ -26,11 +25,13 @@ class BaseNuomi extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    const { store } = this.props;
-    if (!store.id) {
-      this.createId();
+    const { props } = this;
+    if (!props.store.id) {
       this.createStore();
       this.createReducer();
+      if (props.onInit) {
+        props.onInit();
+      }
     }
   }
 
@@ -109,7 +110,8 @@ class BaseNuomi extends React.PureComponent {
   }
 
   createReducer() {
-    const { store, state: defaultState, reducers } = this.props;
+    const { props } = this;
+    const { store, state: defaultState, reducers } = props;
     createReducer(store.id, (state = defaultState, action) => {
       const { type } = action;
       const typePre = `${store.id}/`;

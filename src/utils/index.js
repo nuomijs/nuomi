@@ -16,13 +16,12 @@ export const isNative = (obj) => /native code/i.test(obj.toString()) && typeof o
 
 export const extend = (...args) => {
   const [object, newObject] = args;
-  let currentObject = {};
+  const currentObject = { ...object };
   if (isObject(newObject)) {
     const { state, data, reducers, ...rest } = newObject;
-    const restObject = { ...rest };
-    for (const i in restObject) {
-      if (restObject[i] !== undefined) {
-        currentObject[i] = restObject[i];
+    for (const i in rest) {
+      if (rest[i] !== undefined) {
+        currentObject[i] = rest[i];
       }
     }
     if (isObject(state)) {
@@ -48,8 +47,6 @@ export const extend = (...args) => {
         }
       }
     }
-  } else {
-    currentObject = { ...object };
   }
   return currentObject;
 };

@@ -1,18 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { location } from '../../core/router';
 
 class Link extends React.PureComponent {
-  static defaultProps = {};
+  static defaultProps = {
+    to: '',
+    reload: false,
+  };
 
-  static propTypes = {};
+  static propTypes = {
+    to: PropTypes.string,
+    reload: PropTypes.bool,
+  };
 
-  onClick = (e) => {
-    e.preventDefault();
+  onClick = () => {
+    const { to, reload } = this.props;
+    location(to, reload);
   };
 
   render() {
-    const { children } = this.props;
-    return <a onClick={this.onClick}>{children}</a>;
+    const { to, reload, ...rest } = this.props;
+    return <a {...rest} onClick={this.onClick} />;
   }
 }
 

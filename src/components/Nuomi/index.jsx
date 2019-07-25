@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseNuomi from '../BaseNuomi';
 import { removeReducer } from '../../core/redux/reducer';
-import { getProps } from '../../core/nuomi';
+import { getDefaultProps } from '../../core/nuomi';
 import { extend, isFunction } from '../../utils';
 
 class Nuomi extends React.PureComponent {
@@ -12,7 +12,7 @@ class Nuomi extends React.PureComponent {
     const isAsync = isFunction(async);
     this.state = {
       loaded: !isAsync,
-      props: isAsync ? rest : extend(getProps(), rest),
+      props: isAsync ? rest : extend(getDefaultProps(), rest),
     };
   }
 
@@ -34,7 +34,7 @@ class Nuomi extends React.PureComponent {
       async((props) => {
         this.setState({
           loaded: true,
-          props: extend(getProps(), { ...rest, ...props }),
+          props: extend(getDefaultProps(), { ...rest, ...props }),
         });
       });
     }

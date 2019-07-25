@@ -58,6 +58,8 @@ function merge(...args) {
   return normalize(args.filter((path) => !!path).join('/'));
 }
 
+parser.replacePath = replacePath;
+
 parser.normalize = normalize;
 
 parser.toRegexp = toRegexp;

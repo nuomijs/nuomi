@@ -12,6 +12,7 @@ class Router extends React.PureComponent {
 
   static propTypes = {
     prefix: PropTypes.string,
+    entry: PropTypes.string,
     redirect: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   };
 

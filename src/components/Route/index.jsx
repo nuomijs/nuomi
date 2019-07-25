@@ -4,13 +4,10 @@ import NuomiRoute from '../NuomiRoute';
 import RouterContext from '../RouterContext';
 import { removeReducer } from '../../core/redux/reducer';
 import { matchPath, savePath, removePath } from '../../core/router';
+import { getDefaultProps } from '../../core/nuomi';
+import { extend } from '../../utils';
 
 class Route extends React.PureComponent {
-  static defaultProps = {
-    path: '/',
-    wrapper: false,
-  };
-
   static propTypes = {
     path: PropTypes.string,
     wrapper: PropTypes.bool,
@@ -63,9 +60,10 @@ class Route extends React.PureComponent {
             return this.routeComponent;
           }
           if (match) {
+            const props = extend(getDefaultProps(), this.props);
             this.routeComponent = (
               <RouterContext.Provider value={{ location }}>
-                <NuomiRoute {...this.props} store={this.store} ref={this.ref} />
+                <NuomiRoute {...props} store={this.store} ref={this.ref} />
               </RouterContext.Provider>
             );
             return this.routeComponent;

@@ -81,7 +81,7 @@ function location(...args) {
     if (isObject(data) || isFunction(data)) {
       extraData.data = data;
     }
-    const hash = hashPrefix() + path;
+    const hash = hashPrefix() + parser.replacePath(path);
     if (hash !== window.location.hash) {
       window.location.hash = hash;
       // hash相同时强制执行回调
