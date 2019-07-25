@@ -19,7 +19,4 @@ export default {
       type: '$getDetail',
     });
   },
-  onChange() {
-    console.log(111);
-  },
 };
