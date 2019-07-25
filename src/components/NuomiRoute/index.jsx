@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
-import Nuomi from '../Nuomi';
 import RouterContext from '../RouterContext';
-import { isFunction } from '../../utils';
+import { isFunction, isObject, extend } from '../../utils';
+import { getProps } from '../../core/nuomi';
 
-class NuomiRoute extends Nuomi {
+class NuomiRoute extends React.PureComponent {
   static defaultProps = {
     onBefore: null,
   };
@@ -21,10 +21,11 @@ class NuomiRoute extends Nuomi {
     const { async, ...rest } = this.props;
     this.ref = React.createRef();
     this.wrapperRef = React.createRef();
+    const isAsync = isFunction(async);
     this.state = {
-      loaded: typeof async !== 'function',
+      loaded: !isAsync,
       visible: false,
-      props: { ...rest },
+      props: isAsync ? rest : extend(getProps(), rest),
     };
   }
 
@@ -39,26 +40,43 @@ class NuomiRoute extends Nuomi {
       if (props.onBefore) {
         if (
           props.onBefore(() => {
-            this.visible();
+            this.visibleRoute();
           }) === true
         ) {
-          this.visible();
+          this.visibleRoute();
         }
       } else {
-        this.visible();
+        this.visibleRoute();
       }
     });
   }
 
-  componentWillUnmount() {
-    super.componentWillUnmount();
+  loadProps(cb) {
+    const { async, ...rest } = this.props;
+    const { loaded } = this.state;
+    if (!loaded) {
+      async((props) => {
+        this.setState(
+          {
+            loaded: true,
+            props: extend(getProps(), { ...rest, ...props }),
+          },
+          cb,
+        );
+      });
+    } else {
+      cb && cb();
+    }
+  }
+
+  removeWrapper() {
     const { current } = this.wrapperRef;
     if (current) {
       NuomiRoute.wrappers = NuomiRoute.wrappers.filter((wrapper) => wrapper !== current);
     }
   }
 
-  visible() {
+  visibleRoute() {
     this.setState({ visible: true });
   }
 
@@ -72,18 +90,16 @@ class NuomiRoute extends Nuomi {
 
   render() {
     const { props, visible, loaded } = this.state;
-    const { wrapper, store } = props;
+    const { wrapper } = props;
     let propsData = props.data;
     const routeComponent = (
       <RouterContext.Consumer>
-        {({ location: { reload, data } }) => {
-          if (isFunction(data)) {
-
-          } else {
+        {({ location: { data } }) => {
+          if (isObject(data)) {
             propsData = {
               ...propsData,
               ...data,
-            }
+            };
           }
           return <BaseRoute ref={this.ref} {...props} data={propsData} />;
         }}

@@ -1,16 +1,18 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import BaseNuomi from '../BaseNuomi';
 import { removeReducer } from '../../core/redux/reducer';
+import { getProps } from '../../core/nuomi';
+import { extend, isFunction } from '../../utils';
 
 class Nuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
-    this.ref = createRef();
     this.store = {};
     const { async, ...rest } = this.props;
+    const isAsync = isFunction(async);
     this.state = {
-      loaded: typeof async !== 'function',
-      props: { ...rest },
+      loaded: !isAsync,
+      props: isAsync ? rest : extend(getProps(), rest),
     };
   }
 
@@ -19,37 +21,29 @@ class Nuomi extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { current } = this.ref;
-    if (current && current.id) {
-      removeReducer(current.id);
+    const { id } = this.store;
+    if (id) {
+      removeReducer(id);
     }
   }
 
-  loadProps(cb) {
+  loadProps() {
     const { async, ...rest } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
       async((props) => {
-        this.setState(
-          {
-            loaded: true,
-            props: {
-              ...rest,
-              ...props,
-            },
-          },
-          cb,
-        );
+        this.setState({
+          loaded: true,
+          props: extend(getProps(), { ...rest, ...props }),
+        });
       });
-    } else {
-      cb && cb();
     }
   }
 
   render() {
     const { loaded, props } = this.state;
     if (loaded) {
-      return <BaseNuomi {...props} ref={this.ref} store={this.store} />;
+      return <BaseNuomi {...props} store={this.store} />;
     }
     return null;
   }

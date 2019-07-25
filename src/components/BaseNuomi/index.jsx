@@ -19,7 +19,7 @@ class BaseNuomi extends React.PureComponent {
   static propTypes = {};
 
   static childContextTypes = {
-    nuomiStore: PropTypes.object,
+    sourceProps: PropTypes.object,
   };
 
   static nuomiId = 0;
@@ -36,20 +36,23 @@ class BaseNuomi extends React.PureComponent {
 
   getChildContext() {
     return {
-      nuomiStore: this.store,
+      sourceProps: this.props,
     };
   }
 
-  createId() {
+  getId() {
     BaseNuomi.nuomiId += 1;
     const { id } = this.props;
     const defaultId = `nuomi_${BaseNuomi.nuomiId}`;
-    this.id = id || defaultId;
+    return id || defaultId;
   }
 
   createStore() {
     const { store, effects: createEffects, reducers } = this.props;
     const effects = createEffects ? createEffects() || {} : {};
+
+    store.id = this.getId();
+
     store.dispatch = async ({ type, payload }) => {
       if (type.indexOf('/') === -1) {
         if (isObject(effects) && isFunction(effects[type])) {
@@ -61,7 +64,7 @@ class BaseNuomi extends React.PureComponent {
                 if (isFunction(effect) && name.indexOf('$') === 0) {
                   const prevEffect = queue.slice(-1)[0];
                   rootStore.dispatch({
-                    type: `${this.id}/updateLoading`,
+                    type: `${store.id}/updateLoading`,
                     payload: {
                       [prevEffect !== type ? prevEffect : undefined]: false,
                       [name]: true,
@@ -80,7 +83,7 @@ class BaseNuomi extends React.PureComponent {
           } finally {
             if (queue.length) {
               rootStore.dispatch({
-                type: `${this.id}/updateLoading`,
+                type: `${store.id}/updateLoading`,
                 payload: {
                   [queue[0]]: false,
                   [queue.slice(-1)]: false,
@@ -90,7 +93,7 @@ class BaseNuomi extends React.PureComponent {
           }
         } else if (reducers[type]) {
           rootStore.dispatch({
-            type: `${this.id}/${type}`,
+            type: `${store.id}/${type}`,
             payload,
           });
         }
@@ -102,18 +105,14 @@ class BaseNuomi extends React.PureComponent {
       }
     };
 
-    store.getState = () => rootStore.getState()[this.id];
-
-    store.id = this.id;
-
-    this.store = store;
+    store.getState = () => rootStore.getState()[store.id];
   }
 
   createReducer() {
-    const { state: defaultState, reducers } = this.props;
-    createReducer(this.id, (state = defaultState, action) => {
+    const { store, state: defaultState, reducers } = this.props;
+    createReducer(store.id, (state = defaultState, action) => {
       const { type } = action;
-      const typePre = `${this.id}/`;
+      const typePre = `${store.id}/`;
       if (type.indexOf(typePre) === 0) {
         const key = type.replace(typePre, '');
         if (reducers[key]) {
@@ -126,10 +125,7 @@ class BaseNuomi extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { children } = props;
-    if (props.render) {
-      return props.render(children);
-    }
+    const children = props.render ? props.render() : props.children;
     return children || null;
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NuomiRoute from '../NuomiRoute';
 import RouterContext from '../RouterContext';
+import { removeReducer } from '../../core/redux/reducer';
 import { matchPath, savePath, removePath } from '../../core/router';
 
 class Route extends React.PureComponent {
@@ -31,9 +32,17 @@ class Route extends React.PureComponent {
 
   componentWillUnmount() {
     const { allow } = this.state;
-    const { path } = this.props;
+    const { path, wrapper } = this.props;
+    const { current } = this.ref;
+    const { id } = this.store;
+    if (wrapper && current) {
+      current.removeWrapper();
+    }
     if (allow) {
       removePath(path);
+    }
+    if (id) {
+      removeReducer(id);
     }
   }
 
