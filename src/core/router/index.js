@@ -19,12 +19,12 @@ function forward() {
   window.history.forward();
 }
 
-function hashPrefix() {
+function getHashPrefix() {
   return `#${prefix}`;
 }
 
 function getLocation() {
-  const hashPath = window.location.hash.substr(hashPrefix().length);
+  const hashPath = window.location.hash.substr(getHashPrefix().length);
   return parser(hashPath);
 }
 
@@ -81,7 +81,7 @@ function location(...args) {
     if (isObject(data) || isFunction(data)) {
       extraData.data = data;
     }
-    const hash = hashPrefix() + parser.replacePath(path);
+    const hash = getHashPrefix() + parser.replacePath(path);
     if (hash !== window.location.hash) {
       window.location.hash = hash;
       // hash相同时强制执行回调
@@ -186,6 +186,7 @@ export {
   savePath,
   removePath,
   getParams,
+  getHashPrefix,
 };
 
 export default {

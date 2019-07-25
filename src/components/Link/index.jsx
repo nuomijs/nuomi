@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { location } from '../../core/router';
+import { location, getHashPrefix } from '../../core/router';
 
 class Link extends React.PureComponent {
   static defaultProps = {
@@ -13,14 +13,15 @@ class Link extends React.PureComponent {
     reload: PropTypes.bool,
   };
 
-  onClick = () => {
+  onClick = (e) => {
+    e.preventDefault();
     const { to, reload } = this.props;
     location(to, reload);
   };
 
   render() {
     const { to, reload, ...rest } = this.props;
-    return <a {...rest} onClick={this.onClick} />;
+    return <a href={`${getHashPrefix()}${to}`} {...rest} onClick={this.onClick} />;
   }
 }
 

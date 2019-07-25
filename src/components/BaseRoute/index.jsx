@@ -21,10 +21,12 @@ class BaseRoute extends BaseNuomi {
 
   constructor(...args) {
     super(...args);
-    const { store, path } = this.props;
+    const { store, path, reload } = this.props;
     if (!store.id) {
       this.createStore();
       this.createReducer();
+    } else if (reload === true) {
+      this.checkReload(this.props);
     }
     this.unListener = listener((location) => {
       const { props } = this;
@@ -36,18 +38,25 @@ class BaseRoute extends BaseNuomi {
 
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { store } = this.props;
-    if (store.id && nextProps.reload === true) {
-      this.createReducer(nextProps);
-    }
+    this.checkReload(nextProps);
   }
 
   componentWillUnmount() {
     this.unListener();
   }
 
-  createReducer() {
-    super.createReducer();
+  checkReload(nextProps) {
+    const { store, state } = this.props;
+    if (store.id && nextProps.reload === true) {
+      store.dispatch({
+        type: 'setState',
+        payload: state,
+      });
+      this.initialize();
+    }
+  }
+
+  initialize() {
     const { props } = this;
     const { routerLocationCallback } = props;
     if (routerLocationCallback) {

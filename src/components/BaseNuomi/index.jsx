@@ -30,9 +30,6 @@ class BaseNuomi extends React.PureComponent {
     if (!props.store.id) {
       this.createStore();
       this.createReducer();
-      if (props.onInit) {
-        props.onInit();
-      }
     }
   }
 
@@ -52,19 +49,22 @@ class BaseNuomi extends React.PureComponent {
   }
 
   createStore() {
-    const { store, effects: createEffects, reducers } = this.props;
-    const effects = createEffects ? createEffects() : null;
+    const { props } = this;
+    const { store, reducers } = props;
 
     store.id = this.getId();
 
     store.dispatch = async ({ type, payload }) => {
+      if (!this.effects) {
+        this.effects = props.effects ? props.effects() : null;
+      }
       if (type.indexOf('/') === -1) {
-        if (isObject(effects) && isFunction(effects[type])) {
+        if (isObject(this.effects) && isFunction(this.effects[type])) {
           const queue = [];
           try {
-            const effectsProxy = EffectsProxy(effects, {
+            const effectsProxy = EffectsProxy(this.effects, {
               get: (target, name) => {
-                const effect = effects[name];
+                const effect = this.effects[name];
                 if (isFunction(effect) && name.indexOf('$') === 0) {
                   const prevEffect = queue.slice(-1)[0];
                   rootStore.dispatch({
@@ -125,6 +125,15 @@ class BaseNuomi extends React.PureComponent {
       }
       return state;
     });
+
+    this.initialize();
+  }
+
+  initialize() {
+    const { props } = this;
+    if (props.onInit) {
+      props.onInit();
+    }
   }
 
   render() {

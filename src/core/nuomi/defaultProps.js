@@ -4,6 +4,7 @@ export default {
   },
   data: {},
   reducers: {
+    setState: (state, { payload }) => payload,
     updateState: (state, { payload }) => ({ ...state, ...payload }),
     updateLoading: (state, { payload }) => ({
       ...state,

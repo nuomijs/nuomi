@@ -64,9 +64,11 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
       }
 
       render() {
+        const { nuomiStore } = this.context;
         const props = {
           ...this.getProps(),
           ref: this.ref,
+          dispatch: nuomiStore.dispatch,
         };
         return <WrapperComponent {...props} />;
       }

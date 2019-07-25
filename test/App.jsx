@@ -1,36 +1,27 @@
 import React from 'react';
-import { Router, Route, Nuomi, Link, router, nuomi, connect } from 'nuomi';
-import { extend } from '../src/utils';
+import { Router, Route, Nuomi } from 'nuomi';
+import layout from './layout';
+import pages from './pages';
 
-class A extends React.PureComponent {
-  render() {
-    console.log(this.props)
-    return '';
+class App extends React.Component {
+  state = {};
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ destroy: true });
+    }, 5000);
   }
-}
 
-const B = connect(() => ({ a:1 }))(A);
-
-nuomi({
-  onChange() {
-    console.log(this)
-  }
-});
-
-class App extends React.PureComponent {
   render() {
     return (
-      <Nuomi>
-        <B />
-        <Router>
-          <Route path="/" wrapper>1</Route>
-          <Route path="/a/" wrapper>2</Route>
-          <Route path="/b/" wrapper>3</Route>
-          <Route path="/c/:a">4</Route>
-          <Route path="/d/">
-            <Link to="/a/" reload>toA</Link>
-          </Route>
-        </Router>
+      <Nuomi {...layout}>
+        {this.state.destroy !== true && (
+          <Router entry="/">
+            {pages.map((route) => (
+              <Route key={route.path} {...route} />
+            ))}
+          </Router>
+        )}
       </Nuomi>
     );
   }
