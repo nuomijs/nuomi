@@ -19,4 +19,8 @@ export default class Effects extends BaseEffects {
       payload: data,
     });
   }
+
+  async initData() {
+    await this.$getDetail();
+  }
 }

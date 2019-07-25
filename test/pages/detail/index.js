@@ -16,7 +16,7 @@ export default {
   },
   onInit() {
     this.store.dispatch({
-      type: '$getDetail',
+      type: 'initData',
     });
   },
 };

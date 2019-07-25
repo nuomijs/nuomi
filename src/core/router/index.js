@@ -36,7 +36,6 @@ function getMergeLocation() {
 }
 
 function hashchange() {
-  // 当刷新路由的时候，无需执行用户自己的监听器
   let currentLocation = null;
   listeners.forEach((callback) => {
     if (callback === createdListener) {
