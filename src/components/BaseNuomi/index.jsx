@@ -67,12 +67,13 @@ class BaseNuomi extends React.PureComponent {
                 const effect = this.effects[name];
                 if (isFunction(effect) && name.indexOf('$') === 0) {
                   const prevEffect = queue.slice(-1)[0];
+                  const loadingPayload = { [name]: true };
+                  if (prevEffect !== type && prevEffect) {
+                    loadingPayload[prevEffect] = false;
+                  }
                   rootStore.dispatch({
                     type: `${store.id}/updateLoading`,
-                    payload: {
-                      [prevEffect !== type ? prevEffect : undefined]: false,
-                      [name]: true,
-                    },
+                    payload: loadingPayload,
                   });
                   queue.push(name);
                 }
@@ -86,12 +87,14 @@ class BaseNuomi extends React.PureComponent {
             }
           } finally {
             if (queue.length) {
+              const loadingPayload = { [queue[0]]: false };
+              const lastEffect = queue.slice(-1)[0];
+              if (lastEffect) {
+                loadingPayload[lastEffect] = false;
+              }
               rootStore.dispatch({
                 type: `${store.id}/updateLoading`,
-                payload: {
-                  [queue[0]]: false,
-                  [queue.slice(-1)]: false,
-                },
+                payload: loadingPayload,
               });
             }
           }
