@@ -18,6 +18,11 @@ class BaseRoute extends BaseNuomi {
     onLeave: PropTypes.func,
   };
 
+  static childContextTypes = {
+    nuomiStore: PropTypes.object,
+    sourceProps: PropTypes.object,
+  };
+
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { props } = this;
