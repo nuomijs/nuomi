@@ -128,6 +128,17 @@ function createRouter({ prefix: routerPrefix }, callback) {
   return null;
 }
 
+function matchPathname({ pathname }) {
+  for (const i in pathRegexps) {
+    if (pathRegexps[i]) {
+      if (pathRegexps[i].test(pathname)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function matchPath(currentLocation, path) {
   const normalPath = parser.normalize(path);
   const pathRegexp = pathRegexps[normalPath];
@@ -178,6 +189,7 @@ export {
   createRouter,
   reload,
   matchPath,
+  matchPathname,
   savePath,
   removePath,
   getParams,

@@ -28,14 +28,13 @@ class Route extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { allow } = this.state;
     const { path, wrapper } = this.props;
     const { current } = this.ref;
     const { id } = this.store;
     if (wrapper && current) {
       current.removeWrapper();
     }
-    if (allow) {
+    if (!this.repeated) {
       removePath(path);
     }
     if (id) {

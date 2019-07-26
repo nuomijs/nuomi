@@ -9,6 +9,20 @@ class Layout extends React.PureComponent {
     });
   };
 
+  add = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/setRoutes',
+    });
+  };
+
+  remove = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/removeRoutes',
+    });
+  };
+
   render() {
     const { detail, count, loadings } = this.props;
     return (
@@ -16,6 +30,8 @@ class Layout extends React.PureComponent {
         <div>{loadings.$getDetail === true && <span>正在加载中...</span>}</div>
         {detail}
         <span onClick={this.click}>攒（{count}）</span>
+        <span onClick={this.add}>增加</span>
+        <span onClick={this.remove}>移除</span>
       </div>
     );
   }

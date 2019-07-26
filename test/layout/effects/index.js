@@ -9,4 +9,36 @@ export default class Effects extends BaseEffects {
       payload: data,
     });
   }
+
+  async setRoutes() {
+    await services.getInfo();
+    this.dispatch({
+      type: 'updateState',
+      payload: {
+        routes: [
+          {
+            path: '/a/',
+            render() {
+              return 'a';
+            },
+          },
+          {
+            path: '/b/',
+            render() {
+              return 'b';
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  async removeRoutes() {
+    this.dispatch({
+      type: 'updateState',
+      payload: {
+        routes: [],
+      },
+    });
+  }
 }

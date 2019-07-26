@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import store from './store';
+import store, { setStore } from './store';
 
 const reducers = {};
 
@@ -14,5 +14,6 @@ export const createReducer = (key, reducer) => {
 
 export const removeReducer = (key) => {
   delete reducers[key];
+  setStore(key, null);
   replaceReducer();
 };

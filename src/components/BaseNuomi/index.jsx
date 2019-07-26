@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createReducer } from '../../core/redux/reducer';
-import rootStore from '../../core/redux/store';
+import rootStore, { getStore, setStore } from '../../core/redux/store';
 import { isObject, isFunction } from '../../utils';
 import EffectsProxy from '../../utils/effectsProxy';
 
@@ -60,7 +60,8 @@ class BaseNuomi extends React.PureComponent {
       if (!this.effects) {
         this.effects = props.effects ? props.effects() : null;
       }
-      if (type.indexOf('/') === -1) {
+      const splitIndex = type.indexOf('/');
+      if (splitIndex === -1) {
         if (isObject(this.effects) && isFunction(this.effects[type])) {
           const queue = [];
           try {
@@ -107,14 +108,21 @@ class BaseNuomi extends React.PureComponent {
           });
         }
       } else {
-        rootStore.dispatch({
-          type,
-          payload,
-        });
+        const id = type.substr(0, splitIndex);
+        const effect = type.substr(splitIndex + 1);
+        const $store = getStore(id);
+        if ($store) {
+          $store.dispatch({
+            type: effect,
+            payload,
+          });
+        }
       }
     };
 
     store.getState = () => rootStore.getState()[store.id];
+
+    setStore(store.id, store);
   }
 
   createReducer() {

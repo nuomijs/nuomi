@@ -1,7 +1,8 @@
 import { createStore } from 'redux';
 
 const rootReducer = () => {};
-const store =
+const stores = {};
+const rootStore =
   process.env.NODE_ENV === 'production'
     ? createStore(rootReducer)
     : createStore(
@@ -10,4 +11,16 @@ const store =
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
       );
 
-export default store;
+export const getStore = (id) => {
+  return stores[id];
+};
+
+export const setStore = (id, store) => {
+  if (!stores[id]) {
+    stores[id] = store;
+  } else if (!store) {
+    delete stores[id];
+  }
+};
+
+export default rootStore;
