@@ -14,7 +14,7 @@ export default {
   render() {
     return <Layout />;
   },
-  onInit() {
+  onChange() {
     this.store.dispatch({
       type: 'initData',
     });

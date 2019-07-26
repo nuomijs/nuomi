@@ -26,11 +26,7 @@ class BaseNuomi extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    const { props } = this;
-    if (!props.store.id) {
-      this.createStore();
-      this.createReducer();
-    }
+    this.initialize();
   }
 
   getChildContext() {
@@ -46,6 +42,12 @@ class BaseNuomi extends React.PureComponent {
     const { id } = this.props;
     const defaultId = `nuomi_${BaseNuomi.nuomiId}`;
     return id || defaultId;
+  }
+
+  initialize() {
+    this.createStore();
+    this.createReducer();
+    this.nuomiInit();
   }
 
   createStore() {
@@ -128,11 +130,9 @@ class BaseNuomi extends React.PureComponent {
       }
       return state;
     });
-
-    this.initialize();
   }
 
-  initialize() {
+  nuomiInit() {
     const { props } = this;
     if (props.onInit) {
       props.onInit();

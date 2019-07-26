@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import BaseNuomi from '../BaseNuomi';
-import { listener, matchPath } from '../../core/router';
 
 class BaseRoute extends BaseNuomi {
   static propTypes = {
@@ -19,36 +18,49 @@ class BaseRoute extends BaseNuomi {
     onLeave: PropTypes.func,
   };
 
-  constructor(...args) {
-    super(...args);
-    const { store, reload } = this.props;
-    if (!store.id) {
-      this.createStore();
-      this.createReducer();
-    } else if (reload === true) {
-      this.checkResetState(this.props);
-    }
-    this.routerChange();
-  }
-
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { props } = this;
-    this.checkResetState(nextProps);
-    if (nextProps.location !== props.location) {
+    const { store } = props;
+    const isReload = store.id && nextProps.reload === true;
+    const isChange = nextProps.location !== props.location;
+    if (isReload) {
+      this.resetState();
+    }
+    if (isChange) {
+      this.execLocationCallback();
+    }
+    if (isReload) {
+      this.nuomiInit();
+    }
+    if (isChange) {
       this.routerChange();
     }
   }
 
-  checkResetState(nextProps) {
-    const { store, state } = this.props;
-    if (store.id && nextProps.reload === true) {
-      store.dispatch({
-        type: 'setState',
-        payload: state,
-      });
-      this.initialize();
+  initialize() {
+    const { store, reload } = this.props;
+    if (!store.id) {
+      this.createStore();
+      this.createReducer();
+      this.execLocationCallback();
+      this.nuomiInit();
+    } else if (reload === true) {
+      this.resetState();
+      this.execLocationCallback();
+      this.nuomiInit();
+    } else {
+      this.execLocationCallback();
     }
+    this.routerChange();
+  }
+
+  resetState() {
+    const { props } = this;
+    props.store.dispatch({
+      type: 'setState',
+      payload: props.state,
+    });
   }
 
   routerChange() {
@@ -58,14 +70,10 @@ class BaseRoute extends BaseNuomi {
     }
   }
 
-  initialize() {
+  execLocationCallback() {
     const { props } = this;
-    const { routerLocationCallback } = props;
-    if (routerLocationCallback) {
-      routerLocationCallback(props);
-    }
-    if (props.onInit) {
-      props.onInit();
+    if (props.routerLocationCallback) {
+      props.routerLocationCallback(props);
     }
   }
 }

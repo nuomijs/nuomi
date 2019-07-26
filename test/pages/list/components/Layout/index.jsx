@@ -1,7 +1,16 @@
 import React from 'react';
-import { connect, Link } from 'nuomi';
+import { connect, Link, router } from 'nuomi';
 
 class Layout extends React.PureComponent {
+  click(count) {
+    router.location('/detail/', ({ store }) => {
+      store.dispatch({
+        type: 'updateState',
+        payload: { count },
+      });
+    });
+  }
+
   render() {
     const { dataSource, loadings } = this.props;
     return (
@@ -10,9 +19,7 @@ class Layout extends React.PureComponent {
         <ul>
           {dataSource.map(({ title }, i) => (
             <li key={i}>
-              <Link to="/detail/" reload>
-                {title}
-              </Link>
+              <a onClick={() => this.click(i)}>{title}</a>
             </li>
           ))}
         </ul>
