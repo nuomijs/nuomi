@@ -1,4 +1,4 @@
-import ProxyPolyfill from 'proxy-polyfill/src/proxy';
+import ProxyPolyfill from './ProxyPolyfill';
 import { isNative } from './index';
 
 const supportProxy = isNative(window.Proxy);
