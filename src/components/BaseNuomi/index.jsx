@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { createReducer } from '../../core/redux/reducer';
 import rootStore from '../../core/redux/store';
 import { isObject, isFunction } from '../../utils';
-import EffectsProxy from '../../utils/EffectsProxy';
+import EffectsProxy from '../../utils/effectsProxy';
 
 class BaseNuomi extends React.PureComponent {
   static propTypes = {

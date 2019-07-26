@@ -1,9 +1,9 @@
-import ProxyPolyfill from './ProxyPolyfill';
+import proxyPolyfill from './proxyPolyfill';
 import { isNative } from './index';
 
 const supportProxy = isNative(window.Proxy);
 
-const EffectsProxy = supportProxy ? window.Proxy : ProxyPolyfill;
+const EffectsProxy = supportProxy ? window.Proxy : proxyPolyfill();
 
 const getEffects = (effects) => {
   if (!supportProxy) {

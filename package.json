@@ -44,8 +44,8 @@
     "lint": "npm run format && eslint --fix --ext \".js,.mjs,.ts\" .",
     "build": "npm run clean && npm run build:cjs && npm run build:copy && npm run build:proxy",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-    "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/ProxyPolyfill.js --out-file lib/utils/ProxyPolyfill.js",
-    "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/ProxyPolyfill.js --copy-files",
+    "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
+    "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
     "clean": "rimraf lib",
     "start": "cross-env NODE_ENV=development webpack-dev-server --progress"
   },

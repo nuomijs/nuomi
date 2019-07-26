@@ -34,7 +34,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, 'src'),
+      nuomi: path.resolve(__dirname, 'lib'),
     },
   },
   module: {
