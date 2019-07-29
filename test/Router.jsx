@@ -5,7 +5,6 @@ import pages from './pages';
 class Router extends React.Component {
   render() {
     const { routes } = this.props;
-    console.log(1);
     return (
       <NuomiRouter entry="/">
         {pages.map((route) => (

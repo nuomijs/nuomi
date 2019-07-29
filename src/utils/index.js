@@ -16,13 +16,14 @@ export const isNative = (obj) => typeof obj !== 'undefined' && /native code/i.te
 
 export const extend = (...args) => {
   const [object, newObject] = args;
-  const currentObject = { ...object };
+  let currentObject = { ...object };
   if (isObject(newObject)) {
-    const { state, data, reducers, ...rest } = newObject;
-    for (const i in rest) {
-      if (rest[i] !== undefined) {
-        currentObject[i] = rest[i];
-      }
+    const { state, data, reducers, onChange, ...rest } = newObject;
+    currentObject = { ...currentObject, ...rest, onChange };
+    if (isFunction(onChange)) {
+      currentObject.onChange = onChange;
+    } else if (isObject(onChange)) {
+      currentObject.onChange = { ...currentObject.onChange, ...onChange };
     }
     if (isObject(state)) {
       const { loadings, ...restState } = state;
@@ -41,11 +42,11 @@ export const extend = (...args) => {
     }
     if (isObject(reducers)) {
       currentObject.reducers = { ...object.reducers };
-      for (const i in reducers) {
-        if (isFunction(reducers[i])) {
-          currentObject.reducers[i] = reducers[i];
+      Object.keys(reducers).forEach((key) => {
+        if (isFunction(reducers[key])) {
+          currentObject.reducers[key] = reducers[key];
         }
-      }
+      });
     }
   }
   return currentObject;

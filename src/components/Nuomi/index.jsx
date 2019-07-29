@@ -34,7 +34,7 @@ class Nuomi extends React.PureComponent {
       async((props) => {
         this.setState({
           loaded: true,
-          props: extend(getDefaultProps(), { ...rest, ...props }),
+          props: extend(getDefaultProps(), extend(rest, props)),
         });
       });
     }

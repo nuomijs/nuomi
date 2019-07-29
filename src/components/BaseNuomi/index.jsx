@@ -26,6 +26,7 @@ class BaseNuomi extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
+    this.unListener = null;
     this.initialize();
   }
 
@@ -35,6 +36,10 @@ class BaseNuomi extends React.PureComponent {
       nuomiStore: store,
       sourceProps: this.props,
     };
+  }
+
+  componentWillUnmount() {
+    this.removeListener();
   }
 
   getId() {
@@ -140,10 +145,18 @@ class BaseNuomi extends React.PureComponent {
     });
   }
 
+  removeListener() {
+    if (isFunction(this.unListener)) {
+      this.unListener();
+      this.unListener = null;
+    }
+  }
+
   nuomiInit() {
     const { props } = this;
+    this.removeListener();
     if (props.onInit) {
-      props.onInit();
+      this.unListener = props.onInit();
     }
   }
 

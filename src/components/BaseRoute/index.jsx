@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import BaseNuomi from '../BaseNuomi';
+import { isFunction, isObject } from '../../utils';
 
 class BaseRoute extends BaseNuomi {
   static propTypes = {
@@ -14,7 +15,7 @@ class BaseRoute extends BaseNuomi {
     render: PropTypes.func,
     onBefore: PropTypes.func,
     onInit: PropTypes.func,
-    onChange: PropTypes.func,
+    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     onLeave: PropTypes.func,
   };
 
@@ -30,7 +31,7 @@ class BaseRoute extends BaseNuomi {
     const isReload = store.id && nextProps.reload === true;
     const isChange = nextProps.location !== props.location;
     if (isReload) {
-      this.resetState();
+      this.replaceState();
     }
     if (isChange) {
       this.execLocationCallback();
@@ -51,7 +52,7 @@ class BaseRoute extends BaseNuomi {
       this.execLocationCallback();
       this.nuomiInit();
     } else if (reload === true) {
-      this.resetState();
+      this.replaceState();
       this.execLocationCallback();
       this.nuomiInit();
     } else {
@@ -60,18 +61,24 @@ class BaseRoute extends BaseNuomi {
     this.routerChange();
   }
 
-  resetState() {
+  replaceState() {
     const { props } = this;
     props.store.dispatch({
-      type: 'setState',
+      type: 'replaceState',
       payload: props.state,
     });
   }
 
   routerChange() {
     const { props } = this;
-    if (props.onChange) {
+    if (isFunction(props.onChange)) {
       props.onChange();
+    } else if (isObject(props.onChange)) {
+      Object.values(props.onChange).forEach((change) => {
+        if (isFunction(change)) {
+          change.call(props);
+        }
+      });
     }
   }
 

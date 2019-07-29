@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
 import RouterContext from '../RouterContext';
-import { isFunction, isObject } from '../../utils';
+import { isFunction, isObject, extend } from '../../utils';
 import { getParams } from '../../core/router';
 
 class NuomiRoute extends React.PureComponent {
@@ -55,7 +55,7 @@ class NuomiRoute extends React.PureComponent {
         this.setState(
           {
             loaded: true,
-            props: { ...rest, ...props },
+            props: extend(rest, props),
           },
           cb,
         );
@@ -87,7 +87,7 @@ class NuomiRoute extends React.PureComponent {
   render() {
     const { props, visible, loaded } = this.state;
     const { wrapper } = props;
-    let propsData = props.data;
+    let propsData = { ...props.data };
     const routeComponent = (
       <RouterContext.Consumer>
         {({ location }) => {
