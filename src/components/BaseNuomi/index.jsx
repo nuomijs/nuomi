@@ -80,7 +80,7 @@ class BaseNuomi extends React.PureComponent {
                     loadingPayload[prevEffect] = false;
                   }
                   rootStore.dispatch({
-                    type: `${store.id}/updateLoading`,
+                    type: `${store.id}/_updateLoading`,
                     payload: loadingPayload,
                   });
                   queue.push(name);
@@ -101,7 +101,7 @@ class BaseNuomi extends React.PureComponent {
                 loadingPayload[lastEffect] = false;
               }
               rootStore.dispatch({
-                type: `${store.id}/updateLoading`,
+                type: `${store.id}/_updateLoading`,
                 payload: loadingPayload,
               });
             }
