@@ -21,7 +21,7 @@ class BaseRoute extends BaseNuomi {
 
   static childContextTypes = {
     nuomiStore: PropTypes.object,
-    sourceProps: PropTypes.object,
+    nuomiProps: PropTypes.object,
   };
 
   componentDidUpdate(nextProps) {
