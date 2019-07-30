@@ -18,25 +18,24 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
 
       constructor(...args) {
         super(...args);
-        const { nuomiStore } = this.context;
+        this.updateState = null;
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
         }
-        this.state = {};
         if (isFunction(mapStateToProps)) {
-          const listener = () => {
-            if (this.subcribe) {
-              const state = mapStateToProps(nuomiStore.getState(), store.getState());
-              this.subcribe(isObject(state) ? state : {});
+          // 初始化state
+          this.state = this.getState();
+          // 订阅更新状态
+          this.unSubcribe = store.subscribe(() => {
+            if (this.updateState) {
+              this.updateState(this.getState());
             }
-          };
-          listener();
-          this.unSubcribe = store.subscribe(listener);
+          });
         }
       }
 
       componentDidMount() {
-        this.subcribe = (state) => {
+        this.updateState = (state) => {
           this.setState(state);
         };
       }
@@ -44,9 +43,15 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
       componentWillUnmount() {
         if (this.unSubcribe) {
           // 设置为null是为了防止组件在销毁时执行setState导致报错
-          this.subcribe = null;
+          this.updateState = null;
           this.unSubcribe();
         }
+      }
+
+      getState() {
+        const { nuomiStore } = this.context;
+        const state = mapStateToProps(nuomiStore.getState(), store.getState());
+        return isObject(state) ? state : {};
       }
 
       getWrappedInstance() {
@@ -61,10 +66,6 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
         return (
           mergeProps(this.props, this.state, mapDispatchToProps(nuomiStore.dispatch)) || this.props
         );
-      }
-
-      subcribe(state) {
-        this.state = state;
       }
 
       render() {
