@@ -43,7 +43,8 @@ class Route extends React.PureComponent {
   }
 
   render() {
-    const { path, wrapper } = this.props;
+    const props = extend(getDefaultProps(), this.props);
+    const { path, wrapper } = props;
     // 重复的path将不被渲染
     if (this.repeated) {
       return null;
@@ -52,18 +53,12 @@ class Route extends React.PureComponent {
       <RouterContext.Consumer>
         {({ location }) => {
           const match = matchPath(location, path);
-          if (!location.reload && wrapper && this.routeComponent) {
-            if (match) {
-              this.ref.current.visibleWrapperHandler();
-            }
+          if (!location.reload && wrapper && this.routeComponent && !match) {
             return this.routeComponent;
           }
           if (match) {
-            const props = extend(getDefaultProps(), this.props);
             this.routeComponent = (
-              <RouterContext.Provider value={{ location }}>
-                <NuomiRoute {...props} store={this.store} ref={this.ref} />
-              </RouterContext.Provider>
+              <NuomiRoute {...props} location={location} store={this.store} ref={this.ref} />
             );
             return this.routeComponent;
           }

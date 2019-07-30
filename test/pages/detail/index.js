@@ -3,6 +3,7 @@ import Effects from './effects';
 import Layout from './components/Layout';
 
 export default {
+  wrapper: true,
   path: '/detail/',
   state: {
     detail: '',

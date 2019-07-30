@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
-import RouterContext from '../RouterContext';
 import { isFunction, isObject, extend } from '../../utils';
 import { getParams } from '../../core/router';
 
@@ -14,11 +13,12 @@ class NuomiRoute extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    const { async, ...rest } = this.props;
+    const { async, data, ...rest } = this.props;
     this.ref = React.createRef();
     this.wrapperRef = React.createRef();
     const isAsync = isFunction(async);
     this.state = {
+      data: { ...data },
       loaded: !isAsync,
       visible: false,
       props: rest,
@@ -47,15 +47,24 @@ class NuomiRoute extends React.PureComponent {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+    if (location !== prevProps.location) {
+      this.visibleWrapperHandler();
+    }
+  }
+
   loadProps(cb) {
-    const { async, ...rest } = this.props;
+    const { async, data, ...rest } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
       async((props) => {
+        const { data: dataProps, ...restProps } = props;
         this.setState(
           {
             loaded: true,
-            props: extend(rest, props),
+            props: extend(rest, restProps),
+            data: { ...data, ...dataProps },
           },
           cb,
         );
@@ -85,32 +94,29 @@ class NuomiRoute extends React.PureComponent {
   }
 
   render() {
-    const { props, visible, loaded } = this.state;
-    const { wrapper } = props;
-    let propsData = { ...props.data };
+    const { location, wrapper } = this.props;
+    const { props, visible, loaded, data } = this.state;
+    let propsData = data;
+    const { data: locationData, reload, ...rest } = location;
+    const extraProps = {};
+    rest.params = getParams(rest, props.path);
+
+    if (isFunction(locationData)) {
+      extraProps.routerLocationCallback = locationData;
+    } else if (isObject(locationData)) {
+      propsData = {
+        ...propsData,
+        ...locationData,
+      };
+    }
+    if (reload) {
+      extraProps.reload = reload;
+    }
+
     const routeComponent = (
-      <RouterContext.Consumer>
-        {({ location }) => {
-          const { data, reload, ...rest } = location;
-          const extraProps = {};
-          rest.params = getParams(rest, props.path);
-          if (isFunction(data)) {
-            extraProps.routerLocationCallback = data;
-          } else if (isObject(data)) {
-            propsData = {
-              ...propsData,
-              ...data,
-            };
-          }
-          if (reload) {
-            extraProps.reload = reload;
-          }
-          return (
-            <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
-          );
-        }}
-      </RouterContext.Consumer>
+      <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
     );
+
     if (wrapper) {
       return (
         <div ref={this.wrapperRef} className="nuomi-route-wrapper">

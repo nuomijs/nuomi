@@ -24,8 +24,7 @@ class BaseRoute extends BaseNuomi {
     sourceProps: PropTypes.object,
   };
 
-  /* eslint-disable camelcase */
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     const { props } = this;
     const { store } = props;
     const isReload = store.id && nextProps.reload === true;

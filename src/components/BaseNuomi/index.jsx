@@ -63,7 +63,7 @@ class BaseNuomi extends React.PureComponent {
 
     store.dispatch = async ({ type, payload }) => {
       if (!this.effects) {
-        this.effects = props.effects ? props.effects() : null;
+        this.effects = props.effects ? props.effects() : {};
       }
       const splitIndex = type.indexOf('/');
       if (splitIndex === -1) {

@@ -19,7 +19,7 @@ export const extend = (...args) => {
   let currentObject = { ...object };
   if (isObject(newObject)) {
     const { state, data, reducers, onChange, ...rest } = newObject;
-    currentObject = { ...currentObject, ...rest, onChange };
+    currentObject = { ...currentObject, ...rest };
     if (isFunction(onChange)) {
       currentObject.onChange = onChange;
     } else if (isObject(onChange)) {

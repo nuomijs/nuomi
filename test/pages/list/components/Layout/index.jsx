@@ -3,12 +3,13 @@ import { connect, Link, router } from 'nuomi';
 
 class Layout extends React.PureComponent {
   click(count) {
-    router.location('/detail/', ({ store }) => {
-      store.dispatch({
-        type: 'updateState',
-        payload: { count },
-      });
-    });
+    // router.location('/detail/', ({ store }) => {
+    //   store.dispatch({
+    //     type: 'updateState',
+    //     payload: { count },
+    //   });
+    // });
+    router.location('/detail/', { a:1 });
   }
 
   render() {
