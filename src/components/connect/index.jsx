@@ -25,8 +25,10 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
         this.state = {};
         if (isFunction(mapStateToProps)) {
           const listener = () => {
-            const state = mapStateToProps(nuomiStore.getState(), store.getState());
-            this.subcribe(isObject(state) ? state : {});
+            if (this.subcribe) {
+              const state = mapStateToProps(nuomiStore.getState(), store.getState());
+              this.subcribe(isObject(state) ? state : {});
+            }
           };
           listener();
           this.unSubcribe = store.subscribe(listener);
@@ -41,6 +43,8 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
 
       componentWillUnmount() {
         if (this.unSubcribe) {
+          // 设置为null是为了防止组件在销毁时执行setState导致报错
+          this.subcribe = null;
           this.unSubcribe();
         }
       }
@@ -52,15 +56,15 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
         return null;
       }
 
-      subcribe(state) {
-        this.state = state;
-      }
-
       getProps() {
         const { nuomiStore } = this.context;
         return (
           mergeProps(this.props, this.state, mapDispatchToProps(nuomiStore.dispatch)) || this.props
         );
+      }
+
+      subcribe(state) {
+        this.state = state;
       }
 
       render() {
