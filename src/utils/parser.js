@@ -14,6 +14,7 @@ function toRegexp(path) {
   const regexpPath = path
     .replace(/:([^/]+)$/, '([^/]+)?')
     .replace(/\/:([^/]+)/g, '(/[^/]+)?')
+    .replace(/\/$/g, '/?')
     .replace(/\//g, '\\/');
   return new RegExp(`^${regexpPath}$`, 'i');
 }
