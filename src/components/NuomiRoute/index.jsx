@@ -109,6 +109,7 @@ class NuomiRoute extends React.PureComponent {
         ...locationData,
       };
     }
+
     if (reload) {
       extraProps.reload = reload;
     }

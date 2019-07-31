@@ -1,7 +1,10 @@
 function replacePath(path) {
   // a//b//c => a/b/c
   // a/b/c => /a/b/c
-  return path.replace(/\/{2,}/g, '/').replace(/^([^/])/, '/$1');
+  return path
+    .replace(/\/{2,}/g, '/')
+    .replace(/^([^/])/, '/$1')
+    .replace(/([^/])\/$/, '$1');
 }
 
 function normalize(path) {

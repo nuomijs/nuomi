@@ -25,14 +25,6 @@ class Router extends React.PureComponent {
     });
   }
 
-  setLocation(location) {
-    const { entry } = this.props;
-    if (!location.pathname && entry) {
-      routerLocation(entry);
-    }
-    this.state.location = location;
-  }
-
   componentDidMount() {
     this.setLocation = (location) => {
       this.setState({ location });
@@ -44,6 +36,14 @@ class Router extends React.PureComponent {
       this.destroyRouter();
       this.destroyRouter = null;
     }
+  }
+
+  setLocation(location) {
+    const { entry } = this.props;
+    if (!location.pathname && entry) {
+      routerLocation(entry);
+    }
+    this.state.location = location;
   }
 
   render() {

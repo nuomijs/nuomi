@@ -129,13 +129,11 @@ function createRouter({ prefix: routerPrefix }, callback) {
 }
 
 function matchPathname({ pathname }) {
-  for (const i in pathRegexps) {
-    if (pathRegexps[i]) {
-      if (pathRegexps[i].test(pathname)) {
-        return true;
-      }
+  Object.keys(pathRegexps).forEach((i) => {
+    if (pathRegexps[i].test(pathname)) {
+      return true;
     }
-  }
+  });
   return false;
 }
 
