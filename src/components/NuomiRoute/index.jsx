@@ -113,18 +113,17 @@ class NuomiRoute extends React.PureComponent {
       extraProps.reload = reload;
     }
 
-    const routeComponent = (
-      <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
-    );
-
-    if (wrapper) {
-      return (
-        <div ref={this.wrapperRef} className="nuomi-route-wrapper">
-          {loaded && visible && routeComponent}
-        </div>
+    if (wrapper || (loaded && visible)) {
+      const routeComponent = (
+        <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
       );
-    }
-    if (loaded && visible) {
+      if (wrapper) {
+        return (
+          <div ref={this.wrapperRef} className="nuomi-route-wrapper">
+            {loaded && visible && routeComponent}
+          </div>
+        );
+      }
       return routeComponent;
     }
     return null;

@@ -53,7 +53,7 @@ class Route extends React.PureComponent {
       <RouterContext.Consumer>
         {({ location }) => {
           const match = matchPath(location, path);
-          if (!location.reload && wrapper && this.routeComponent && !match) {
+          if (wrapper && this.routeComponent && !match) {
             return this.routeComponent;
           }
           if (match) {
