@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import store from '../../core/redux/store';
 import { isFunction, isObject } from '../../utils';
+import { getStore } from '../../core/redux/store';
 
 const defaultMergeProps = (props, stateProps, dispatchProps) => {
   return { ...props, ...stateProps, ...dispatchProps };
@@ -19,6 +20,7 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
       constructor(...args) {
         super(...args);
         this.updateState = null;
+        const { nuomiStore } = this.context;
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
         }
@@ -27,7 +29,7 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
           this.state = this.getState();
           // 订阅更新状态
           this.unSubcribe = store.subscribe(() => {
-            if (this.updateState) {
+            if (this.updateState && getStore(nuomiStore.id)) {
               this.updateState(this.getState());
             }
           });
