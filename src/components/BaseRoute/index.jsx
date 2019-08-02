@@ -24,11 +24,11 @@ class BaseRoute extends BaseNuomi {
     nuomiProps: PropTypes.object,
   };
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate(prevProps) {
     const { props } = this;
     const { store } = props;
-    const isReload = store.id && nextProps.reload === true;
-    const isChange = nextProps.location !== props.location;
+    const isReload = store.id && props.reload === true;
+    const isChange = prevProps.location !== props.location;
     if (isReload) {
       this.replaceState();
     }

@@ -4,5 +4,3 @@ export { default as Route } from './Route';
 export { default as Link } from './Link';
 export { default as connect } from './connect';
 export { default as withNuomi } from './withNuomi';
-export { default as createNuomi } from './createNuomi';
-export { default as createRoute } from './createRoute';

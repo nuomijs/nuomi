@@ -113,7 +113,6 @@ class NuomiRoute extends React.PureComponent {
     if (reload) {
       extraProps.reload = reload;
     }
-
     if (wrapper || (loaded && visible)) {
       const routeComponent = (
         <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
