@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import store from '../../core/redux/store';
 import { isFunction, isObject } from '../../utils';
-import { getStore } from '../../core/redux/store';
+import store, { getStore } from '../../core/redux/store';
 
 const defaultMergeProps = (props, stateProps, dispatchProps) => {
   return { ...props, ...stateProps, ...dispatchProps };
