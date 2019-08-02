@@ -102,7 +102,8 @@ class NuomiRoute extends React.PureComponent {
     rest.params = getParams(rest, props.path);
 
     if (isFunction(locationData)) {
-      extraProps.routerLocationCallback = locationData;
+      /* eslint-disable no-underscore-dangle */
+      extraProps._routerChangeCallback = locationData;
     } else if (isObject(locationData)) {
       propsData = {
         ...propsData,

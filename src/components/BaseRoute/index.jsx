@@ -33,13 +33,10 @@ class BaseRoute extends BaseNuomi {
       this.replaceState();
     }
     if (isChange) {
-      this.execLocationCallback();
+      this.routerChange();
     }
     if (isReload) {
       this.nuomiInit();
-    }
-    if (isChange) {
-      this.routerChange();
     }
   }
 
@@ -48,16 +45,15 @@ class BaseRoute extends BaseNuomi {
     if (!store.id) {
       this.createStore();
       this.createReducer();
-      this.execLocationCallback();
+      this.routerChange();
       this.nuomiInit();
     } else if (reload === true) {
       this.replaceState();
-      this.execLocationCallback();
+      this.routerChange();
       this.nuomiInit();
     } else {
-      this.execLocationCallback();
+      this.routerChange();
     }
-    this.routerChange();
   }
 
   replaceState() {
@@ -70,6 +66,10 @@ class BaseRoute extends BaseNuomi {
 
   routerChange() {
     const { props } = this;
+    /* eslint-disable no-underscore-dangle */
+    if (props._routerChangeCallback) {
+      props._routerChangeCallback(props);
+    }
     if (isFunction(props.onChange)) {
       props.onChange();
     } else if (isObject(props.onChange)) {
@@ -78,13 +78,6 @@ class BaseRoute extends BaseNuomi {
           change.call(props);
         }
       });
-    }
-  }
-
-  execLocationCallback() {
-    const { props } = this;
-    if (props.routerLocationCallback) {
-      props.routerLocationCallback(props);
     }
   }
 }
