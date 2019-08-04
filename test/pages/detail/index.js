@@ -18,6 +18,7 @@ export default {
       });
     },
     count() {
+      console.log(this.getNuomiProps())
       const { count } = this.getState();
       this.updateState({
         count: count + 1,

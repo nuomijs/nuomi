@@ -11,7 +11,7 @@ class BaseRoute extends BaseNuomi {
     data: PropTypes.object,
     store: PropTypes.object,
     reducers: PropTypes.object,
-    effects: PropTypes.func,
+    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
     onBefore: PropTypes.func,
     onInit: PropTypes.func,
