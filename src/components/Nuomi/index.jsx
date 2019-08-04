@@ -2,7 +2,8 @@ import React from 'react';
 import BaseNuomi from '../BaseNuomi';
 import { removeReducer } from '../../core/redux/reducer';
 import { getDefaultProps } from '../../core/nuomi';
-import { extend, isFunction } from '../../utils';
+import { isFunction } from '../../utils';
+import extend from '../../utils/extend';
 
 class Nuomi extends React.PureComponent {
   constructor(...args) {

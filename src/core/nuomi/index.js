@@ -1,5 +1,5 @@
 import defaultProps from './defaultProps';
-import { extend } from '../../utils';
+import extend from '../../utils/extend';
 
 let newProps = defaultProps;
 

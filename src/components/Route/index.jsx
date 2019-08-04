@@ -5,7 +5,7 @@ import RouterContext from '../RouterContext';
 import { removeReducer } from '../../core/redux/reducer';
 import { matchPath, savePath, removePath } from '../../core/router';
 import { getDefaultProps } from '../../core/nuomi';
-import { extend } from '../../utils';
+import extend from '../../utils/extend';
 
 class Route extends React.PureComponent {
   static propTypes = {

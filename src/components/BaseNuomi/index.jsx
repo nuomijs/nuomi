@@ -12,7 +12,7 @@ class BaseNuomi extends React.PureComponent {
     data: PropTypes.object,
     store: PropTypes.object,
     reducers: PropTypes.object,
-    effects: PropTypes.func,
+    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
     onInit: PropTypes.func,
   };
@@ -27,6 +27,7 @@ class BaseNuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.unListener = null;
+    this.effects = null;
     this.initialize();
   }
 
@@ -55,6 +56,23 @@ class BaseNuomi extends React.PureComponent {
     this.nuomiInit();
   }
 
+  getEffects() {
+    const { props } = this;
+    const { effects, store } = props;
+    if (isObject(effects)) {
+      return {
+        ...effects,
+        getNuomiProps: () => props,
+        getState: store.getState,
+        dispatch: store.dispatch,
+      };
+    }
+    if (isFunction(effects)) {
+      return props.effects() || {};
+    }
+    return {};
+  }
+
   createStore() {
     const { props } = this;
     const { store, reducers } = props;
@@ -63,7 +81,7 @@ class BaseNuomi extends React.PureComponent {
 
     store.dispatch = async ({ type, payload }) => {
       if (!this.effects) {
-        this.effects = props.effects ? props.effects() : {};
+        this.effects = this.getEffects();
       }
       const splitIndex = type.indexOf('/');
       if (splitIndex === -1) {
