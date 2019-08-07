@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, Link, Route, Redirect } from 'nuomi';
-import routes from '../../../routes';
+import routes from '../../../public/routes';
 
 const style = {
   marginLeft: 8,

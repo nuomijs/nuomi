@@ -3,7 +3,6 @@ import Effects from './effects';
 import Layout from './components/Layout';
 
 export default {
-  path: '/home/list',
   state: {
     dataSource: [],
   },

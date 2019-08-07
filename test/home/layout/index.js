@@ -13,11 +13,7 @@ export default {
     return new Effects(this);
   },
   render() {
-    return sessionStorage.getItem('isLogin') ? (
-      <Layout>{this.children}</Layout>
-    ) : (
-      <Redirect to="/" />
-    );
+    return sessionStorage.getItem('isLogin') ? <Layout /> : <Redirect to="/" />;
   },
   onInit() {
     this.store.dispatch({

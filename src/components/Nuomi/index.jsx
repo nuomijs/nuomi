@@ -29,16 +29,24 @@ class Nuomi extends React.PureComponent {
     }
   }
 
-  loadProps() {
+  loaded(props) {
     const { async, ...rest } = this.props;
+    this.setState({
+      loaded: true,
+      props: extend(getDefaultProps(), extend(rest, props)),
+    });
+  }
+
+  loadProps() {
+    const { async } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
-      async((props) => {
-        this.setState({
-          loaded: true,
-          props: extend(getDefaultProps(), extend(rest, props)),
-        });
+      const loadResult = async((props) => {
+        this.loaded(props);
       });
+      if (loadResult && loadResult instanceof Promise) {
+        loadResult.then((module) => this.loaded(module.default));
+      }
     }
   }
 

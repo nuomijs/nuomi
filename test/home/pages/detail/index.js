@@ -5,7 +5,6 @@ import services from './services';
 
 export default {
   wrapper: true,
-  path: '/home/detail/:id',
   state: {
     detail: '',
     count: 0,

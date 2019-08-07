@@ -147,3 +147,6 @@ export default class Effects extends BaseEffects {
 0.2.1
 增加NuomiRoute、Redirect组件 移出Router组件entry props
 代码优化
+
+0.2.2
+模块异步加载支持import()动态导入

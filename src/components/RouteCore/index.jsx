@@ -55,21 +55,29 @@ class RouteCore extends React.PureComponent {
     }
   }
 
-  loadProps(cb) {
+  loaded(props, cb) {
     const { async, data, ...rest } = this.props;
+    const { data: dataProps, ...restProps } = props;
+    this.setState(
+      {
+        loaded: true,
+        props: extend(rest, restProps),
+        data: { ...data, ...dataProps },
+      },
+      cb,
+    );
+  }
+
+  loadProps(cb) {
+    const { async } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
-      async((props) => {
-        const { data: dataProps, ...restProps } = props;
-        this.setState(
-          {
-            loaded: true,
-            props: extend(rest, restProps),
-            data: { ...data, ...dataProps },
-          },
-          cb,
-        );
+      const loadResult = async((props) => {
+        this.loaded(props, cb);
       });
+      if (loadResult && loadResult instanceof Promise) {
+        loadResult.then((module) => this.loaded(module.default, cb));
+      }
     } else {
       cb && cb();
     }
