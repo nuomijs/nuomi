@@ -1,7 +1,7 @@
 function replacePath(path) {
   // a//b//c => a/b/c
   // a/b/c => /a/b/c
-  return path
+  return `${path}/`
     .replace(/\/{2,}/g, '/')
     .replace(/^([^/])/, '/$1')
     .replace(/([^/])\/$/, '$1');
@@ -10,15 +10,12 @@ function replacePath(path) {
 function normalize(path) {
   // /a/:b/ => /a/:b
   // /a/b => /a/b/
-  return replacePath(`${path}/`).replace(/(\/:[^/]+)\/$/, '$1');
+  return replacePath(path).replace(/(\/:[^/]+)\/$/, '$1');
 }
 
 function toRegexp(path) {
-  const regexpPath = path
-    .replace(/\/:([^/]+)/g, '/?([^/]+)?')
-    .replace(/\/$/g, '/?')
-    .replace(/\//g, '\\/');
-  return new RegExp(`^${regexpPath}$`, 'i');
+  const regexpPath = path.replace(/\/:([^/]+)/g, '(/[^/]+)?').replace(/\//g, '\\/');
+  return new RegExp(`^${regexpPath}\\/?$`, 'i');
 }
 
 function parser(path) {

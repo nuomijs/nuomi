@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RouterContext from '../RouterContext';
-import { location as routerLocation, matchPath } from '../../core/router';
+import { location as routerLocation } from '../../core/router';
+import parser from '../../utils/parser';
 
 class Redirect extends React.PureComponent {
   static defaultProps = {
@@ -22,15 +23,22 @@ class Redirect extends React.PureComponent {
     this.redirected = false;
   }
 
+  matchPath({ pathname }) {
+    const { from } = this.props;
+    return pathname === parser.replacePath(from);
+  }
+
   render() {
     const { from, to, reload } = this.props;
     return (
       <RouterContext.Consumer>
         {(context) => {
           const { matched, location } = context;
-          if (to && !this.redirected) {
-            if ((!matched && !from) || (from && matchPath(location, from))) {
+          if (to && !context.redirecting && !this.redirected) {
+            if ((from && this.matchPath(location)) || (!matched && !from)) {
               this.redirected = true;
+              // eslint-disable-next-line no-param-reassign
+              context.redirecting = true; // 防止同时执行多个Redirect
               routerLocation(to, reload);
             }
           } else if (this.redirected) {

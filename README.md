@@ -150,3 +150,6 @@ export default class Effects extends BaseEffects {
 
 0.2.2
 模块异步加载支持import()动态导入
+
+0.2.3
+修复同时执行多个Redirect bug

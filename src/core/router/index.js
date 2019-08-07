@@ -171,7 +171,7 @@ function getParams({ pathname }, path) {
         const name = param.replace(/^\/:/, '');
         const value = pathnameMatch[i + 1];
         if (value !== undefined) {
-          params[name] = value;
+          params[name] = value.replace(/^\//, '');
         }
       });
     }
