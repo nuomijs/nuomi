@@ -1,54 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RouterContext from '../RouterContext';
-import { createRouter, location as routerLocation } from '../../core/router';
+import { createRouter } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
     prefix: '',
-    redirect: '/',
-    entry: '/',
   };
 
   static propTypes = {
     prefix: PropTypes.string,
-    entry: PropTypes.string,
-    redirect: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   };
 
   constructor(...args) {
     super(...args);
-    this.state = {};
     const { prefix } = this.props;
+    this.mounted = false;
+    this.state = {};
     this.destroyRouter = createRouter({ prefix }, (location) => {
-      this.setLocation(location);
+      if (this.mounted) {
+        this.setState({ location });
+      } else {
+        this.state.location = location;
+      }
     });
   }
 
   componentDidMount() {
-    this.setLocation = (location) => {
-      this.setState({ location });
-    };
+    this.mounted = true;
   }
 
   componentWillUnmount() {
     if (this.destroyRouter) {
       this.destroyRouter();
-      this.destroyRouter = null;
+      this.mounted = false;
     }
-  }
-
-  setLocation(location) {
-    const { entry } = this.props;
-    if (!location.pathname && entry) {
-      routerLocation(entry);
-    }
-    this.state.location = location;
   }
 
   render() {
     const { children } = this.props;
-    return <RouterContext.Provider value={this.state}>{children}</RouterContext.Provider>;
+    const { location } = this.state;
+    return (
+      <RouterContext.Provider value={{ location, matched: false }}>
+        {children}
+      </RouterContext.Provider>
+    );
   }
 }
 

@@ -142,3 +142,8 @@ export default class Effects extends BaseEffects {
   }
 }
 ```
+
+日志：
+0.2.1
+增加NuomiRoute、Redirect组件 移出Router组件entry props
+代码优化

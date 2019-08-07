@@ -8,6 +8,7 @@ import extend from '../../utils/extend';
 class Nuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
+    this.ref = React.createRef();
     this.store = {};
     const { async, ...rest } = this.props;
     const isAsync = isFunction(async);
@@ -22,9 +23,9 @@ class Nuomi extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { id } = this.store;
-    if (id) {
-      removeReducer(id);
+    removeReducer(this.store.id);
+    if (this.ref.current) {
+      this.ref.current.removeListener();
     }
   }
 
@@ -44,7 +45,7 @@ class Nuomi extends React.PureComponent {
   render() {
     const { loaded, props } = this.state;
     if (loaded) {
-      return <BaseNuomi {...props} store={this.store} />;
+      return <BaseNuomi ref={this.ref} {...props} store={this.store} />;
     }
     return null;
   }

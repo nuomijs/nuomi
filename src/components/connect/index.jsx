@@ -18,7 +18,7 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
 
       constructor(...args) {
         super(...args);
-        this.updateState = null;
+        this.mounted = false;
         const { nuomiStore } = this.context;
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
@@ -28,23 +28,21 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
           this.state = this.getState();
           // 订阅更新状态
           this.unSubcribe = store.subscribe(() => {
-            if (this.updateState && getStore(nuomiStore.id)) {
-              this.updateState(this.getState());
+            if (this.mounted && getStore(nuomiStore.id)) {
+              this.setState(this.getState());
             }
           });
         }
       }
 
       componentDidMount() {
-        this.updateState = (state) => {
-          this.setState(state);
-        };
+        this.mounted = true;
       }
 
       componentWillUnmount() {
         if (this.unSubcribe) {
-          // 设置为null是为了防止组件在销毁时执行setState导致报错
-          this.updateState = null;
+          // 为了防止组件在销毁时执行setState导致报错
+          this.mounted = false;
           this.unSubcribe();
         }
       }

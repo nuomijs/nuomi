@@ -1,14 +1,16 @@
 import React from 'react';
-import { Nuomi } from 'nuomi';
-import layout from './layout';
-import Router from './Router';
+import { Router, Route, NuomiRoute, Redirect } from 'nuomi';
+import home from './home';
+import login from './login';
 
 class App extends React.Component {
   render() {
     return (
-      <Nuomi {...layout}>
-        <Router />
-      </Nuomi>
+      <Router>
+        <Route path="/" {...login} />
+        <NuomiRoute prefix={/^\/(home|404)/} {...home} />
+        <Redirect to="/" />
+      </Router>
     );
   }
 }

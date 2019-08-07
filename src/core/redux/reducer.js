@@ -8,12 +8,16 @@ const replaceReducer = () => {
 };
 
 export const createReducer = (key, reducer) => {
-  reducers[key] = reducer;
-  replaceReducer();
+  if (key && reducer) {
+    reducers[key] = reducer;
+    replaceReducer();
+  }
 };
 
 export const removeReducer = (key) => {
-  delete reducers[key];
-  setStore(key, null);
-  replaceReducer();
+  if (key) {
+    delete reducers[key];
+    setStore(key, null);
+    replaceReducer();
+  }
 };
