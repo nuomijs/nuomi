@@ -45,6 +45,7 @@ class Route extends React.PureComponent {
         {(context) => {
           const { location } = context;
           let match = matchPath(location, path);
+          // context.matched 表示同一个上下文中，多个路由只匹配一个
           if (context.matched === true) {
             match = false;
           }
