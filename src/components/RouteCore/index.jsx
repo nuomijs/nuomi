@@ -17,6 +17,7 @@ class RouteCore extends React.PureComponent {
     const { async, data, ...rest } = this.props;
     this.ref = React.createRef();
     this.wrapperRef = React.createRef();
+    this.mounted = false;
     const isAsync = isFunction(async);
     this.state = {
       data: { ...data },
@@ -27,6 +28,7 @@ class RouteCore extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.mounted = true;
     const { current } = this.wrapperRef;
     if (current) {
       wrappers.push(current);
@@ -55,17 +57,23 @@ class RouteCore extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
   loaded(props, cb) {
     const { async, data, ...rest } = this.props;
     const { data: dataProps, ...restProps } = props;
-    this.setState(
-      {
-        loaded: true,
-        props: extend(rest, restProps),
-        data: { ...data, ...dataProps },
-      },
-      cb,
-    );
+    if (this.mounted) {
+      this.setState(
+        {
+          loaded: true,
+          props: extend(rest, restProps),
+          data: { ...data, ...dataProps },
+        },
+        cb,
+      );
+    }
   }
 
   loadProps(cb) {
@@ -91,7 +99,9 @@ class RouteCore extends React.PureComponent {
   }
 
   visibleRoute() {
-    this.setState({ visible: true });
+    if (this.mounted) {
+      this.setState({ visible: true });
+    }
   }
 
   visibleWrapperHandler() {
@@ -109,7 +119,6 @@ class RouteCore extends React.PureComponent {
     const { data: locationData, reload, ...rest } = location;
     const extraProps = {};
     rest.params = getParams(rest, props.path);
-
     if (isFunction(locationData)) {
       /* eslint-disable no-underscore-dangle */
       extraProps._routerChangeCallback = locationData;

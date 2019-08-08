@@ -28,7 +28,7 @@ class NuomiRoute extends Nuomi {
           const { location } = context;
           if (!context.matched && this.matchPath(location.pathname)) {
             // eslint-disable-next-line no-param-reassign
-            context.matched = true;
+            context.matched = this;
             return (
               <RouterContext.Provider value={{ location, matched: false }}>
                 {super.render()}

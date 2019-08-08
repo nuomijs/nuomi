@@ -9,6 +9,7 @@ class Nuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.ref = React.createRef();
+    this.mounted = false;
     this.store = {};
     const { async, ...rest } = this.props;
     const isAsync = isFunction(async);
@@ -19,10 +20,12 @@ class Nuomi extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.mounted = true;
     this.loadProps();
   }
 
   componentWillUnmount() {
+    this.mounted = false;
     removeReducer(this.store.id);
     if (this.ref.current) {
       this.ref.current.removeListener();
@@ -31,10 +34,12 @@ class Nuomi extends React.PureComponent {
 
   loaded(props) {
     const { async, ...rest } = this.props;
-    this.setState({
-      loaded: true,
-      props: extend(getDefaultProps(), extend(rest, props)),
-    });
+    if (this.mounted === true) {
+      this.setState({
+        loaded: true,
+        props: extend(getDefaultProps(), extend(rest, props)),
+      });
+    }
   }
 
   loadProps() {

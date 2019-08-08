@@ -156,3 +156,7 @@ export default class Effects extends BaseEffects {
 
 0.2.4
 nuomi由方法修改为对象，包含config、getDefaultProps、extend三个属性方法
+
+0.2.5
+修复Route组件更新时不能再次匹配问题
+修复Route，Nuomi组件卸载时报setState的错误

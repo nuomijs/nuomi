@@ -46,7 +46,7 @@ class Route extends React.PureComponent {
           const { location } = context;
           let match = matchPath(location, path);
           // context.matched 表示同一个上下文中，多个路由只匹配一个
-          if (context.matched === true) {
+          if (context.matched && context.matched !== this) {
             match = false;
           }
           if (wrapper && this.routeCore && !match) {
@@ -54,7 +54,7 @@ class Route extends React.PureComponent {
           }
           if (match) {
             // eslint-disable-next-line no-param-reassign
-            context.matched = true;
+            context.matched = this; // 解决Route在更新时不匹配问题，值不能设置为true
             this.routeCore = (
               <RouteCore {...props} location={location} store={this.store} ref={this.ref} />
             );
