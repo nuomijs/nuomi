@@ -153,3 +153,6 @@ export default class Effects extends BaseEffects {
 
 0.2.3
 修复同时执行多个Redirect bug
+
+0.2.4
+nuomi由方法修改为对象，包含config、getDefaultProps、extend三个属性方法
