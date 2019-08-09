@@ -5,17 +5,17 @@ import Nuomi from '../Nuomi';
 
 class NuomiRoute extends Nuomi {
   static propTypes = {
-    prefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   };
 
   matchPath(pathname) {
-    const { prefix } = this.props;
-    if (prefix) {
-      if (prefix instanceof RegExp) {
-        return prefix.test(pathname);
+    const { pathPrefix } = this.props;
+    if (pathPrefix) {
+      if (pathPrefix instanceof RegExp) {
+        return pathPrefix.test(pathname);
       }
-      if (typeof prefix === 'string') {
-        return pathname.indexOf(prefix) === 0;
+      if (typeof pathPrefix === 'string') {
+        return pathname.indexOf(pathPrefix) === 0;
       }
     }
     return false;
@@ -30,7 +30,7 @@ class NuomiRoute extends Nuomi {
             // eslint-disable-next-line no-param-reassign
             context.matched = this;
             return (
-              <RouterContext.Provider value={{ location, matched: false }}>
+              <RouterContext.Provider value={{ location, matched: null }}>
                 {super.render()}
               </RouterContext.Provider>
             );

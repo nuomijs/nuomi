@@ -46,13 +46,19 @@ class BaseNuomi extends React.PureComponent {
     return id || defaultId;
   }
 
+  initialize() {
+    this.createStore();
+    this.createReducer();
+    this.nuomiInit();
+  }
+
   getEffects() {
     const { props } = this;
     const { effects, store } = props;
     if (isObject(effects)) {
       return {
         ...effects,
-        getNuomiProps: () => props,
+        getNuomiProps: () => this.props,
         getState: store.getState,
         dispatch: store.dispatch,
       };
@@ -61,12 +67,6 @@ class BaseNuomi extends React.PureComponent {
       return props.effects() || {};
     }
     return {};
-  }
-
-  initialize() {
-    this.createStore();
-    this.createReducer();
-    this.nuomiInit();
   }
 
   createStore() {

@@ -16,7 +16,7 @@ class Link extends React.PureComponent {
   onClick = (e) => {
     e.preventDefault();
     const { to, reload } = this.props;
-    location(to, reload);
+    location(to, reload, false);
   };
 
   render() {

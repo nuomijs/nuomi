@@ -8,7 +8,7 @@ class App extends React.Component {
     return (
       <Router>
         <Route path="/index" {...login} />
-        <NuomiRoute prefix={/^\/(home|404)/} {...home} />
+        <NuomiRoute pathPrefix={/^\/(home|404)/} {...home} />
         <Redirect from="/" to="/index" />
         <Redirect to="/index" />
       </Router>

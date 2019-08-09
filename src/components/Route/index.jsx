@@ -13,13 +13,23 @@ class Route extends React.PureComponent {
     wrapper: PropTypes.bool,
   };
 
+  static childContextTypes = {
+    routeTempData: PropTypes.object,
+  };
+
   constructor(...args) {
     super(...args);
     this.store = {};
-    this.routeCore = null;
+    this.routeTempData = {};
     this.ref = React.createRef();
     const { path } = this.props;
     savePath(path);
+  }
+
+  getChildContext() {
+    return {
+      routeTempData: this.routeTempData,
+    };
   }
 
   componentWillUnmount() {

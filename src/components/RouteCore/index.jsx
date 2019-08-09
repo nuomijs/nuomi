@@ -12,15 +12,18 @@ class RouteCore extends React.PureComponent {
     onBefore: PropTypes.func,
   };
 
+  static contextTypes = {
+    routeTempData: PropTypes.object,
+  };
+
   constructor(...args) {
     super(...args);
-    const { async, data, ...rest } = this.props;
+    const { async, ...rest } = this.props;
     this.ref = React.createRef();
     this.wrapperRef = React.createRef();
     this.mounted = false;
     const isAsync = isFunction(async);
     this.state = {
-      data: { ...data },
       loaded: !isAsync,
       visible: false,
       props: rest,
@@ -62,14 +65,12 @@ class RouteCore extends React.PureComponent {
   }
 
   loaded(props, cb) {
-    const { async, data, ...rest } = this.props;
-    const { data: dataProps, ...restProps } = props;
+    const { async, ...rest } = this.props;
     if (this.mounted) {
       this.setState(
         {
           loaded: true,
-          props: extend(rest, restProps),
-          data: { ...data, ...dataProps },
+          props: extend(rest, props),
         },
         cb,
       );
@@ -112,29 +113,74 @@ class RouteCore extends React.PureComponent {
     });
   }
 
+  getData() {
+    const { props } = this.state;
+    const { data } = props;
+    const { routeTempData } = this.context;
+    // 删除临时数据
+    if (routeTempData.temp) {
+      const tempDataKeys = Object.keys(routeTempData.temp);
+      if (tempDataKeys.length) {
+        tempDataKeys.forEach((key) => {
+          delete data[key];
+        });
+        routeTempData.temp = null;
+      }
+    }
+    // 还原旧数据
+    if (routeTempData.prev) {
+      const prevDataKeys = Object.keys(routeTempData.prev);
+      if (prevDataKeys.length) {
+        prevDataKeys.forEach((key) => {
+          data[key] = this.oldData[key];
+        });
+        routeTempData.prev = null;
+      }
+    }
+
+    return data;
+  }
+
+  // 设置data临时数据，保存设置前的数据
+  setData(locationData) {
+    const { props } = this.state;
+    const { data } = props;
+    const { routeTempData } = this.context;
+    const keys = Object.keys(locationData);
+    if (keys.length) {
+      const dataKeys = Object.keys(data);
+      // 存储临时数据
+      routeTempData.temp = locationData;
+      // 存储之前的data数据，为了临时数据使用完后还原
+      routeTempData.prev = {};
+      keys.forEach((key) => {
+        if (dataKeys.includes(key)) {
+          routeTempData.prev[key] = dataKeys[key];
+        }
+        data[key] = locationData[key];
+      });
+    }
+  }
+
   render() {
     const { location, wrapper } = this.props;
-    const { props, visible, loaded, data } = this.state;
-    let propsData = data;
+    const { props, visible, loaded } = this.state;
     const { data: locationData, reload, ...rest } = location;
     const extraProps = {};
+    const data = this.getData();
     rest.params = getParams(rest, props.path);
     if (isFunction(locationData)) {
       /* eslint-disable no-underscore-dangle */
       extraProps._routerChangeCallback = locationData;
     } else if (isObject(locationData)) {
-      propsData = {
-        ...propsData,
-        ...locationData,
-      };
+      this.setData(locationData);
     }
-
     if (reload) {
       extraProps.reload = reload;
     }
     if (wrapper || (loaded && visible)) {
       const baseRoute = (
-        <BaseRoute ref={this.ref} {...props} {...extraProps} data={propsData} location={rest} />
+        <BaseRoute ref={this.ref} {...props} {...extraProps} data={data} location={rest} />
       );
       if (wrapper) {
         return (

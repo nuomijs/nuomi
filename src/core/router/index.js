@@ -1,13 +1,13 @@
-import { isFunction, isArray, isObject, parser } from '../../utils';
+import { isFunction, isObject, parser } from '../../utils';
 
 // 监听列表
 let listeners = [];
 // hash前缀，紧跟在#后面的符号
-let prefix = '';
+let hashPrefix = '';
 // location额外的数据
 let extraData = {};
 // 路由器回调
-let createdListener = null;
+let routerListener = null;
 // path对应的正则集合
 const pathRegexps = {};
 
@@ -20,7 +20,7 @@ function forward() {
 }
 
 function getHashPrefix() {
-  return `#${prefix}`;
+  return `#${hashPrefix}`;
 }
 
 function getLocation() {
@@ -36,9 +36,10 @@ function getMergeLocation() {
 }
 
 function hashchange() {
+  // 一次change可能有多个listeners，只创建一次location
   let currentLocation = null;
   listeners.forEach((callback) => {
-    if (callback === createdListener) {
+    if (callback === routerListener) {
       callback(getMergeLocation());
     } else {
       if (!currentLocation) {
@@ -47,7 +48,6 @@ function hashchange() {
       callback(currentLocation);
     }
   });
-  currentLocation = null;
 }
 
 function location(...args) {
@@ -57,10 +57,9 @@ function location(...args) {
   let path = args[0];
   const data = args[1];
   let isReload = args[2];
-  if (path && (typeof path === 'string' || typeof path === 'object')) {
-    if (isArray(path)) {
-      path = '';
-    } else if (isObject(path)) {
+  let force = args[3];
+  if (path && (typeof path === 'string' || isObject(path))) {
+    if (isObject(path)) {
       path = '';
     }
   } else {
@@ -68,10 +67,15 @@ function location(...args) {
   }
   if (path) {
     if (typeof data === 'boolean') {
+      force = isReload;
       isReload = data;
     }
     if (isReload === true) {
+      force = true;
       extraData.reload = true;
+    }
+    if (force === undefined) {
+      force = true;
     }
     if (isObject(data) || isFunction(data)) {
       extraData.data = data;
@@ -80,7 +84,7 @@ function location(...args) {
     if (hash !== window.location.hash) {
       window.location.hash = hash;
       // hash相同时强制执行回调
-    } else if (isReload === true) {
+    } else if (force === true) {
       hashchange();
     }
   }
@@ -112,16 +116,17 @@ function listener(callback) {
   return () => {};
 }
 
-function createRouter({ prefix: routerPrefix }, callback) {
-  if (!createdListener) {
-    prefix = routerPrefix;
-    createdListener = callback;
-    listeners.push(createdListener);
-    createdListener(getMergeLocation());
+function createRouter({ hashPrefix: prefix }, callback) {
+  if (!routerListener) {
+    hashPrefix = prefix;
+    routerListener = callback;
+    listeners.push(routerListener);
+    routerListener(getMergeLocation());
     window.addEventListener('hashchange', hashchange);
     return () => {
-      createdListener = null;
+      routerListener = null;
       window.removeEventListener('hashchange', hashchange);
+      // 移除所有回调
       removeListener();
     };
   }
@@ -196,7 +201,6 @@ export {
 
 export default {
   listener,
-  removeListener,
   location,
   matchPath,
   reload,

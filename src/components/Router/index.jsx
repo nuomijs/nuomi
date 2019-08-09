@@ -5,19 +5,19 @@ import { createRouter } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
-    prefix: '',
+    hashPrefix: '',
   };
 
   static propTypes = {
-    prefix: PropTypes.string,
+    hashPrefix: PropTypes.string,
   };
 
   constructor(...args) {
     super(...args);
-    const { prefix } = this.props;
+    const { hashPrefix } = this.props;
     this.mounted = false;
     this.state = {};
-    this.destroyRouter = createRouter({ prefix }, (location) => {
+    this.destroyRouter = createRouter({ hashPrefix }, (location) => {
       if (this.mounted) {
         this.setState({ location });
       } else {
