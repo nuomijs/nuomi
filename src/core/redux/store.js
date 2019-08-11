@@ -23,4 +23,6 @@ export const setStore = (id, store) => {
   }
 };
 
+rootStore.getStore = getStore;
+
 export default rootStore;

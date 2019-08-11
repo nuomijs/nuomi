@@ -7,7 +7,6 @@ export default {
   id: 'global',
   state: {
     username: '',
-    routes: [],
   },
   effects() {
     return new Effects(this);

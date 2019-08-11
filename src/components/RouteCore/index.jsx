@@ -175,7 +175,7 @@ class RouteCore extends React.PureComponent {
     } else if (isObject(locationData)) {
       this.setData(locationData);
     }
-    if (reload) {
+    if (typeof reload === 'boolean') {
       extraProps.reload = reload;
     }
     if (wrapper || (loaded && visible)) {

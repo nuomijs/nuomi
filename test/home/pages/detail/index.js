@@ -4,7 +4,6 @@ import Layout from './components/Layout';
 import services from './services';
 
 export default {
-  wrapper: true,
   state: {
     detail: '',
     count: 0,

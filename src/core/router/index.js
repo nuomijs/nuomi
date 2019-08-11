@@ -67,12 +67,11 @@ function location(...args) {
   }
   if (path) {
     if (typeof data === 'boolean') {
-      force = isReload;
       isReload = data;
     }
-    if (isReload === true) {
-      force = true;
-      extraData.reload = true;
+    if (typeof isReload === 'boolean') {
+      force = isReload === true ? isReload : force;
+      extraData.reload = isReload;
     }
     if (force === undefined) {
       force = true;
