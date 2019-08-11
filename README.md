@@ -13,7 +13,7 @@ index.js
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Nuomi } from 'nuomi';
+import { Router, Route, Redirect, Nuomi } from 'nuomi';
 import layout from './layout';
 import pages from './pages';
 
@@ -21,10 +21,12 @@ class App extends React.Component {
   render() {
     return (
       <Nuomi {...layout}>
-        <Router entry="/">
+        <Router>
           {pages.map((route) => (
             <Route key={route.path} {...route} />
           ))}
+          <Redirect from="/" to="/home" />
+          <Redirect to="/home" />
         </Router>
       </Nuomi>
     );
