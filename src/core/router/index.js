@@ -6,8 +6,8 @@ let listeners = [];
 let hashPrefix = '';
 // location额外的数据
 let extraData = {};
-// 路由器回调
-let routerListener = null;
+// 是否创建过路由
+let created = false;
 // path对应的正则集合
 const pathRegexps = {};
 
@@ -39,14 +39,10 @@ function hashchange() {
   // 一次change可能有多个listeners，只创建一次location
   let currentLocation = null;
   listeners.forEach((callback) => {
-    if (callback === routerListener) {
-      callback(getMergeLocation());
-    } else {
-      if (!currentLocation) {
-        currentLocation = getLocation();
-      }
-      callback(currentLocation);
+    if (!currentLocation) {
+      currentLocation = getMergeLocation();
     }
+    callback(currentLocation);
   });
 }
 
@@ -107,7 +103,7 @@ function listener(callback) {
   if (isFunction(callback)) {
     listeners.push(callback);
     // 执行一次
-    callback(location());
+    callback(getLocation());
     return () => {
       removeListener(callback);
     };
@@ -116,14 +112,13 @@ function listener(callback) {
 }
 
 function createRouter({ hashPrefix: prefix }, callback) {
-  if (!routerListener) {
+  if (!created) {
+    created = true;
     hashPrefix = prefix;
-    routerListener = callback;
-    listeners.push(routerListener);
-    routerListener(getMergeLocation());
+    listener(callback);
     window.addEventListener('hashchange', hashchange);
     return () => {
-      routerListener = null;
+      created = false;
       window.removeEventListener('hashchange', hashchange);
       // 移除所有回调
       removeListener();
