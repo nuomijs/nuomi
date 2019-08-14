@@ -1,5 +1,9 @@
 # 更新日志：
 
+## 0.2.11 (2019-08-14)
+修复Route动态设置wrapper后，切换路由无法隐藏问题
+修复Route设置wrapper后，render组件内无法获取高度问题
+
 ## 0.2.10 (2019-08-14)
 修复onChange执行2次问题
 修复路由设置wrapper时onBefore无效问题
