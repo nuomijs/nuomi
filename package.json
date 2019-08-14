@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -58,5 +58,11 @@
   "directories": {
     "lib": "lib",
     "test": "test"
-  }
+  },
+  "keywords": [
+    "nuomi",
+    "redux",
+    "nuomijs",
+    "router"
+  ]
 }

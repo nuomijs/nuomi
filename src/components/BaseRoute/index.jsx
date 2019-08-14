@@ -66,9 +66,9 @@ class BaseRoute extends BaseNuomi {
 
   routerChange() {
     const { props } = this;
-    /* eslint-disable no-underscore-dangle */
-    if (props._routerChangeCallback) {
-      props._routerChangeCallback(props);
+    const { location } = props;
+    if (isFunction(location.data)) {
+      location.data(props);
     }
     if (isFunction(props.onChange)) {
       props.onChange();

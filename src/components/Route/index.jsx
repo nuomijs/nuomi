@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import RouterContext from '../RouterContext';
 import RouteCore from '../RouteCore';
 import { removeReducer } from '../../core/redux/reducer';
-import { matchPath, savePath, removePath } from '../../core/router';
+import { matchPath, savePath, removePath, getParams } from '../../core/router';
 import { getDefaultProps } from '../../core/nuomi';
-import extend from '../../utils/extend';
 
 class Route extends React.PureComponent {
   static propTypes = {
@@ -48,8 +47,8 @@ class Route extends React.PureComponent {
   }
 
   render() {
-    const props = extend(getDefaultProps(), this.props);
-    const { path, wrapper } = props;
+    const defaultProps = getDefaultProps();
+    const { path, wrapper = defaultProps.wrapper } = this.props;
     return (
       <RouterContext.Consumer>
         {(context) => {
@@ -59,14 +58,22 @@ class Route extends React.PureComponent {
           if (context.matched && context.matched !== this) {
             match = false;
           }
-          if (wrapper && this.routeCore && !match) {
+          // 设置了wrapper没有匹配路由，不销毁，只隐藏
+          if (wrapper === true && this.routeCore && !match) {
             return this.routeCore;
           }
           if (match) {
             // eslint-disable-next-line no-param-reassign
             context.matched = this; // 解决Route在更新时不匹配问题，值不能设置为true
+            location.params = getParams(location, path); // 解析动态参数
             this.routeCore = (
-              <RouteCore {...props} location={location} store={this.store} ref={this.ref} />
+              <RouteCore
+                {...this.props}
+                wrapper={wrapper}
+                location={location}
+                store={this.store}
+                ref={this.ref}
+              />
             );
             return this.routeCore;
           }

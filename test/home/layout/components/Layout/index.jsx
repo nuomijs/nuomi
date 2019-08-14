@@ -29,6 +29,9 @@ class Layout extends React.PureComponent {
           {routes.map((route) => (
             <Route key={route.path} {...route} />
           ))}
+          {/* <Route path="/home" async={() => import('../../../pages/home')} />
+          <Route path="/home/list" async={() => import('../../../pages/list')} />
+          <Route path="/home/detail/:id" async={() => import('../../../pages/detail')} /> */}
           <Redirect to="/home" />
         </div>
       </div>

@@ -15,7 +15,7 @@ class Nuomi extends React.PureComponent {
     const isAsync = isFunction(async);
     this.state = {
       loaded: !isAsync,
-      props: isAsync ? rest : extend(getDefaultProps(), rest),
+      nuomiProps: extend(getDefaultProps(), rest),
     };
   }
 
@@ -33,11 +33,11 @@ class Nuomi extends React.PureComponent {
   }
 
   loaded(props) {
-    const { async, ...rest } = this.props;
+    const { nuomiProps } = this.state;
     if (this.mounted === true) {
       this.setState({
         loaded: true,
-        props: extend(getDefaultProps(), extend(rest, props)),
+        nuomiProps: extend(nuomiProps, props),
       });
     }
   }
@@ -56,9 +56,9 @@ class Nuomi extends React.PureComponent {
   }
 
   render() {
-    const { loaded, props } = this.state;
+    const { loaded, nuomiProps } = this.state;
     if (loaded) {
-      return <BaseNuomi ref={this.ref} {...props} store={this.store} />;
+      return <BaseNuomi ref={this.ref} {...nuomiProps} store={this.store} />;
     }
     return null;
   }

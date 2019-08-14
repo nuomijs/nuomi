@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import BaseRoute from '../BaseRoute';
 import { isFunction, isObject } from '../../utils';
 import extend from '../../utils/extend';
-import { getParams } from '../../core/router';
+import { getDefaultProps } from '../../core/nuomi';
 
 let wrappers = [];
 
@@ -18,15 +18,17 @@ class RouteCore extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    const { async, ...rest } = this.props;
     this.ref = React.createRef();
     this.wrapperRef = React.createRef();
     this.mounted = false;
-    const isAsync = isFunction(async);
+    const { async, ...rest } = this.props;
+    const loaded = !isFunction(async);
+    const nuomiProps = extend(getDefaultProps(), rest);
     this.state = {
-      loaded: !isAsync,
-      visible: false,
-      props: rest,
+      loaded,
+      // 异步加载props时默认为false
+      visible: loaded ? !nuomiProps.onBefore : false,
+      nuomiProps,
     };
   }
 
@@ -36,27 +38,24 @@ class RouteCore extends React.PureComponent {
     if (current) {
       wrappers.push(current);
     }
-    this.visibleWrapperHandler();
+    this.hideWrapper();
     this.loadProps(() => {
-      const { props } = this.state;
-      if (props.onBefore) {
-        if (
-          props.onBefore(() => {
-            this.visibleRoute();
-          }) === true
-        ) {
-          this.visibleRoute();
-        }
-      } else {
+      this.visibleHandler(() => {
+        this.showWrapper();
         this.visibleRoute();
-      }
+      });
     });
   }
 
   componentDidUpdate(prevProps) {
-    const { location } = this.props;
+    const { location, wrapper } = this.props;
     if (location !== prevProps.location) {
-      this.visibleWrapperHandler();
+      this.hideWrapper();
+      if (wrapper === true) {
+        this.visibleHandler(() => {
+          this.showWrapper();
+        });
+      }
     }
   }
 
@@ -65,12 +64,15 @@ class RouteCore extends React.PureComponent {
   }
 
   loaded(props, cb) {
-    const { async, ...rest } = this.props;
+    const { nuomiProps } = this.state;
+    const newNuomiProps = extend(nuomiProps, props);
     if (this.mounted) {
       this.setState(
         {
           loaded: true,
-          props: extend(rest, props),
+          // onBefore不存在则展示页面
+          visible: !newNuomiProps.onBefore,
+          nuomiProps: newNuomiProps,
         },
         cb,
       );
@@ -92,6 +94,35 @@ class RouteCore extends React.PureComponent {
     }
   }
 
+  visibleHandler(cb) {
+    const { nuomiProps } = this.state;
+    if (nuomiProps.onBefore) {
+      if (
+        nuomiProps.onBefore(() => {
+          cb();
+        }) === true
+      ) {
+        cb();
+      }
+    } else {
+      cb();
+    }
+  }
+
+  visibleRoute() {
+    const { visible } = this.state;
+    if (this.mounted && !visible) {
+      this.setState({ visible: true });
+    }
+  }
+
+  showWrapper() {
+    const { current } = this.wrapperRef;
+    if (current) {
+      current.style.display = 'block';
+    }
+  }
+
   removeWrapper() {
     const { current } = this.wrapperRef;
     if (current) {
@@ -99,23 +130,16 @@ class RouteCore extends React.PureComponent {
     }
   }
 
-  visibleRoute() {
-    if (this.mounted) {
-      this.setState({ visible: true });
-    }
-  }
-
-  visibleWrapperHandler() {
-    const { current } = this.wrapperRef;
+  hideWrapper() {
     wrappers.forEach((wrapper) => {
-      const elem = wrapper;
-      elem.style.display = current === elem ? 'block' : 'none';
+      // eslint-disable-next-line no-param-reassign
+      wrapper.style.display = 'none';
     });
   }
 
-  getData() {
-    const { props } = this.state;
-    const { data } = props;
+  restoreData() {
+    const { nuomiProps } = this.state;
+    const { data } = nuomiProps;
     const { routeTempData } = this.context;
     // 删除临时数据
     if (routeTempData.temp) {
@@ -137,14 +161,12 @@ class RouteCore extends React.PureComponent {
         routeTempData.prev = null;
       }
     }
-
-    return data;
   }
 
   // 设置data临时数据，保存设置前的数据
   setData(locationData) {
-    const { props } = this.state;
-    const { data } = props;
+    const { nuomiProps } = this.state;
+    const { data } = nuomiProps;
     const { routeTempData } = this.context;
     const keys = Object.keys(locationData);
     if (keys.length) {
@@ -164,23 +186,15 @@ class RouteCore extends React.PureComponent {
 
   render() {
     const { location, wrapper } = this.props;
-    const { props, visible, loaded } = this.state;
-    const { data: locationData, reload, ...rest } = location;
-    const extraProps = {};
-    const data = this.getData();
-    rest.params = getParams(rest, props.path);
-    if (isFunction(locationData)) {
-      /* eslint-disable no-underscore-dangle */
-      extraProps._routerChangeCallback = locationData;
-    } else if (isObject(locationData)) {
-      this.setData(locationData);
-    }
-    if (typeof reload === 'boolean') {
-      extraProps.reload = reload;
+    const { nuomiProps, visible, loaded } = this.state;
+    const { data, reload = nuomiProps.reload } = location;
+    this.restoreData();
+    if (isObject(data)) {
+      this.setData(data);
     }
     if (wrapper || (loaded && visible)) {
       const baseRoute = (
-        <BaseRoute ref={this.ref} {...props} {...extraProps} data={data} location={rest} />
+        <BaseRoute ref={this.ref} {...nuomiProps} reload={reload} location={location} />
       );
       if (wrapper) {
         return (

@@ -1,5 +1,6 @@
 export default [
   {
+    wrapper: false,
     path: '/home',
     async: () => import('../pages/home'),
   },
@@ -8,7 +9,6 @@ export default [
     async: () => import('../pages/list'),
   },
   {
-    wrapper: true,
     path: '/home/detail/:id',
     async: (cb) => {
       require.ensure([], (require) => {
