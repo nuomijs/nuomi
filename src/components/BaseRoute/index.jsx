@@ -45,11 +45,11 @@ class BaseRoute extends BaseNuomi {
     if (!store.id) {
       this.createStore();
       this.createReducer();
-      this.routerChange();
+      this.routerChange(true);
       this.nuomiInit();
     } else if (reload === true) {
       this.replaceState();
-      this.routerChange();
+      this.routerChange(true);
       this.nuomiInit();
     } else {
       this.routerChange();
@@ -64,18 +64,23 @@ class BaseRoute extends BaseNuomi {
     });
   }
 
-  routerChange() {
+  routerChange(isReload) {
     const { props } = this;
-    const { location } = props;
+    const { location, onChange } = props;
     if (isFunction(location.data)) {
       location.data(props);
     }
-    if (isFunction(props.onChange)) {
-      props.onChange();
-    } else if (isObject(props.onChange)) {
-      Object.values(props.onChange).forEach((change) => {
-        if (isFunction(change)) {
-          change.call(props);
+    if (isFunction(onChange)) {
+      onChange.call(props);
+    } else if (isObject(onChange)) {
+      Object.keys(onChange).forEach((key) => {
+        const callback = onChange[key];
+        if (isFunction(callback)) {
+          // 首次加载和刷新时不执行带有$前缀的回调
+          if (isReload && key.indexOf('$') === 0) {
+            return;
+          }
+          callback.call(props);
         }
       });
     }

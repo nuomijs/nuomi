@@ -1,5 +1,27 @@
 # 更新日志：
 
+## 0.2.12 (2019-08-14)
+新增功能：当onChange是对象时，回调方法若以“$”开头，将只在路由切换时执行（不包含首次加载以及路由刷新）,该类型方法可以配合onInit进行数据更新
+```js
+{
+  ...,
+  onChange: {
+    $update() {
+      // 路由切换更新数据
+      this.store.dispatch({
+        type: 'update',
+      });
+    },
+  },
+  onInit() {
+    // 首次加载初始化
+    this.store.dispatch({
+      type: 'init',
+    });
+  },
+}
+```
+
 ## 0.2.11 (2019-08-14)
 修复Route动态设置wrapper后，切换路由无法隐藏问题
 修复Route设置wrapper后，render组件内无法获取高度问题
