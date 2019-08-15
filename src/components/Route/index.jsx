@@ -10,6 +10,27 @@ class Route extends React.PureComponent {
   static propTypes = {
     path: PropTypes.string,
     wrapper: PropTypes.bool,
+    id: PropTypes.string,
+    reload: PropTypes.bool,
+    state: PropTypes.object,
+    data: PropTypes.object,
+    reducers: PropTypes.objectOf(PropTypes.func),
+    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    render: PropTypes.func,
+    onBefore: PropTypes.func,
+    onInit: PropTypes.func,
+    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    onLeave: PropTypes.func,
+    async: PropTypes.func,
+  };
+
+  static defaultProps = {
+    id: '',
+    path: '',
+    reload: false,
+    state: {},
+    data: {},
+    reducers: {},
   };
 
   static childContextTypes = {

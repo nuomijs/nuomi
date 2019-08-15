@@ -11,7 +11,7 @@ class BaseNuomi extends React.PureComponent {
     state: PropTypes.object,
     data: PropTypes.object,
     store: PropTypes.object,
-    reducers: PropTypes.object,
+    reducers: PropTypes.objectOf(PropTypes.func),
     effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
     onInit: PropTypes.func,

@@ -1,5 +1,7 @@
 # 更新日志：
 
+## 0.2.14 (2019-08-15)
+修复多个模块data共享问题
 
 ## 0.2.13 (2019-08-15)
 修复dispatch跨模块更新状态无法获取返回值的问题。[#1](https://github.com/nuomijs/nuomi/pull/1) [@iblq](https://github.com/iblq)

@@ -5,12 +5,12 @@ import { isFunction, isObject } from '../../utils';
 class BaseRoute extends BaseNuomi {
   static propTypes = {
     id: PropTypes.string,
-    wrapper: PropTypes.bool,
     reload: PropTypes.bool,
     state: PropTypes.object,
     data: PropTypes.object,
     store: PropTypes.object,
-    reducers: PropTypes.object,
+    location: PropTypes.object,
+    reducers: PropTypes.objectOf(PropTypes.func),
     effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
     onBefore: PropTypes.func,

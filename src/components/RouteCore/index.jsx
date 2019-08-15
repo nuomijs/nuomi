@@ -9,6 +9,7 @@ let wrappers = [];
 
 class RouteCore extends React.PureComponent {
   static propTypes = {
+    async: PropTypes.func,
     onBefore: PropTypes.func,
   };
 
