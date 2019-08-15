@@ -121,20 +121,22 @@ class BaseNuomi extends React.PureComponent {
             }
           }
         } else if (reducers[type]) {
-          rootStore.dispatch({
+          const res = rootStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
+          return res;
         }
       } else {
         const id = type.substr(0, splitIndex);
         const effect = type.substr(splitIndex + 1);
         const $store = getStore(id);
         if ($store) {
-          $store.dispatch({
+          const res = await $store.dispatch({
             type: effect,
             payload,
           });
+          return res;
         }
       }
     };
