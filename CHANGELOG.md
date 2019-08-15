@@ -1,5 +1,9 @@
 # 更新日志：
 
+
+## 0.2.13 (2019-08-15)
+修复dispatch跨模块更新状态无法获取返回值的问题。[#1](https://github.com/nuomijs/nuomi/pull/1) [@iblq](https://github.com/iblq)
+
 ## 0.2.12 (2019-08-14)
 新增功能：当onChange是对象时，回调方法若以“$”开头，将只在路由切换时执行（不包含首次加载以及路由刷新）,该类型方法可以配合onInit进行数据更新
 ```js
