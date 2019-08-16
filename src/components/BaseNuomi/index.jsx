@@ -79,17 +79,25 @@ class BaseNuomi extends React.PureComponent {
       if (!this.effects) {
         this.effects = this.getEffects();
       }
+      // type中包含斜杠视为调用其他模块方法
       const splitIndex = type.indexOf('/');
       if (splitIndex === -1) {
         if (isObject(this.effects) && isFunction(this.effects[type])) {
+          // 调用的方法队列
           const queue = [];
           try {
+            // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const effectsProxy = EffectsProxy(this.effects, {
+              // name是当前执行的方法名
               get: (target, name) => {
                 const effect = this.effects[name];
+                // $开头进行loading特殊处理
                 if (isFunction(effect) && name.indexOf('$') === 0) {
+                  // 获取上一次调用的方法
                   const prevEffect = queue.slice(-1)[0];
+                  // 开启loading
                   const loadingPayload = { [name]: true };
+                  // 当前方法调用，说明上一个方法肯定调用结束了，因此关闭上一个loading
                   if (prevEffect !== type && prevEffect) {
                     loadingPayload[prevEffect] = false;
                   }
@@ -121,11 +129,10 @@ class BaseNuomi extends React.PureComponent {
             }
           }
         } else if (reducers[type]) {
-          const res = rootStore.dispatch({
+          rootStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
-          return res;
         }
       } else {
         const id = type.substr(0, splitIndex);
