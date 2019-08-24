@@ -1,4 +1,5 @@
-import { isFunction, isObject, parser } from '../../utils';
+import { isFunction, isObject } from '../../utils';
+import parser from '../../utils/parser';
 
 // 监听列表
 let listeners = [];
@@ -56,7 +57,7 @@ function location(...args) {
   let force = args[3];
   if (path && (typeof path === 'string' || isObject(path))) {
     if (isObject(path)) {
-      path = '';
+      path = parser.restore(path);
     }
   } else {
     path = null;

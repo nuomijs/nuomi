@@ -40,6 +40,8 @@ export default (...args) => {
     if (keys.includes('onChange')) {
       if (isObject(onChange)) {
         currentObject.onChange = { ...currentObject.onChange, ...onChange };
+      } else if (isFunction(onChange)) {
+        currentObject.onChange = { ...currentObject.onChange, _onChange: onChange };
       } else {
         currentObject.onChange = onChange;
       }

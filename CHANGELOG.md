@@ -1,5 +1,33 @@
 # 更新日志：
 
+## 0.3.1 (2019-08-24)
+router.location第一个参数加入对象支持
+```js
+router.location({ pathname: '/path', query: { a: 1 } }) // /path?a=1
+router.location({ pathname: '/path', search: '?a=1' }) // /path?a=1
+router.location({ pathname: '/path', params: { a: 1 } }) // /path/1
+```
+onChange逻辑优化，可以使用函数形式，但是内部会将其转换为对象，名称为_onChange
+```js
+// 公共配置
+nuomi.config({
+  onChange: {
+    init() {},
+  },
+});
+
+// A页面
+{
+  path: '/a',
+  onChange() {},
+}
+
+// 最终A页面onChange
+{
+  init() {},
+  _onChange() {},
+}
+```
 ## 0.2.14 (2019-08-15)
 修复多个模块data共享问题
 

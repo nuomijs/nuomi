@@ -13,5 +13,3 @@ export const isObject = (obj) => obj && isType('Object')(obj);
 export const isArray = Array.isArray || isType('Array');
 
 export const isNative = (obj) => typeof obj !== 'undefined' && /native code/i.test(obj.toString());
-
-export { default as parser } from './parser';
