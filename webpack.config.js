@@ -2,6 +2,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+  devtool: 'source-map',
   entry: {
     index: ['@babel/polyfill', './test'],
   },
@@ -17,7 +18,7 @@ module.exports = {
     }),
   ],
   mode: process.env.NODE_ENV,
-  devtool: 'eval-source-map',
+  // devtool: 'eval-source-map',
   optimization: {
     splitChunks: {
       cacheGroups: {

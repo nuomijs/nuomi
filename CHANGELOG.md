@@ -1,5 +1,17 @@
 # 更新日志：
 
+## 0.4.1 (2019-08-29)
+增加了对中间件的支持
+```js
+import { store } from 'nuomi';
+import logger from 'redux-logger';
+import immutable from 'redux-immutable-state-invariant';
+
+if (process.env.NODE_ENV !== 'production') {
+  store.applyMiddleware(immutable(), logger);
+}
+```
+
 ## 0.3.1 (2019-08-24)
 router.location第一个参数加入对象支持
 ```js

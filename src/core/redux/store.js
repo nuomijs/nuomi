@@ -1,15 +1,18 @@
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
+import applyMiddleware from './applyMiddleware';
+import { isFunction } from '../../utils';
 
 const rootReducer = () => {};
 const stores = {};
-const rootStore =
-  process.env.NODE_ENV === 'production'
-    ? createStore(rootReducer)
-    : createStore(
-        rootReducer,
-        /* eslint-disable no-underscore-dangle */
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-      );
+let middlewares = [];
+const composeEnhancers =
+  /* eslint-disable no-underscore-dangle */
+  process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md#trace
+      window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
+    : compose;
+
+const rootStore = createStore(rootReducer, composeEnhancers(applyMiddleware(() => middlewares)));
 
 export const getStore = (id) => {
   return stores[id];
@@ -24,5 +27,9 @@ export const setStore = (id, store) => {
 };
 
 rootStore.getStore = getStore;
+
+rootStore.applyMiddleware = (...args) => {
+  middlewares = args.filter((middleware) => isFunction(middleware));
+};
 
 export default rootStore;
