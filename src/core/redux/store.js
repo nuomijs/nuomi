@@ -5,7 +5,8 @@ import { isFunction } from '../../utils';
 
 const rootReducer = () => {};
 const stores = {};
-let middlewares = null;
+let middlewares = [];
+let usedDispatch = false;
 const composeEnhancers =
   /* eslint-disable no-underscore-dangle */
   process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -15,7 +16,8 @@ const composeEnhancers =
 
 const rootStore = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(() => middlewares || [])),
+  // eslint-disable-next-line no-return-assign
+  composeEnhancers(applyMiddleware(() => middlewares, () => (usedDispatch = true))),
 );
 
 const getStore = (id) => {
@@ -33,8 +35,10 @@ const setStore = (id, store) => {
 rootStore.getStore = getStore;
 
 rootStore.applyMiddleware = (...args) => {
-  if (middlewares === null) {
-    middlewares = args.filter((middleware) => isFunction(middleware));
+  if (!usedDispatch) {
+    middlewares = middlewares.concat(args.filter((middleware) => isFunction(middleware)));
+  } else {
+    warning(false, 'dispatch已经被使用，不能添加中间件，请确保添加中间件操作发生在dispatch之前');
   }
 };
 

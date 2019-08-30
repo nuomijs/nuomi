@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import RouterContext from '../RouterContext';
 import { location as routerLocation } from '../../core/router';
 import parser from '../../utils/parser';
@@ -33,6 +34,7 @@ class Redirect extends React.PureComponent {
     return (
       <RouterContext.Consumer>
         {(context) => {
+          invariant(context, '不允许在 <Router> 外部使用 <Redirect>');
           const { matched, location } = context;
           if (to && !context.redirecting && !this.redirected) {
             if ((from && this.matchPath(location)) || (!matched && !from)) {

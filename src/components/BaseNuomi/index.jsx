@@ -1,9 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import warning from 'warning';
 import { createReducer } from '../../core/redux/reducer';
 import rootStore, { getStore, setStore } from '../../core/redux/store';
-import { isObject, isFunction } from '../../utils';
-import EffectsProxy from '../../utils/effectsProxy';
+import { isObject, isFunction, isNative } from '../../utils';
+import proxyPolyfill from '../../utils/proxyPolyfill';
+
+// 是否原生支持Proxy
+const supportProxy = isNative(window.Proxy);
+
+const EffectsProxy = supportProxy ? window.Proxy : proxyPolyfill();
+
+// 获取以类方式创建的effects实例对象
+const getClassEffects = (effects) => {
+  // 原生不支持Proxy，需要遍历获取类中的方法属性（包括继承的），存到对象中
+  if (!supportProxy) {
+    // 所有属性方法都存储到该对象中
+    const propertys = {};
+    const setPropertys = (key, value) => {
+      // 排除constructor和已经存储过的
+      if (key !== 'constructor' && !propertys[key]) {
+        propertys[key] = value;
+      }
+    };
+    // 遍历的对象
+    let object = effects;
+    // 只要对象构造函数不是顶层Object，都视为Effects对象
+    while (object.constructor !== Object) {
+      // 获取实例对象的原型
+      const prototype = Object.getPrototypeOf(object);
+      // 原型是Object跳出
+      if (prototype.constructor === Object) {
+        break;
+      }
+      // 获取对象可枚举的属性集合，通过this定义的属性
+      const entries = Object.entries(object);
+      // 获取原型链上可枚举和不可枚举的属性
+      const propertyNames = Object.getOwnPropertyNames(prototype);
+      // 继续遍历查找是否有继承的对象
+      object = prototype;
+      // 存储所有可枚举的属性
+      entries.forEach((data) => {
+        const [name, value] = data;
+        setPropertys(name, value);
+      });
+      // 存储原型上全部属性
+      propertyNames.forEach((key) => {
+        setPropertys(key, prototype[key]);
+      });
+    }
+    // 返回所有的对象属性
+    return propertys;
+  }
+  // 原生支持Proxy直接返回实例
+  return effects;
+};
 
 class BaseNuomi extends React.PureComponent {
   static propTypes = {
@@ -43,7 +94,11 @@ class BaseNuomi extends React.PureComponent {
     BaseNuomi.nuomiId += 1;
     const { id } = this.props;
     const defaultId = `nuomi_${BaseNuomi.nuomiId}`;
-    return id || defaultId;
+    if (!id || (!!id && !!getStore(id))) {
+      warning(!id, `storeId：${id} 已被使用，将由 ${defaultId} 替代`);
+      return defaultId;
+    }
+    return id;
   }
 
   initialize() {
@@ -55,18 +110,18 @@ class BaseNuomi extends React.PureComponent {
   getEffects() {
     const { props } = this;
     const { effects, store } = props;
+    let newEffects = {};
     if (isObject(effects)) {
-      return {
+      newEffects = {
         ...effects,
         getNuomiProps: () => this.props,
         getState: store.getState,
         dispatch: store.dispatch,
       };
+    } else if (isFunction(effects)) {
+      newEffects = props.effects() || {};
     }
-    if (isFunction(effects)) {
-      return props.effects() || {};
-    }
-    return {};
+    return newEffects.constructor === Object ? newEffects : getClassEffects(newEffects);
   }
 
   createStore() {
@@ -87,7 +142,7 @@ class BaseNuomi extends React.PureComponent {
           const loadingQueue = [];
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
-            const effectsProxy = EffectsProxy(this.effects, {
+            const effectsProxy = new EffectsProxy(this.effects, {
               // name是当前调用的方法或者属性名
               get: (target, name) => {
                 const effect = this.effects[name];
@@ -118,7 +173,7 @@ class BaseNuomi extends React.PureComponent {
             });
             return await effectsProxy[type](payload);
           } catch (e) {
-            if (e instanceof Error) {
+            if (e && e.constructor !== Object) {
               throw e;
             }
           } finally {
@@ -150,11 +205,11 @@ class BaseNuomi extends React.PureComponent {
         const effect = type.substr(splitIndex + 1);
         const $store = getStore(id);
         if ($store) {
-          const res = await $store.dispatch({
+          const dispatchReturn = await $store.dispatch({
             type: effect,
             payload,
           });
-          return res;
+          return dispatchReturn;
         }
       }
     };
@@ -174,6 +229,11 @@ class BaseNuomi extends React.PureComponent {
         if (reducers[key]) {
           return reducers[key](state, action);
         }
+        warning(
+          false,
+          `未定义actionType为 ${type} 的reducer，如果你是想调用effects中的方法，请使用
+          \nstore.getStore('${store.id}').dispatch({\n  type: '${key}',\n  payload,\n})`,
+        );
       }
       return state;
     });

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import { getLocation } from '../../core/router';
 
 const withNuomi = (WrapperComponent) => {
@@ -8,9 +9,15 @@ const withNuomi = (WrapperComponent) => {
       nuomiProps: PropTypes.object,
     };
 
+    static displayName = `withNuomi(${WrapperComponent.displayName || WrapperComponent.name})`;
+
     constructor(...args) {
       super(...args);
       const { nuomiProps } = this.context;
+      invariant(
+        nuomiProps,
+        `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${WithNuomi.displayName}`,
+      );
       this.location = nuomiProps ? nuomiProps.location : getLocation();
     }
 

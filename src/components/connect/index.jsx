@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import { isFunction, isObject } from '../../utils';
 import store, { getStore } from '../../core/redux/store';
 
@@ -7,7 +8,8 @@ const defaultMergeProps = (props, stateProps, dispatchProps) => {
   return { ...props, ...stateProps, ...dispatchProps };
 };
 
-const connect = (mapStateToProps, mapDispatch, merge, options) => {
+const connect = (...args) => {
+  const [mapStateToProps, mapDispatch, merge, options] = args;
   const mapDispatchToProps = isFunction(mapDispatch) ? mapDispatch : () => {};
   const mergeProps = isFunction(merge) ? merge : defaultMergeProps;
   return (WrapperComponent) => {
@@ -16,10 +18,16 @@ const connect = (mapStateToProps, mapDispatch, merge, options) => {
         nuomiStore: PropTypes.object,
       };
 
-      constructor(...args) {
-        super(...args);
+      static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
+
+      constructor(...arg) {
+        super(...arg);
         this.mounted = false;
         const { nuomiStore } = this.context;
+        invariant(
+          nuomiStore,
+          `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${Connect.displayName}`,
+        );
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
         }

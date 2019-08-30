@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import RouterContext from '../RouterContext';
 import RouteCore from '../RouteCore';
 import { removeReducer } from '../../core/redux/reducer';
@@ -73,6 +74,7 @@ class Route extends React.PureComponent {
     return (
       <RouterContext.Consumer>
         {(context) => {
+          invariant(context, '不允许在 <Router> 外部使用 <Route>');
           const { location } = context;
           let match = matchPath(location, path);
           // context.matched 表示同一个上下文中，多个路由只匹配一个

@@ -4,7 +4,7 @@ import { location, getHashPrefix } from '../../core/router';
 
 class Link extends React.PureComponent {
   static propTypes = {
-    to: PropTypes.string,
+    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     reload: PropTypes.bool,
   };
 

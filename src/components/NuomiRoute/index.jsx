@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import RouterContext from '../RouterContext';
 import Nuomi from '../Nuomi';
 
@@ -25,6 +26,7 @@ class NuomiRoute extends Nuomi {
     return (
       <RouterContext.Consumer>
         {(context) => {
+          invariant(context, '不允许在 <Router> 外部使用 <NuomiRoute>');
           const { location } = context;
           if (!context.matched && this.matchPath(location.pathname)) {
             // eslint-disable-next-line no-param-reassign

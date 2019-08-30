@@ -1,15 +1,11 @@
 import { compose } from 'redux';
 
-export default (getMiddleware) => {
+export default (getMiddlewares, cb) => {
   return (createStore) => (...args) => {
     const store = createStore(...args);
     let dispatch;
-    // dispatch没有被创建前调用会抛出错误
     let middlewareDispatch = () => {
-      throw new Error(
-        'Dispatching while constructing your middleware is not allowed. ' +
-          'Other middleware would not be applied to this dispatch.',
-      );
+      throw new Error('dispatch未被创建，不允许使用');
     };
     const middlewareAPI = {
       getState: store.getState,
@@ -20,10 +16,11 @@ export default (getMiddleware) => {
       ...store,
       dispatch: (action) => {
         if (!dispatch) {
-          const middlewares = getMiddleware();
+          const middlewares = getMiddlewares();
           const chain = middlewares.map((middleware) => middleware(middlewareAPI));
           dispatch = compose(...chain)(store.dispatch);
           middlewareDispatch = dispatch;
+          cb && cb();
         }
         return dispatch(action);
       },
