@@ -1,10 +1,11 @@
 import { createStore, compose } from 'redux';
+import warning from 'warning';
 import applyMiddleware from './applyMiddleware';
 import { isFunction } from '../../utils';
 
 const rootReducer = () => {};
 const stores = {};
-let middlewares = [];
+let middlewares = null;
 const composeEnhancers =
   /* eslint-disable no-underscore-dangle */
   process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -12,13 +13,16 @@ const composeEnhancers =
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
     : compose;
 
-const rootStore = createStore(rootReducer, composeEnhancers(applyMiddleware(() => middlewares)));
+const rootStore = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(() => middlewares || [])),
+);
 
-export const getStore = (id) => {
+const getStore = (id) => {
   return stores[id];
 };
 
-export const setStore = (id, store) => {
+const setStore = (id, store) => {
   if (!stores[id]) {
     stores[id] = store;
   } else if (!store) {
@@ -29,7 +33,11 @@ export const setStore = (id, store) => {
 rootStore.getStore = getStore;
 
 rootStore.applyMiddleware = (...args) => {
-  middlewares = args.filter((middleware) => isFunction(middleware));
+  if (middlewares === null) {
+    middlewares = args.filter((middleware) => isFunction(middleware));
+  }
 };
+
+export { getStore, setStore };
 
 export default rootStore;

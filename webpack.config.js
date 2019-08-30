@@ -2,9 +2,8 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
   entry: {
-    index: ['@babel/polyfill', './test'],
+    index: ['@babel/polyfill', './example'],
   },
   devServer: {
     port: 9000,
@@ -13,12 +12,12 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: 'public/index.html',
+      template: 'example/index.html',
       chunks: ['index', 'common'],
     }),
   ],
   mode: process.env.NODE_ENV,
-  // devtool: 'eval-source-map',
+  devtool: 'source-map',
   optimization: {
     splitChunks: {
       cacheGroups: {

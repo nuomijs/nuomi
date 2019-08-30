@@ -9,11 +9,13 @@
   "author": "yinjiazeng <yinjiazeng@163.com>",
   "license": "MIT",
   "dependencies": {
+    "invariant": "^2.2.4",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "warning": "^4.0.3"
   },
   "files": [
     "lib"
@@ -56,7 +58,7 @@
   "homepage": "https://github.com/nuomijs/nuomi#readme",
   "directories": {
     "lib": "lib",
-    "test": "test"
+    "example": "example"
   },
   "keywords": [
     "nuomi",
