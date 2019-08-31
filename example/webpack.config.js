@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: ['@babel/polyfill', './example'],
+    index: ['@babel/polyfill', './example/src'],
   },
   devServer: {
     port: 9000,
@@ -34,7 +34,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, 'src'),
+      nuomi: path.resolve(__dirname, '../src'),
     },
   },
   module: {

@@ -50,7 +50,7 @@
     "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
     "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
     "clean": "rimraf lib",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --progress"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --config example/webpack.config.js"
   },
   "description": "``` npm i --save nuomi ```",
   "bugs": {
