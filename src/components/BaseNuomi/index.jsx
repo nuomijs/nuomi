@@ -80,7 +80,8 @@ class BaseNuomi extends React.PureComponent {
 
     store.id = this.getId();
 
-    store.dispatch = async ({ type, payload }) => {
+    store.dispatch = async (action) => {
+      const { type, payload } = action;
       if (!this.effects) {
         this.effects = this.getEffects();
       }
@@ -144,10 +145,12 @@ class BaseNuomi extends React.PureComponent {
           }
           // effects不存在就执行reducers中方法直接更新状态
         } else if (reducers[type]) {
-          rootStore.dispatch({
+          return rootStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
+        } else {
+          return action;
         }
         // dispatch其他模块方法
       } else {
