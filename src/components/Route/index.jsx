@@ -18,7 +18,7 @@ class Route extends React.PureComponent {
     reducers: PropTypes.objectOf(PropTypes.func),
     effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
-    onBefore: PropTypes.func,
+    onEnter: PropTypes.func,
     onInit: PropTypes.func,
     onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     onLeave: PropTypes.func,

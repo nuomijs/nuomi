@@ -10,7 +10,7 @@ let wrappers = [];
 class RouteCore extends React.PureComponent {
   static propTypes = {
     async: PropTypes.func,
-    onBefore: PropTypes.func,
+    onEnter: PropTypes.func,
   };
 
   static contextTypes = {
@@ -30,7 +30,7 @@ class RouteCore extends React.PureComponent {
       // 是否异步加载完，async为函数时为false
       loaded,
       // 是否显示路由组件，异步时为false，因为异步加载的props可能包含onBefore，非异步时，没有onBefore值为true
-      visible: loaded ? !nuomiProps.onBefore : false,
+      visible: loaded ? !nuomiProps.onEnter : false,
       // 异步加载的props
       nuomiProps,
     };
@@ -167,9 +167,9 @@ class RouteCore extends React.PureComponent {
   // 根据onBefore决定是否可以展示组件
   // eslint-disable-next-line class-methods-use-this
   visibleHandler(nuomiProps, cb) {
-    if (nuomiProps.onBefore) {
+    if (nuomiProps.onEnter) {
       if (
-        nuomiProps.onBefore(() => {
+        nuomiProps.onEnter(() => {
           cb();
         }) === true
       ) {
