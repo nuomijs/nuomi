@@ -53,7 +53,7 @@ export default {
         type: '_updateState',
         payload: data,
       });
-    }
+    },
   },
   render() {
     return <Layout>{this.children}</Layout>;
@@ -78,13 +78,25 @@ export default {
     count: 0,
   },
   effects: {
+    count() {
+      const { count } = this.getState();
+      this.dispatch({
+        type: '_updateState',
+        payload: {
+          count: count + 1,
+        },
+      });
+    },
     async $getDetail() {
       const data = await services.getDetail();
-      this.updateState(data);
-    }
+      this.dispatch({
+        type: '_updateState',
+        payload: data,
+      });
+    },
     async initData() {
       await this.$getDetail();
-    }
+    },
   },
   render() {
     return <Layout />;
