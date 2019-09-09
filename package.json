@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.5.1",
+  "version": "0.5.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -59,6 +59,7 @@
   "homepage": "https://github.com/nuomijs/nuomi#readme",
   "directories": {
     "example": "example",
+    "lib": "lib",
     "test": "test"
   },
   "keywords": [
