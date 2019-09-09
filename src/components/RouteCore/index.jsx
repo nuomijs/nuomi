@@ -29,7 +29,7 @@ class RouteCore extends React.PureComponent {
     this.state = {
       // 是否异步加载完，async为函数时为false
       loaded,
-      // 是否显示路由组件，异步时为false，因为异步加载的props可能包含onBefore，非异步时，没有onBefore值为true
+      // 是否显示路由组件，异步时为false，因为异步加载的props可能包含onEnter，非异步时，没有onEnter值为true
       visible: loaded ? !nuomiProps.onEnter : false,
       // 异步加载的props
       nuomiProps,
@@ -164,7 +164,7 @@ class RouteCore extends React.PureComponent {
     }
   }
 
-  // 根据onBefore决定是否可以展示组件
+  // 根据onEnter决定是否可以展示组件
   // eslint-disable-next-line class-methods-use-this
   visibleHandler(nuomiProps, cb) {
     if (nuomiProps.onEnter) {
@@ -207,7 +207,6 @@ class RouteCore extends React.PureComponent {
   // eslint-disable-next-line class-methods-use-this
   hideWrapper() {
     wrappers.forEach((wrapper) => {
-      // eslint-disable-next-line no-param-reassign
       wrapper.style.display = 'none';
     });
   }

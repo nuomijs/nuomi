@@ -7,18 +7,19 @@ const withNuomi = (WrapperComponent) => {
   return class WithNuomi extends React.PureComponent {
     static contextTypes = {
       nuomiProps: PropTypes.object,
+      nuomiRouteProps: PropTypes.object,
     };
 
     static displayName = `withNuomi(${WrapperComponent.displayName || WrapperComponent.name})`;
 
     constructor(...args) {
       super(...args);
-      const { nuomiProps } = this.context;
+      const { nuomiProps, nuomiRouteProps } = this.context;
       invariant(
         nuomiProps,
         `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${WithNuomi.displayName}`,
       );
-      this.location = nuomiProps ? nuomiProps.location : getLocation();
+      this.location = nuomiRouteProps ? nuomiRouteProps.location : getLocation();
     }
 
     render() {

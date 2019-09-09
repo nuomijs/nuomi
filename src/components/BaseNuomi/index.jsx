@@ -19,7 +19,6 @@ class BaseNuomi extends React.PureComponent {
   };
 
   static childContextTypes = {
-    nuomiStore: PropTypes.object,
     nuomiProps: PropTypes.object,
   };
 
@@ -33,9 +32,7 @@ class BaseNuomi extends React.PureComponent {
   }
 
   getChildContext() {
-    const { store } = this.props;
     return {
-      nuomiStore: store,
       nuomiProps: this.props,
     };
   }

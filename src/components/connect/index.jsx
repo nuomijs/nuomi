@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { isFunction, isObject } from '../../utils';
-import store, { getStore } from '../../core/redux/store';
+// eslint-disable-next-line import/no-named-default
+import { default as rootStore, getStore } from '../../core/redux/store';
 
 const defaultMergeProps = (props, stateProps, dispatchProps) => {
   return { ...props, ...stateProps, ...dispatchProps };
@@ -15,7 +16,7 @@ const connect = (...args) => {
   return (WrapperComponent) => {
     return class Connect extends React.PureComponent {
       static contextTypes = {
-        nuomiStore: PropTypes.object,
+        nuomiProps: PropTypes.object,
       };
 
       static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
@@ -23,9 +24,9 @@ const connect = (...args) => {
       constructor(...arg) {
         super(...arg);
         this.mounted = false;
-        const { nuomiStore } = this.context;
+        const { nuomiProps } = this.context;
         invariant(
-          nuomiStore,
+          nuomiProps,
           `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${Connect.displayName}`,
         );
         if (isObject(options) && options.withRef === true) {
@@ -35,8 +36,8 @@ const connect = (...args) => {
           // 初始化state
           this.state = this.getState();
           // 订阅更新状态
-          this.unSubcribe = store.subscribe(() => {
-            if (this.mounted && getStore(nuomiStore.id)) {
+          this.unSubcribe = rootStore.subscribe(() => {
+            if (this.mounted && getStore(nuomiProps.store.id)) {
               this.setState(this.getState());
             }
           });
@@ -56,8 +57,8 @@ const connect = (...args) => {
       }
 
       getState() {
-        const { nuomiStore } = this.context;
-        const state = mapStateToProps(nuomiStore.getState(), store.getState());
+        const { store } = this.context.nuomiProps;
+        const state = mapStateToProps(store.getState(), rootStore.getState());
         return isObject(state) ? state : {};
       }
 
@@ -69,18 +70,16 @@ const connect = (...args) => {
       }
 
       getProps() {
-        const { nuomiStore } = this.context;
-        return (
-          mergeProps(this.props, this.state, mapDispatchToProps(nuomiStore.dispatch)) || this.props
-        );
+        const { store } = this.context.nuomiProps;
+        return mergeProps(this.props, this.state, mapDispatchToProps(store.dispatch)) || this.props;
       }
 
       render() {
-        const { nuomiStore } = this.context;
+        const { store } = this.context.nuomiProps;
         const props = {
           ...this.getProps(),
           ref: this.ref,
-          dispatch: nuomiStore.dispatch,
+          dispatch: store.dispatch,
         };
         return <WrapperComponent {...props} />;
       }

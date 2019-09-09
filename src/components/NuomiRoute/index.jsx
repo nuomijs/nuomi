@@ -9,6 +9,11 @@ class NuomiRoute extends Nuomi {
     pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   };
 
+  constructor(...args) {
+    super(...args);
+    this.routeComponent = null;
+  }
+
   matchPath(pathname) {
     const { pathPrefix } = this.props;
     if (pathPrefix) {
@@ -28,16 +33,20 @@ class NuomiRoute extends Nuomi {
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NuomiRoute>');
           const { location } = context;
+          // 路由还原时不渲染组件
+          if (context.restore) {
+            return this.routeComponent;
+          }
+          this.routeComponent = null;
           if (!context.matched && this.matchPath(location.pathname)) {
-            // eslint-disable-next-line no-param-reassign
             context.matched = this;
-            return (
-              <RouterContext.Provider value={{ location, matched: null }}>
+            this.routeComponent = (
+              <RouterContext.Provider value={{ ...context, matched: null }}>
                 {super.render()}
               </RouterContext.Provider>
             );
           }
-          return null;
+          return this.routeComponent;
         }}
       </RouterContext.Consumer>
     );

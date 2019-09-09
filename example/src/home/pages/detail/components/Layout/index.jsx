@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, router } from 'nuomi';
+import { connect, router, withNuomi } from 'nuomi';
 
 class Layout extends React.PureComponent {
   click = () => {
@@ -26,4 +26,6 @@ class Layout extends React.PureComponent {
   }
 }
 
-export default connect(({ detail, count, loadings }) => ({ detail, count, loadings }))(Layout);
+export default connect(({ detail, count, loadings }) => ({ detail, count, loadings }))(
+  withNuomi(Layout),
+);

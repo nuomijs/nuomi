@@ -9,6 +9,8 @@ let hashPrefix = '';
 let extraData = {};
 // 是否创建过路由
 let created = false;
+// 是否允许执行路由监听器
+let allowExecListener = true;
 // path对应的正则集合
 const pathRegexps = {};
 
@@ -37,14 +39,18 @@ function getMergeLocation() {
 }
 
 function hashchange() {
-  // 一次change可能有多个listeners，只创建一次location
-  let currentLocation = null;
-  listeners.forEach((callback) => {
-    if (!currentLocation) {
-      currentLocation = getMergeLocation();
-    }
-    callback(currentLocation);
-  });
+  if (allowExecListener) {
+    // 一次change可能有多个listeners，只创建一次location
+    let currentLocation = null;
+    listeners.forEach((callback) => {
+      if (!currentLocation) {
+        currentLocation = getMergeLocation();
+      }
+      callback(currentLocation);
+    });
+  } else {
+    allowExecListener = true;
+  }
 }
 
 function location(...args) {
@@ -84,6 +90,11 @@ function location(...args) {
       hashchange();
     }
   }
+}
+
+function normalLocation(url) {
+  allowExecListener = false;
+  location(url);
 }
 
 function reload() {
@@ -159,29 +170,47 @@ function removePath(path) {
   delete pathRegexps[parser.normalize(path)];
 }
 
-function getParams({ pathname }, path) {
+function getParamsLocation(locationData, path) {
+  const { pathname, ...rest } = locationData;
   const normalPath = parser.normalize(path);
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
     const pathnameMatch = pathname.match(pathRegexp);
     const pathMatch = path.match(/\/:([^/]+)/g);
     const params = {};
+    const paramsPathArray = [];
+    let paramsPath = '';
+    let newPathname = pathname;
     if (pathnameMatch && pathMatch) {
       pathMatch.forEach((param, i) => {
         const name = param.replace(/^\/:/, '');
         const value = pathnameMatch[i + 1];
+        paramsPathArray.push(value);
         if (value !== undefined) {
           params[name] = value.replace(/^\//, '');
         }
       });
+      // pathname排除params部分
+      if (paramsPathArray.length > 0) {
+        paramsPath = paramsPathArray.join('');
+        const lastIndex = pathname.lastIndexOf(paramsPath);
+        if (lastIndex !== -1) {
+          newPathname = pathname.substr(0, lastIndex);
+        }
+      }
     }
-    return params;
+    return {
+      ...rest,
+      pathname: newPathname,
+      params,
+    };
   }
-  return {};
+  return locationData;
 }
 
 export {
   getLocation,
+  normalLocation,
   location,
   listener,
   createRouter,
@@ -190,7 +219,7 @@ export {
   matchPathname,
   savePath,
   removePath,
-  getParams,
+  getParamsLocation,
   getHashPrefix,
 };
 

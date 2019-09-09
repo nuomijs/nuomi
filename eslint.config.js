@@ -6,6 +6,7 @@ module.exports = {
     'no-unused-expressions': 'off',
     'class-methods-use-this': 'off',
     'no-alert': 'off',
+    'no-param-reassign': 'off',
   },
   env: {
     browser: true,

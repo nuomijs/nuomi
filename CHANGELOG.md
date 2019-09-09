@@ -1,5 +1,36 @@
 # 更新日志：
 
+## 0.5.1 (2019-09-09)
+* Route组件增加onLeave回调
+```js
+export default {
+  ...,
+  // 确认框
+  onLeave(leave) {
+    const { editing } = this.store.getState();
+    if (editing) {
+      Modal.confirm({
+        content: '数据已修改，确定要离开当前页面？',
+        onOk() {
+          leave();
+        },
+      });
+    }
+    return false;
+  },
+  // 系统模态框
+  onLeave() {
+    const { editing } = this.store.getState();
+    if (editing) {
+      return window.confirm('数据已修改，确定要离开当前页面？');
+    }
+  },
+}
+```
+* Route组件onBefore回调更改为onEnter
+* 修复withNuomi获取的location没有params问题
+* 修复location.pathname包含params问题
+
 ## 0.4.2 (2019-08-31)
 * Link组件to属性增加对象支持
 * 代码增加错误提示，可以避免开发过程中一些不必要的错误
