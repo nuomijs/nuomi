@@ -165,6 +165,7 @@ class BaseNuomi extends React.PureComponent {
     };
 
     store.getState = () => rootStore.getState()[store.id] || props.state;
+    setStore(store.id, store);
   }
 
   createReducer() {
