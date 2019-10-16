@@ -13,5 +13,5 @@ module.exports = {
     ],
     '@babel/preset-react',
   ],
-  plugins: ['@babel/plugin-proposal-class-properties'],
+  plugins: ['dynamic-import-webpack', '@babel/plugin-proposal-class-properties'],
 };

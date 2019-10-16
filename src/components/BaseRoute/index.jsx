@@ -1,71 +1,95 @@
 import PropTypes from 'prop-types';
 import BaseNuomi from '../BaseNuomi';
-import { listener, matchPath } from '../../core/router';
+import { isFunction, isObject } from '../../utils';
 
 class BaseRoute extends BaseNuomi {
   static propTypes = {
     id: PropTypes.string,
-    wrapper: PropTypes.bool,
     reload: PropTypes.bool,
     state: PropTypes.object,
     data: PropTypes.object,
     store: PropTypes.object,
-    reducers: PropTypes.object,
-    effects: PropTypes.func,
+    location: PropTypes.object,
+    reducers: PropTypes.objectOf(PropTypes.func),
+    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     render: PropTypes.func,
-    onBefore: PropTypes.func,
+    onEnter: PropTypes.func,
     onInit: PropTypes.func,
-    onChange: PropTypes.func,
+    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     onLeave: PropTypes.func,
   };
 
-  constructor(...args) {
-    super(...args);
-    const { store, reload } = this.props;
-    if (!store.id) {
-      this.createStore();
-      this.createReducer();
-    } else if (reload === true) {
-      this.checkResetState(this.props);
-    }
-    this.routerChange();
+  static childContextTypes = {
+    nuomiProps: PropTypes.object,
+    nuomiRouteProps: PropTypes.object,
+  };
+
+  getChildContext() {
+    return {
+      nuomiProps: this.props,
+      nuomiRouteProps: this.props,
+    };
   }
 
-  /* eslint-disable camelcase */
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const { props } = this;
-    this.checkResetState(nextProps);
-    if (nextProps.location !== props.location) {
+    const { store } = props;
+    const isReload = store.id && props.reload === true;
+    const isChange = prevProps.location !== props.location;
+    if (isReload) {
+      this.replaceState();
+    }
+    if (isChange) {
       this.routerChange();
     }
-  }
-
-  checkResetState(nextProps) {
-    const { store, state } = this.props;
-    if (store.id && nextProps.reload === true) {
-      store.dispatch({
-        type: 'setState',
-        payload: state,
-      });
-      this.initialize();
-    }
-  }
-
-  routerChange() {
-    const { props } = this;
-    if (props.onChange) {
-      props.onChange();
+    if (isReload) {
+      this.nuomiInit();
     }
   }
 
   initialize() {
-    const { props } = this;
-    const { routerLocationCallback } = props;
-    if (routerLocationCallback) {
-      routerLocationCallback(props);
+    const { store, reload } = this.props;
+    if (!store.id) {
+      this.createStore();
+      this.createReducer();
+      this.routerChange(true);
+      this.nuomiInit();
+    } else if (reload === true) {
+      this.replaceState();
+      this.routerChange(true);
+      this.nuomiInit();
+    } else {
+      this.routerChange();
     }
-    if (props.onInit) {
-      props.onInit();
+  }
+
+  replaceState() {
+    const { props } = this;
+    props.store.dispatch({
+      type: '_replaceState',
+      payload: props.state,
+    });
+  }
+
+  routerChange(isReload) {
+    const { props } = this;
+    const { location, onChange } = props;
+    if (isFunction(location.data)) {
+      location.data(props);
+    }
+    if (isFunction(onChange)) {
+      onChange.call(props);
+    } else if (isObject(onChange)) {
+      Object.keys(onChange).forEach((key) => {
+        const callback = onChange[key];
+        if (isFunction(callback)) {
+          // 首次加载和刷新时不执行带有$前缀的回调
+          if (isReload && key.indexOf('$') === 0) {
+            return;
+          }
+          callback.call(props);
+        }
+      });
     }
   }
 }

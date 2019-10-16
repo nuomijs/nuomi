@@ -1,14 +1,16 @@
 import defaultProps from './defaultProps';
-import { extend } from '../../utils';
+import extend from '../../utils/extend';
 
 let newProps = defaultProps;
 
-const nuomi = (props) => {
+export const getDefaultProps = () => newProps;
+
+export const config = (props) => {
   newProps = extend(newProps, props);
 };
 
-export const getDefaultProps = () => newProps;
-
-nuomi.getDefaultProps = getDefaultProps;
-
-export default nuomi;
+export default {
+  config,
+  getDefaultProps,
+  extend,
+};

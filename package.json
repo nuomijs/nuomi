@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -9,12 +9,13 @@
   "author": "yinjiazeng <yinjiazeng@163.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.0",
+    "invariant": "^2.2.4",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "warning": "^4.0.3"
   },
   "files": [
     "lib"
@@ -30,9 +31,11 @@
     "@nuofe/eslint-config-common": "5.8.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
+    "babel-plugin-dynamic-import-webpack": "^1.1.0",
     "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.18.2",
+    "redux-immutable-state-invariant": "^2.1.0",
     "rimraf": "^2.6.3",
     "typescript": "^3.5.2",
     "webpack": "^4.36.1",
@@ -42,9 +45,12 @@
   "scripts": {
     "format": "prettier --write \"**/*{.css,.js,.json,.less,.mjs,.ts}\"",
     "lint": "npm run format && eslint --fix --ext \".js,.mjs,.ts\" .",
-    "build": "rimraf lib && cross-env BABEL_ENV=cjs babel src --out-dir lib",
+    "build": "npm run clean && npm run build:cjs && npm run build:copy && npm run build:proxy",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
+    "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
+    "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
     "clean": "rimraf lib",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --progress"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --config example/webpack.config.js"
   },
   "description": "``` npm i --save nuomi ```",
   "bugs": {
@@ -52,7 +58,14 @@
   },
   "homepage": "https://github.com/nuomijs/nuomi#readme",
   "directories": {
+    "example": "example",
     "lib": "lib",
     "test": "test"
-  }
+  },
+  "keywords": [
+    "nuomi",
+    "redux",
+    "nuomijs",
+    "router"
+  ]
 }

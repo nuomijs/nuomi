@@ -1,23 +1,32 @@
+安装
 ```
-npm i --save nuomi
+yarn add nuomi
+```
+
+demo
+```
+yarn install
+yarn start
 ```
 
 index.js
 ```js
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Nuomi } from 'nuomi';
+import { Router, Route, Redirect, Nuomi } from 'nuomi';
 import layout from './layout';
 import pages from './pages';
 
-class App extends React.Component {
+class App extends Component {
   render() {
     return (
       <Nuomi {...layout}>
-        <Router entry="/">
+        <Router>
           {pages.map((route) => (
             <Route key={route.path} {...route} />
           ))}
+          <Redirect from="/" to="/home" />
+          <Redirect to="/home" />
         </Router>
       </Nuomi>
     );
@@ -30,7 +39,6 @@ ReactDOM.render(<App />, document.querySelector('#root'));
 layout.js
 ```js
 import React from 'react';
-import Effects from './effects';
 import Layout from './components/Layout';
 
 export default {
@@ -38,8 +46,14 @@ export default {
   state: {
     username: '',
   },
-  effects() {
-    return new Effects(this);
+  effects: {
+    async $getInfo() {
+      const data = await services.getInfo();
+      this.dispatch({
+        type: '_updateState',
+        payload: data,
+      });
+    },
   },
   render() {
     return <Layout>{this.children}</Layout>;
@@ -55,17 +69,34 @@ export default {
 detail.js
 ```js
 import React from 'react';
-import Effects from './effects';
 import Layout from './components/Layout';
 
 export default {
-  path: '/detail/',
+  path: '/detail',
   state: {
     detail: '',
     count: 0,
   },
-  effects() {
-    return new Effects(this);
+  effects: {
+    count() {
+      const { count } = this.getState();
+      this.dispatch({
+        type: '_updateState',
+        payload: {
+          count: count + 1,
+        },
+      });
+    },
+    async $getDetail() {
+      const data = await services.getDetail();
+      this.dispatch({
+        type: '_updateState',
+        payload: data,
+      });
+    },
+    async initData() {
+      await this.$getDetail();
+    },
   },
   render() {
     return <Layout />;
@@ -78,32 +109,30 @@ export default {
 };
 ```
 
-detail effects.js
+detail Layout.jsx
 ```js
-import BaseEffects from '../../../public/effects';
-import services from '../services';
+import React, { PureComponent } from 'react';
+import { connect } from 'nuomi';
 
-export default class Effects extends BaseEffects {
-  count() {
-    const { count } = this.getState();
-    this.dispatch({
-      type: 'updateState',
-      payload: {
-        count: count + 1,
-      },
+class Layout extends PureComponent {
+  click = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'count',
     });
-  }
+  };
 
-  async $getDetail() {
-    const data = await services.getDetail();
-    this.dispatch({
-      type: 'updateState',
-      payload: data,
-    });
-  }
-
-  async initData() {
-    await this.$getDetail();
+  render() {
+    const { detail, count, loadings } = this.props;
+    return (
+      <div>
+        {loadings.$getDtail === true && <span>正在加载中...</span>}
+        {detail}
+        <span onClick={this.click}>攒（{count}）</span>
+      </div>
+    );
   }
 }
+
+export default connect(({ detail, count, loadings }) => ({ detail, count, loadings }))(Layout);
 ```
