@@ -1,5 +1,11 @@
 # 更新日志：
 
+## 0.5.2 (2019-10-16)
+* 修复nuomi卸载后调用getState，返回值undefined问题。[#3](https://github.com/nuomijs/nuomi/pull/3) [@liumemgmei](https://github.com/liumemgmei)
+
+## 0.5.1 (2019-09-09)
+:sweat_smile: 发布失误，不要使用该版本
+
 ## 0.5.0 (2019-09-09)
 * Route组件增加onLeave回调
 ```js

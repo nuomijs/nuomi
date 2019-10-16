@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
