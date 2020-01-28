@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
-import RouterContext from '../RouterContext';
+import { RouterContext } from '../Context';
 import { location as routerLocation } from '../../core/router';
 import parser from '../../utils/parser';
 

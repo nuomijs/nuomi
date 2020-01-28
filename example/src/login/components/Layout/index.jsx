@@ -1,7 +1,8 @@
 import React from 'react';
-import { connect } from 'nuomi';
+import { useConnect } from 'nuomi';
 
-const Layout = ({ username, password, loadings, dispatch }) => {
+const Layout = () => {
+  const [{ username, password, loadings }, dispatch] = useConnect();
   const onChange = (e) => {
     const { name, value } = e.target;
     dispatch({
@@ -44,6 +45,4 @@ const Layout = ({ username, password, loadings, dispatch }) => {
   );
 };
 
-export default connect(({ username, password, loadings }) => ({ username, password, loadings }))(
-  Layout,
-);
+export default Layout;

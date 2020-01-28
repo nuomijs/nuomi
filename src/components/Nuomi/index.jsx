@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseNuomi from '../BaseNuomi';
-import { removeReducer } from '../../core/redux/reducer';
 import { getDefaultProps } from '../../core/nuomi';
 import { isFunction } from '../../utils';
 import extend from '../../utils/extend';
@@ -27,7 +26,6 @@ class Nuomi extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    this.ref = React.createRef();
     this.mounted = false;
     this.store = {};
     const { async, ...rest } = this.props;
@@ -45,10 +43,6 @@ class Nuomi extends React.PureComponent {
 
   componentWillUnmount() {
     this.mounted = false;
-    removeReducer(this.store.id);
-    if (this.ref.current) {
-      this.ref.current.removeListener();
-    }
   }
 
   loaded(props) {
@@ -77,7 +71,7 @@ class Nuomi extends React.PureComponent {
   render() {
     const { loaded, nuomiProps } = this.state;
     if (loaded) {
-      return <BaseNuomi ref={this.ref} {...nuomiProps} store={this.store} />;
+      return <BaseNuomi {...nuomiProps} store={this.store} />;
     }
     return null;
   }

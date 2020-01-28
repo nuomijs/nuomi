@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
-import RouterContext from '../RouterContext';
+import { RouterContext } from '../Context';
 import RouteCore from '../RouteCore';
 import { removeReducer } from '../../core/redux/reducer';
 import {
@@ -64,21 +64,11 @@ class Route extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { path, wrapper } = this.props;
-    const { current } = this.ref;
-    if (current) {
-      if (wrapper) {
-        current.removeWrapper();
-      }
-      if (current.ref.current) {
-        current.ref.current.removeListener();
-      }
-    }
+    const { path } = this.props;
     if (activeRouteComponent === this.routeComponent) {
       activeRouteComponent = null;
     }
     removePath(path);
-    removeReducer(this.store.id);
   }
 
   render() {

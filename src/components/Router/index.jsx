@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RouterContext from '../RouterContext';
+import { RouterContext } from '../Context';
 import { createRouter } from '../../core/router';
 
 class Router extends React.PureComponent {

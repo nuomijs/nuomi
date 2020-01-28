@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { getLocation } from '../../core/router';
+import { NuomiContext } from '../Context';
 
 const withNuomi = (WrapperComponent) => {
   return class WithNuomi extends React.PureComponent {
-    static contextTypes = {
-      nuomiProps: PropTypes.object,
-      nuomiRouteProps: PropTypes.object,
-    };
+    static contextType = NuomiContext;
 
     static displayName = `withNuomi(${WrapperComponent.displayName || WrapperComponent.name})`;
 

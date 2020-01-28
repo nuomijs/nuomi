@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { isFunction, isObject } from '../../utils';
 // eslint-disable-next-line import/no-named-default
 import { default as rootStore, getStore } from '../../core/redux/store';
+import { NuomiContext } from '../Context';
 
 const defaultMergeProps = (props, stateProps, dispatchProps) => {
   return { ...props, ...stateProps, ...dispatchProps };
@@ -15,9 +15,7 @@ const connect = (...args) => {
   const mergeProps = isFunction(merge) ? merge : defaultMergeProps;
   return (WrapperComponent) => {
     return class Connect extends React.PureComponent {
-      static contextTypes = {
-        nuomiProps: PropTypes.object,
-      };
+      static contextType = NuomiContext;
 
       static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
 

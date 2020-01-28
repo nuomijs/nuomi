@@ -93,6 +93,7 @@ class RouteCore extends React.PureComponent {
   componentWillUnmount() {
     // 防止组件销毁时更新state报错
     this.mounted = false;
+    this.removeWrapper();
   }
 
   // 设置data临时数据，保存设置前的数据

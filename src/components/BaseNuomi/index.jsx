@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
-import { createReducer } from '../../core/redux/reducer';
+import { createReducer, removeReducer } from '../../core/redux/reducer';
 import rootStore, { getStore, setStore } from '../../core/redux/store';
 import { isObject, isFunction } from '../../utils';
 import EffectsProxy, { getClassEffects } from '../../utils/effectsProxy';
+import { NuomiContext } from '../Context';
 
 class BaseNuomi extends React.PureComponent {
   static propTypes = {
@@ -18,23 +19,20 @@ class BaseNuomi extends React.PureComponent {
     onInit: PropTypes.func,
   };
 
-  static childContextTypes = {
-    nuomiProps: PropTypes.object,
-  };
-
   static nuomiId = 0;
 
   constructor(...args) {
     super(...args);
     this.unListener = null;
     this.effects = null;
+    this.contextValue = { nuomiProps: this.props };
     this.initialize();
   }
 
-  getChildContext() {
-    return {
-      nuomiProps: this.props,
-    };
+  componentWillUnmount() {
+    const { store } = this.props;
+    removeReducer(store.id);
+    this.removeListener();
   }
 
   getId() {
@@ -206,7 +204,9 @@ class BaseNuomi extends React.PureComponent {
   render() {
     const { props } = this;
     const children = props.render ? props.render() : props.children;
-    return children || null;
+    return children ? (
+      <NuomiContext.Provider value={this.contextValue}>{children}</NuomiContext.Provider>
+    ) : null;
   }
 }
 
