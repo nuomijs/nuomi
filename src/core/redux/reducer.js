@@ -4,7 +4,9 @@ import store, { setStore } from './store';
 const reducers = {};
 
 const replaceReducer = () => {
-  store.replaceReducer(combineReducers(reducers));
+  if (Object.keys(reducers).length > 0) {
+    store.replaceReducer(combineReducers(reducers));
+  }
 };
 
 export const createReducer = (key, reducer) => {
