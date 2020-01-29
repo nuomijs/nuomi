@@ -1,10 +1,13 @@
 import proxyPolyfill from './proxyPolyfill';
 import { isNative } from './index';
 
-// 是否原生支持Proxy
-const supportProxy = isNative(window.Proxy);
+// 检测浏览器环境还是node环境
+const ProxyObject = typeof window === 'undefined' ? global.Proxy : window.Proxy;
 
-const EffectsProxy = supportProxy ? window.Proxy : proxyPolyfill();
+// 是否原生支持Proxy
+const supportProxy = isNative(ProxyObject);
+
+const EffectsProxy = supportProxy ? ProxyObject : proxyPolyfill();
 
 // 获取以类方式创建的effects实例对象
 export const getClassEffects = (effects) => {
