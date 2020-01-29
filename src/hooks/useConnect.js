@@ -1,16 +1,17 @@
 import { useReducer, useContext, useEffect, useRef } from 'react';
+import invariant from 'invariant';
 import { NuomiContext } from '../components/Context';
 // eslint-disable-next-line import/no-named-default
 import { default as rootStore, getStore } from '../core/redux/store';
 import { isFunction, shallowEqual } from '../utils';
 
-const useSelector = (callback) => {
+const useConnect = (callback) => {
+  const { nuomiProps } = useContext(NuomiContext);
+  invariant(nuomiProps, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useConnect');
+  // 获取最近的Nuomi组件store
+  const { store } = nuomiProps;
   // 用于强制更新
   const [, forceRender] = useReducer((s) => s + 1, 0);
-  // 获取最近的Nuomi组件store
-  const {
-    nuomiProps: { store },
-  } = useContext(NuomiContext);
   // 用于记忆旧状态
   const selectedState = useRef();
   // 获取最新状态
@@ -47,4 +48,4 @@ const useSelector = (callback) => {
   return [state, store.dispatch];
 };
 
-export default useSelector;
+export default useConnect;

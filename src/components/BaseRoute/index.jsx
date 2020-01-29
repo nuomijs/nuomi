@@ -19,11 +19,6 @@ class BaseRoute extends BaseNuomi {
     onLeave: PropTypes.func,
   };
 
-  constructor(...args) {
-    super(...args);
-    this.contextValue = { nuomiProps: this.props, nuomiRouteProps: this.props };
-  }
-
   componentDidUpdate(prevProps) {
     const { props } = this;
     const { store } = props;

@@ -1,5 +1,32 @@
 # 更新日志：
 
+## 0.6.1 (2020-01-29)
+* 新增useConnect hooks替代connect高阶组件
+```js
+import { useConnect } from 'nuomi';
+
+export default function Layout() {
+  const [{ count }, dispatch] = useConnect();
+  const setCount = () => {
+    dispatch({
+      type: 'setCount',
+      payload: { count: count + 1 },
+    });
+  };
+  return <div onClick={setCount}>{count}</div>;
+}
+```
+* 新增useNuomi hooks替代withNuomi高阶组件
+```js
+import { useNuomi } from 'nuomi';
+
+export default function Layout() {
+  const { nuomiProps } = useNuomi();
+  // ...
+}
+```
+* withNuomi中location props被移除，Route组件内可以通过nuomiProps.location获取，其他组件内可通过router.location()获取
+
 ## 0.5.2 (2019-10-16)
 * 修复nuomi卸载后调用getState，返回值undefined问题。[#3](https://github.com/nuomijs/nuomi/pull/3) [@liumemgmei](https://github.com/liumemgmei)
 

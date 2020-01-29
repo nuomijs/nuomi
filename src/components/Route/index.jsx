@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from '../Context';
 import RouteCore from '../RouteCore';
-import { removeReducer } from '../../core/redux/reducer';
 import {
   matchPath,
   savePath,
