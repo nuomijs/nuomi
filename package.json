@@ -2,6 +2,7 @@
   "name": "nuomi",
   "version": "0.6.1",
   "main": "lib/index.js",
+  "typings": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
@@ -18,7 +19,8 @@
     "warning": "^4.0.3"
   },
   "files": [
-    "lib"
+    "lib",
+    "types"
   ],
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -60,7 +62,8 @@
   "directories": {
     "example": "example",
     "lib": "lib",
-    "test": "test"
+    "test": "test",
+    "types": "types"
   },
   "keywords": [
     "nuomi",
