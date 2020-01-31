@@ -1,25 +1,25 @@
 export interface Props {
-  id?: String,
-  state?: Object,
-  data?: Object,
-  reducers?: Object,
-  effects?: Object,
-  async?: Function,
-  render?: Function,
-  onInit?: Function,
+  id?: string,
+  state?: object,
+  data?: object,
+  reducers?: object,
+  effects?: object,
+  async?: (loadProps: (props: NuomiProps) => void) => void,
+  render?: () => any,
+  onInit?: () => any,
 }
 
 export interface RouteProps extends Props {
-  path?: String,
-  wrapper?: Boolean,
-  reload?: Boolean,
-  onEnter?: Function,
-  onChange?: Function,
-  onLeave?: Function,
+  path?: string,
+  wrapper?: boolean,
+  reload?: boolean,
+  onEnter?: (enter: () => void) => boolean,
+  onChange?: () => void,
+  onLeave?: (leave: () => void) => boolean,
 }
 
 export interface NuomiRouteProps extends Props {
-  pathPrefix?: String,
+  pathPrefix?: string,
 }
 
 export interface NuomiProps extends RouteProps, NuomiRouteProps {}

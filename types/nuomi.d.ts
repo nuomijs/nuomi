@@ -1,11 +1,9 @@
 import { NuomiProps } from './props';
 
-interface Nuomi {
-  config: (opts: NuomiProps) => void,
-  getDefaultProps: () => Object,
-  extend: (props: NuomiProps, ...args: NuomiProps) => Object,
+export interface NuomiAPI {
+  config(opts: NuomiProps): void,
+  getDefaultProps(): object,
+  extend(...props: NuomiProps[]): object,
 }
 
-declare const nuomi: Nuomi;
-
-export { nuomi };
+export const nuomi: NuomiAPI;
