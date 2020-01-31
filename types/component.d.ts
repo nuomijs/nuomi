@@ -16,23 +16,21 @@ export interface LinkProps {
   reload?: boolean,
 }
 
-interface MapStateToProps {}
-
 export interface Connect {
   (): <P>(Component: ComponentType<P>) => ComponentType<P>,
 }
 
-export class Nuomi extends PureComponent<Props> {}
+export class Nuomi<P extends Props> extends PureComponent<P, any> {}
 
-export class Route extends PureComponent<RouteProps> {}
+export class Route<P extends RouteProps> extends PureComponent<P, any> {}
 
-export class NuomiRoute extends PureComponent<NuomiRouteProps> {}
+export class NuomiRoute<P extends NuomiRouteProps> extends PureComponent<P, any> {}
 
-export class Router extends PureComponent<RouterProps> {}
+export class Router<P extends RouterProps> extends PureComponent<P, any> {}
 
-export class Redirect extends PureComponent<RedirectProps> {}
+export class Redirect<P extends RedirectProps> extends PureComponent<P, any> {}
 
-export class Link extends PureComponent<LinkProps> {}
+export class Link<P extends LinkProps> extends PureComponent<P, any> {}
 
 export const connect: Connect;
 
