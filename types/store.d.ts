@@ -1,7 +1,7 @@
-import { Store as ReduxStore, Middleware } from 'redux';
+import { Store, Middleware } from 'redux';
 
-export interface Store extends ReduxStore {
+export interface StoreAPI extends Store {
   applyMiddleware(...middlewares: Middleware[]): void,
 }
 
-export const store: Store;
+export const store: StoreAPI;
