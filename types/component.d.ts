@@ -7,12 +7,12 @@ export interface RouterProps {
 
 export interface RedirectProps {
   from?: string,
-  to?: string,
+  to?: string | object,
   reload?: boolean,
 }
 
 export interface LinkProps {
-  to?: string,
+  to?: string | object,
   reload?: boolean,
 }
 
