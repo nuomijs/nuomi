@@ -1,7 +1,8 @@
 {
   "name": "nuomi",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "main": "lib/index.js",
+  "typings": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
@@ -18,7 +19,8 @@
     "warning": "^4.0.3"
   },
   "files": [
-    "lib"
+    "lib",
+    "types"
   ],
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -30,11 +32,14 @@
     "@babel/preset-react": "^7.0.0",
     "@nuofe/eslint-config-common": "5.8.0",
     "babel-core": "^6.26.3",
+    "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
     "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^25.1.0",
     "prettier": "^1.18.2",
+    "react-test-renderer": "^16.12.0",
     "redux-immutable-state-invariant": "^2.1.0",
     "rimraf": "^2.6.3",
     "typescript": "^3.5.2",
@@ -50,7 +55,8 @@
     "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
     "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
     "clean": "rimraf lib",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --config example/webpack.config.js"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --config example/webpack.config.js",
+    "test": "jest"
   },
   "description": "``` npm i --save nuomi ```",
   "bugs": {
@@ -59,8 +65,7 @@
   "homepage": "https://github.com/nuomijs/nuomi#readme",
   "directories": {
     "example": "example",
-    "lib": "lib",
-    "test": "test"
+    "lib": "lib"
   },
   "keywords": [
     "nuomi",
