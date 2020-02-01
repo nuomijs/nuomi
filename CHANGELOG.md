@@ -1,5 +1,8 @@
 # 更新日志：
 
+## 0.6.2 (2020-02-01)
+* 添加d.ts，增加对typescript的支持
+
 ## 0.6.1 (2020-01-29)
 * 新增useConnect hooks替代connect高阶组件
 ```js

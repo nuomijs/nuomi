@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
   "repository": {
@@ -65,9 +65,7 @@
   "homepage": "https://github.com/nuomijs/nuomi#readme",
   "directories": {
     "example": "example",
-    "lib": "lib",
-    "test": "test",
-    "types": "types"
+    "lib": "lib"
   },
   "keywords": [
     "nuomi",
