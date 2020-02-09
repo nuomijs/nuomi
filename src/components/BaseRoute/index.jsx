@@ -37,15 +37,18 @@ class BaseRoute extends BaseNuomi {
 
   initialize() {
     const { store, reload } = this.props;
+    // 初始化
     if (!store.id) {
       this.createStore();
       this.createReducer();
       this.routerChange(true);
       this.nuomiInit();
+      // 路由刷新
     } else if (reload === true) {
       this.replaceState();
       this.routerChange(true);
       this.nuomiInit();
+      // 路由切换
     } else {
       this.routerChange();
     }

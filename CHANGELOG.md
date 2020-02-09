@@ -1,5 +1,8 @@
 # 更新日志：
 
+## 0.6.5 (2020-02-09)
+* 修复使用useConnect获取state返回undefined [#5](https://github.com/nuomijs/nuomi/issues/5)
+
 ## 0.6.4 (2020-02-09)
 * 修复NuomiRoute组件异步加载刷新页面空白问题 [#4](https://github.com/nuomijs/nuomi/issues/4)
 

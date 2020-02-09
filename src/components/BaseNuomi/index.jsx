@@ -32,16 +32,18 @@ class BaseNuomi extends React.PureComponent {
   componentWillUnmount() {
     const { store } = this.props;
     removeReducer(store.id);
+    store.id = null;
     this.removeListener();
   }
 
   getId() {
-    BaseNuomi.nuomiId += 1;
     const { id } = this.props;
-    const defaultId = `nuomi_${BaseNuomi.nuomiId}`;
-    if (!id || (!!id && !!getStore(id))) {
-      warning(!id, `storeId：${id} 已被使用，将由 ${defaultId} 替代`);
-      return defaultId;
+    // 没有定义id或者id已经被使用
+    if (!id || !!getStore(id)) {
+      BaseNuomi.nuomiId += 1;
+      const newId = `nuomi_${BaseNuomi.nuomiId}`;
+      warning(!id, `storeId：${id} 已被使用，将由 ${newId} 替代`);
+      return newId;
     }
     return id;
   }
