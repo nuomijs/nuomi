@@ -12,7 +12,7 @@ export const isType = (type) => {
  * @fucntion 检测对象是否是函数
  * @param {Object} obj
  */
-export const isFunction = isType('Function');
+export const isFunction = (obj) => typeof obj === 'function';
 
 /**
  * @fucntion 检测对象是否是字符串

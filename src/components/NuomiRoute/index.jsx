@@ -4,8 +4,16 @@ import invariant from 'invariant';
 import { RouterContext } from '../Context';
 import Nuomi from '../Nuomi';
 
-class NuomiRoute extends Nuomi {
+class NuomiRoute extends React.PureComponent {
   static propTypes = {
+    id: PropTypes.string,
+    state: PropTypes.object,
+    data: PropTypes.object,
+    reducers: PropTypes.objectOf(PropTypes.func),
+    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    render: PropTypes.func,
+    onInit: PropTypes.func,
+    async: PropTypes.func,
     pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   };
 
@@ -42,7 +50,7 @@ class NuomiRoute extends Nuomi {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={{ ...context, matched: null }}>
-                {super.render()}
+                <Nuomi {...this.props} />
               </RouterContext.Provider>
             );
           }
