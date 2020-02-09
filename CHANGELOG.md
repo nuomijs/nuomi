@@ -1,5 +1,8 @@
 # 更新日志：
 
+## 0.6.4 (2020-02-09)
+* 修复NuomiRoute组件异步加载刷新页面空白问题 [#4](https://github.com/nuomijs/nuomi/issues/4)
+
 ## 0.6.3 (2020-02-08)
 * 修复dispatch effects方法无效问题
 
