@@ -3,8 +3,6 @@ import parser from '../../utils/parser';
 
 // 监听列表
 let listeners = [];
-// hash前缀，紧跟在#后面的符号
-let hashPrefix = '';
 // location额外的数据
 let extraData = {};
 // 是否创建过路由
@@ -12,7 +10,17 @@ let created = false;
 // 是否允许执行路由监听器
 let allowExecListener = true;
 // path对应的正则集合
-const pathRegexps = {};
+let pathRegexps = {};
+// 是否是hash类型
+let isHash = true;
+// 默认路由选项
+const defaultOptions = {
+  // 路由类型 hash or browser
+  type: 'hash',
+  // 路由路径通用前缀
+  basePath: '/',
+};
+let options = defaultOptions;
 
 function back() {
   window.history.back();
@@ -22,13 +30,16 @@ function forward() {
   window.history.forward();
 }
 
-function getHashPrefix() {
-  return `#${hashPrefix}`;
+function getOriginPath() {
+  const { pathname, search, hash } = window.location;
+  if (isHash) {
+    return hash.substr(1);
+  }
+  return pathname + search + hash;
 }
 
 function getLocation() {
-  const hashPath = window.location.hash.substr(getHashPrefix().length);
-  return parser(hashPath);
+  return parser(getOriginPath());
 }
 
 function getMergeLocation() {
@@ -38,7 +49,7 @@ function getMergeLocation() {
   return mergeLocation;
 }
 
-function hashchange() {
+function routerEventListener() {
   if (allowExecListener) {
     // 一次change可能有多个listeners，只创建一次location
     let currentLocation = null;
@@ -51,6 +62,11 @@ function hashchange() {
   } else {
     allowExecListener = true;
   }
+}
+
+function combinePath(path = '') {
+  const { basePath } = options;
+  return parser.replacePath(`${basePath}/${path.replace(`^${basePath}`, '')}`);
 }
 
 function location(...args) {
@@ -82,12 +98,19 @@ function location(...args) {
     if (isObject(data) || isFunction(data)) {
       extraData.data = data;
     }
-    const hash = getHashPrefix() + parser.replacePath(path);
-    if (hash !== window.location.hash) {
-      window.location.hash = hash;
+
+    const url = combinePath(path);
+    const originPath = getOriginPath();
+    if (url !== originPath) {
+      if (isHash) {
+        window.location.hash = url;
+      } else {
+        window.history.pushState({ a: 1 }, null, url);
+        routerEventListener();
+      }
       // hash相同时强制执行回调
     } else if (force === true) {
-      hashchange();
+      routerEventListener();
     }
   }
 }
@@ -100,6 +123,10 @@ function normalLocation(url) {
 function reload() {
   const { url } = getLocation();
   location(url, true);
+}
+
+function replace() {
+  //
 }
 
 function removeListener(...args) {
@@ -123,17 +150,21 @@ function listener(callback) {
   return () => {};
 }
 
-function createRouter({ hashPrefix: prefix }, callback) {
+function createRouter(routerOptions, callback) {
   if (!created) {
     created = true;
-    hashPrefix = prefix;
+    options = { ...options, ...routerOptions };
+    isHash = options.type !== 'browser';
+    const eventType = isHash ? 'hashchange' : 'popstate';
     listener(callback);
-    window.addEventListener('hashchange', hashchange);
+    window.addEventListener(eventType, routerEventListener);
     return () => {
       created = false;
-      window.removeEventListener('hashchange', hashchange);
-      // 移除所有回调
+      window.removeEventListener(eventType, routerEventListener);
       removeListener();
+      pathRegexps = {};
+      options = defaultOptions;
+      isHash = true;
     };
   }
   return null;
@@ -220,7 +251,7 @@ export {
   savePath,
   removePath,
   getParamsLocation,
-  getHashPrefix,
+  combinePath,
 };
 
 export default {
@@ -228,6 +259,7 @@ export default {
   location,
   matchPath,
   reload,
+  replace,
   back,
   forward,
 };

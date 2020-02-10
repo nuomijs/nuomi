@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { location, getHashPrefix } from '../../core/router';
+import { location, combinePath } from '../../core/router';
 
 class Link extends React.PureComponent {
   static propTypes = {
@@ -18,7 +18,7 @@ class Link extends React.PureComponent {
 
   render() {
     const { to, reload, ...rest } = this.props;
-    return <a href={`${getHashPrefix()}${to}`} {...rest} onClick={this.onClick} />;
+    return <a href={`${combinePath(to)}`} {...rest} onClick={this.onClick} />;
   }
 }
 

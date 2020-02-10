@@ -1,26 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import { RouterContext } from '../Context';
 import { createRouter } from '../../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
-    hashPrefix: '',
+    basePath: '/',
+    type: 'hash',
   };
 
   static propTypes = {
-    hashPrefix: PropTypes.string,
+    basePath: PropTypes.string,
+    type: PropTypes.oneOf(['hash', 'browser']),
   };
 
   constructor(...args) {
     super(...args);
-    const { hashPrefix } = this.props;
     this.mounted = false;
     this.state = {};
-    this.destroyRouter = createRouter({ hashPrefix }, (location) => {
+    this.location = null;
+    const { basePath } = this.props;
+    invariant(basePath.indexOf('/') === 0, 'basePath必须是“/”开头');
+    this.destroyRouter = createRouter(this.props, (location) => {
+      this.location = location;
       if (this.mounted) {
         this.setState({ location });
-      } else {
+      } else if (!this.state.location) {
         this.state.location = location;
       }
     });
@@ -28,6 +34,9 @@ class Router extends React.PureComponent {
 
   componentDidMount() {
     this.mounted = true;
+    if (this.state.location !== this.location) {
+      this.setState({ location: this.location });
+    }
   }
 
   componentWillUnmount() {

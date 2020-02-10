@@ -53,6 +53,7 @@ module.exports = {
   },
   output: {
     filename: '[chunkHash].js',
+    publicPath: '/',
     path: path.resolve(__dirname, './dist'),
   },
 };
