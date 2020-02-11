@@ -4,6 +4,7 @@ import invariant from 'invariant';
 import { RouterContext } from './Context';
 import router from '../core/router';
 import parser from '../utils/parser';
+import { isObject } from '../utils';
 
 class Redirect extends React.PureComponent {
   static defaultProps = {
@@ -35,7 +36,7 @@ class Redirect extends React.PureComponent {
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <Redirect>');
-          const { matched, location } = context;
+          const { matched, location, staticContext } = context;
           // 路由还原时不执行重定向
           if (context.restore) {
             return null;
@@ -45,6 +46,10 @@ class Redirect extends React.PureComponent {
               this.redirected = true;
               context.redirecting = true; // 防止同时执行多个Redirect
               router.replace(to, reload);
+              // 服务器渲染时捕获重定向URL
+              if (staticContext) {
+                staticContext.url = isObject(to) ? parser.restore(to) : to;
+              }
             }
           } else if (this.redirected) {
             this.redirected = false;

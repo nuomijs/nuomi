@@ -6,4 +6,8 @@ export default typeof window !== 'undefined'
       Proxy: global.Proxy,
       addEventListener: noop,
       removeEventListener: noop,
+      history: {
+        pushState: noop,
+        replaceState: noop,
+      },
     };

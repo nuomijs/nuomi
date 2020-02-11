@@ -34,9 +34,11 @@ class StaticRouter extends React.Component {
   }
 
   render() {
-    const { location, ...rest } = this.props;
+    const { location, context, ...rest } = this.props;
     return (
-      <RouterContext.Provider value={{ staticLocation: this.getStaticLocation() }}>
+      <RouterContext.Provider
+        value={{ staticLocation: this.getStaticLocation(), staticContext: context }}
+      >
         <Router type="browser" {...rest} />
       </RouterContext.Provider>
     );

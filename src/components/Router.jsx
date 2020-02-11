@@ -52,8 +52,11 @@ class Router extends React.PureComponent {
   render() {
     const { children } = this.props;
     const { location } = this.state;
+    const { staticContext } = this.context;
     return (
-      <RouterContext.Provider value={{ location, matched: null, restore: false, isLeave: false }}>
+      <RouterContext.Provider
+        value={{ location, matched: null, restore: false, isLeave: false, staticContext }}
+      >
         {children}
       </RouterContext.Provider>
     );

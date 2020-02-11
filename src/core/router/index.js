@@ -157,14 +157,14 @@ function listener(callback) {
   return () => {};
 }
 
-function createRouter(routerOptions, routerLocation, callback) {
+function createRouter(routerOptions, staticLocation, callback) {
   if (!created) {
     created = true;
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    if (routerLocation) {
-      globalLocation = routerLocation;
+    if (staticLocation) {
+      globalLocation = staticLocation;
     }
     listener(callback);
     globalWindow.addEventListener(eventType, routerEventListener);
