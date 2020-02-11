@@ -14,12 +14,14 @@ class Router extends React.PureComponent {
     type: PropTypes.oneOf(['hash', 'browser']),
   };
 
+  static contextType = RouterContext;
+
   constructor(...args) {
     super(...args);
     this.mounted = false;
     this.state = {};
     this.location = null;
-    this.destroyRouter = createRouter(this.props, (location) => {
+    this.destroyRouter = createRouter(this.props, this.context.staticLocation, (location) => {
       if (this.mounted) {
         this.setState({ location });
       } else {

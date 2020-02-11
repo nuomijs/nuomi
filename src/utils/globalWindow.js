@@ -1,6 +1,9 @@
+import { noop } from './index';
+
 export default typeof window !== 'undefined'
   ? window
   : {
       Proxy: global.Proxy,
-      location: {},
+      addEventListener: noop,
+      removeEventListener: noop,
     };

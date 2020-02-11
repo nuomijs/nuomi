@@ -2,6 +2,7 @@ import { isFunction, isObject } from '../../utils';
 import parser from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
 
+let globalLocation = globalWindow.location;
 // 监听列表
 let listeners = [];
 // location额外的数据
@@ -24,7 +25,7 @@ const defaultOptions = {
 let options = defaultOptions;
 
 function getOriginPath() {
-  const { pathname, search, hash } = globalWindow.location;
+  const { pathname, search, hash } = globalLocation;
   if (isHash) {
     return hash.substr(1);
   }
@@ -91,10 +92,10 @@ function locationHandle(...args) {
     if (url !== originPath) {
       if (isHash) {
         if (type === 'push') {
-          globalWindow.location.hash = url;
+          globalLocation.hash = url;
         } else {
-          const { protocol, pathname, host, search } = globalWindow.location;
-          globalWindow.location.replace(`${protocol}//${host + pathname + search}#${url}`);
+          const { protocol, pathname, host, search } = globalLocation;
+          globalLocation.replace(`${protocol}//${host + pathname + search}#${url}`);
         }
       } else {
         globalWindow.history[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);
@@ -156,12 +157,15 @@ function listener(callback) {
   return () => {};
 }
 
-function createRouter(routerOptions, callback) {
+function createRouter(routerOptions, routerLocation, callback) {
   if (!created) {
     created = true;
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
+    if (routerLocation) {
+      globalLocation = routerLocation;
+    }
     listener(callback);
     globalWindow.addEventListener(eventType, routerEventListener);
     return () => {
@@ -171,6 +175,7 @@ function createRouter(routerOptions, callback) {
       pathRegexps = {};
       options = defaultOptions;
       isHash = true;
+      globalLocation = globalWindow.location;
     };
   }
   return null;
