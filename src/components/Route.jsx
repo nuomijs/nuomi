@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
-import { RouterContext } from '../Context';
-import RouteCore from '../RouteCore';
+import { RouterContext } from './Context';
+import RouteCore from './RouteCore';
 import router, {
   matchPath,
   savePath,
   removePath,
   getParamsLocation,
   restoreLocation,
-} from '../../core/router';
-import { getDefaultProps } from '../../core/nuomi';
+} from '../core/router';
+import { getDefaultProps } from '../core/nuomi';
 
 let activeRouteComponent = null;
 
@@ -91,11 +91,7 @@ class Route extends React.PureComponent {
             return this.routeComponent;
           }
           // 检测之前的路由onLeave
-          if (
-            !!activeRouteComponent &&
-            !!activeRouteComponent.ref.current &&
-            !context.callOnLeave
-          ) {
+          if (!!activeRouteComponent && !!activeRouteComponent.ref.current && !context.isLeave) {
             const baseRouteComponent = activeRouteComponent.ref.current.ref.current;
             if (baseRouteComponent) {
               const { props } = baseRouteComponent;
@@ -110,7 +106,7 @@ class Route extends React.PureComponent {
                   invariant(false, 'onLeave中进行跳转只能发生在异步操作或者确认框回调中');
                 }
                 // 防止onLeave重复执行
-                context.callOnLeave = true;
+                context.isLeave = true;
                 if (leaveResult === false) {
                   // 还原路由标记
                   context.restore = true;

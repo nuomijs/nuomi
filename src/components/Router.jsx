@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RouterContext } from '../Context';
-import { createRouter } from '../../core/router';
+import { RouterContext } from './Context';
+import { createRouter } from '../core/router';
 
 class Router extends React.PureComponent {
   static defaultProps = {
@@ -51,9 +51,7 @@ class Router extends React.PureComponent {
     const { children } = this.props;
     const { location } = this.state;
     return (
-      <RouterContext.Provider
-        value={{ location, matched: null, restore: false, callOnLeave: false }}
-      >
+      <RouterContext.Provider value={{ location, matched: null, restore: false, isLeave: false }}>
         {children}
       </RouterContext.Provider>
     );

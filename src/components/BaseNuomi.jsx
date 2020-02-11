@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
-import { createReducer, removeReducer } from '../../core/redux/reducer';
-import rootStore, { getStore, setStore } from '../../core/redux/store';
-import { isObject, isFunction } from '../../utils';
-import EffectsProxy, { getClassEffects } from '../../utils/effectsProxy';
-import { NuomiContext } from '../Context';
+import { createReducer, removeReducer } from '../core/redux/reducer';
+import rootStore, { getStore, setStore } from '../core/redux/store';
+import { isObject, isFunction } from '../utils';
+import EffectsProxy, { getClassEffects } from '../utils/effectsProxy';
+import { NuomiContext } from './Context';
 
 class BaseNuomi extends React.PureComponent {
   static propTypes = {

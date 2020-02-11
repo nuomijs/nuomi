@@ -6,7 +6,7 @@ module.exports = {
     index: ['@babel/polyfill', './example/src'],
   },
   devServer: {
-    port: 9000,
+    port: 8000,
     stats: 'errors-only',
     contentBase: './dist',
   },

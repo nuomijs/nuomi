@@ -1,6 +1,6 @@
 import React from 'react';
 import invariant from 'invariant';
-import { NuomiContext } from '../Context';
+import { NuomiContext } from './Context';
 
 const withNuomi = (WrapperComponent) => {
   return class WithNuomi extends React.PureComponent {

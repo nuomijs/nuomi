@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BaseNuomi from '../BaseNuomi';
-import { getDefaultProps } from '../../core/nuomi';
-import { isFunction } from '../../utils';
-import extend from '../../utils/extend';
+import BaseNuomi from './BaseNuomi';
+import { getDefaultProps } from '../core/nuomi';
+import { isFunction } from '../utils';
+import extend from '../utils/extend';
 
 class Nuomi extends React.PureComponent {
   static propTypes = {

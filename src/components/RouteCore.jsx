@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BaseRoute from '../BaseRoute';
-import { isFunction, isObject } from '../../utils';
-import extend from '../../utils/extend';
-import { getDefaultProps } from '../../core/nuomi';
+import BaseRoute from './BaseRoute';
+import { isFunction, isObject } from '../utils';
+import extend from '../utils/extend';
+import { getDefaultProps } from '../core/nuomi';
 
 let wrappers = [];
 

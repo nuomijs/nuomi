@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import router, { combinePath } from '../../core/router';
+import router, { combinePath } from '../core/router';
 
 class Link extends React.PureComponent {
   static propTypes = {

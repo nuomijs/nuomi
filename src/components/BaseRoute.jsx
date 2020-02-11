@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import BaseNuomi from '../BaseNuomi';
-import { isFunction, isObject } from '../../utils';
+import BaseNuomi from './BaseNuomi';
+import { isFunction, isObject } from '../utils';
 
 class BaseRoute extends BaseNuomi {
   static propTypes = {

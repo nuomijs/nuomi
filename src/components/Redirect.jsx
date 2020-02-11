@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
-import { RouterContext } from '../Context';
-import router from '../../core/router';
-import parser from '../../utils/parser';
+import { RouterContext } from './Context';
+import router from '../core/router';
+import parser from '../utils/parser';
 
 class Redirect extends React.PureComponent {
   static defaultProps = {
