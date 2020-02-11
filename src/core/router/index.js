@@ -94,8 +94,8 @@ function locationHandle(...args) {
         if (type === 'push') {
           globalLocation.hash = url;
         } else {
-          const { protocol, pathname, host, search } = globalLocation;
-          globalLocation.replace(`${protocol}//${host + pathname + search}#${url}`);
+          const { pathname, search } = globalLocation;
+          globalLocation.replace(`${pathname + search}#${url}`);
         }
       } else {
         globalWindow.history[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);

@@ -1,9 +1,17 @@
 import  { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
 
-export interface RouterProps {
-  type?: 'hash' | 'browser',
+interface BaseRouter {
   basename? : string,
+  context?: object,
+}
+
+export interface RouterProps extends BaseRouter {
+  type?: 'hash' | 'browser',
+}
+
+export interface StaticRouterProps extends BaseRouter {
+  location?: string | object,
 }
 
 export interface RedirectProps {
@@ -28,6 +36,8 @@ export class Route<P extends RouteProps> extends PureComponent<P, any> {}
 export class NuomiRoute<P extends NuomiRouteProps> extends PureComponent<P, any> {}
 
 export class Router<P extends RouterProps> extends PureComponent<P, any> {}
+
+export class Router<P extends StaticRouterProps> extends PureComponent<P, any> {}
 
 export class Redirect<P extends RedirectProps> extends PureComponent<P, any> {}
 

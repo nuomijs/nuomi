@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Router from '../Router';
+import Router from './Router';
 import { RouterContext } from './Context';
-import { noop } from '../utils';
+import { noop, isString } from '../utils';
+import parser from '../utils/parser';
 
 class StaticRouter extends React.Component {
   static defaultProps = {
@@ -19,13 +20,15 @@ class StaticRouter extends React.Component {
 
   getStaticLocation() {
     const { location } = this.props;
+    let staticLocation = location;
+    if (isString(location)) {
+      staticLocation = parser(location);
+    }
+    const { search = '', hash = '', pathname = '' } = staticLocation;
     return {
-      protocol: '',
-      host: '',
-      port: '',
-      search: '',
-      hash: '',
-      pathname: '',
+      search,
+      hash,
+      pathname: parser.replacePath(pathname),
       replace: noop,
     };
   }
