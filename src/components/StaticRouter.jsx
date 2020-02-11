@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import Router from './Router';
 import { RouterContext } from './Context';
 import { noop, isString } from '../utils';
@@ -8,7 +9,7 @@ import parser from '../utils/parser';
 class StaticRouter extends React.Component {
   static defaultProps = {
     basename: '/',
-    location: null,
+    location: {},
     context: {},
   };
 
@@ -35,10 +36,9 @@ class StaticRouter extends React.Component {
 
   render() {
     const { location, context, ...rest } = this.props;
+    const staticLocation = this.getStaticLocation();
     return (
-      <RouterContext.Provider
-        value={{ staticLocation: this.getStaticLocation(), staticContext: context }}
-      >
+      <RouterContext.Provider value={{ staticLocation, staticContext: context }}>
         <Router type="browser" {...rest} />
       </RouterContext.Provider>
     );

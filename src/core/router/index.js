@@ -23,6 +23,7 @@ const defaultOptions = {
   basename: '/',
 };
 let options = defaultOptions;
+let destroy = null;
 
 function getOriginPath() {
   const { pathname, search, hash } = globalLocation;
@@ -158,17 +159,20 @@ function listener(callback) {
 }
 
 function createRouter(routerOptions, staticLocation, callback) {
+  if (staticLocation) {
+    if (isFunction(destroy)) {
+      destroy();
+    }
+    globalLocation = staticLocation;
+  }
   if (!created) {
     created = true;
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    if (staticLocation) {
-      globalLocation = staticLocation;
-    }
     listener(callback);
     globalWindow.addEventListener(eventType, routerEventListener);
-    return () => {
+    destroy = () => {
       created = false;
       globalWindow.removeEventListener(eventType, routerEventListener);
       removeListener();
@@ -176,9 +180,10 @@ function createRouter(routerOptions, staticLocation, callback) {
       options = defaultOptions;
       isHash = true;
       globalLocation = globalWindow.location;
+      destroy = null;
     };
   }
-  return null;
+  return destroy;
 }
 
 function matchPathname({ pathname }) {

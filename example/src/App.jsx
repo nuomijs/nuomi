@@ -9,10 +9,9 @@ const loadHome = () => import('./home');
 class App extends React.Component {
   render() {
     return (
-      <StaticRouter location="/">
-        <Route path="/index" {...login} />
+      <StaticRouter>
+        <Route path="/" {...login} />
         <NuomiRoute pathPrefix={/^\/(home|404)/} async={loadHome} />
-        <Redirect from="/" to="/index" />
         <Redirect to="/index" />
       </StaticRouter>
     );
