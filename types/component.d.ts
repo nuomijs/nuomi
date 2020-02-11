@@ -2,7 +2,8 @@ import  { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
 
 export interface RouterProps {
-  hashPrefix?: string,
+  type?: 'hash' | 'browser',
+  basename? : string,
 }
 
 export interface RedirectProps {

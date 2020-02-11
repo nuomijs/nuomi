@@ -1,5 +1,6 @@
 import { isFunction, isObject } from '../../utils';
 import parser from '../../utils/parser';
+import globalWindow from '../../utils/globalWindow';
 
 // 监听列表
 let listeners = [];
@@ -8,7 +9,7 @@ let extraData = {};
 // 是否创建过路由
 let created = false;
 // 是否允许执行路由监听器
-let allowExecListener = true;
+let allowCallListener = true;
 // path对应的正则集合
 let pathRegexps = {};
 // 是否是hash类型
@@ -18,20 +19,12 @@ const defaultOptions = {
   // 路由类型 hash or browser
   type: 'hash',
   // 路由路径通用前缀
-  basePath: '/',
+  basename: '/',
 };
 let options = defaultOptions;
 
-function back() {
-  window.history.back();
-}
-
-function forward() {
-  window.history.forward();
-}
-
 function getOriginPath() {
-  const { pathname, search, hash } = window.location;
+  const { pathname, search, hash } = globalWindow.location;
   if (isHash) {
     return hash.substr(1);
   }
@@ -39,7 +32,8 @@ function getOriginPath() {
 }
 
 function getLocation() {
-  return parser(getOriginPath());
+  const originPath = getOriginPath();
+  return parser(originPath.replace(new RegExp(`^${options.basename}`), ''));
 }
 
 function getMergeLocation() {
@@ -50,7 +44,7 @@ function getMergeLocation() {
 }
 
 function routerEventListener() {
-  if (allowExecListener) {
+  if (allowCallListener) {
     // 一次change可能有多个listeners，只创建一次location
     let currentLocation = null;
     listeners.forEach((callback) => {
@@ -60,23 +54,19 @@ function routerEventListener() {
       callback(currentLocation);
     });
   } else {
-    allowExecListener = true;
+    allowCallListener = true;
   }
 }
 
 function combinePath(path = '') {
-  const { basePath } = options;
-  return parser.replacePath(`${basePath}/${path.replace(`^${basePath}`, '')}`);
+  return parser.replacePath(`${options.basename}/${path}`);
 }
 
-function location(...args) {
-  if (!args.length) {
-    return getLocation();
-  }
-  let path = args[0];
-  const data = args[1];
-  let isReload = args[2];
-  let force = args[3];
+function locationHandle(...args) {
+  const type = args[0];
+  let path = args[1];
+  const data = args[2];
+  let isReload = args[3];
   if (path && (typeof path === 'string' || isObject(path))) {
     if (isObject(path)) {
       path = parser.restore(path);
@@ -89,11 +79,7 @@ function location(...args) {
       isReload = data;
     }
     if (typeof isReload === 'boolean') {
-      force = isReload === true ? isReload : force;
       extraData.reload = isReload;
-    }
-    if (force === undefined) {
-      force = true;
     }
     if (isObject(data) || isFunction(data)) {
       extraData.data = data;
@@ -101,23 +87,34 @@ function location(...args) {
 
     const url = combinePath(path);
     const originPath = getOriginPath();
+
     if (url !== originPath) {
       if (isHash) {
-        window.location.hash = url;
+        if (type === 'push') {
+          globalWindow.location.hash = url;
+        } else {
+          const { protocol, pathname, host, search } = globalWindow.location;
+          globalWindow.location.replace(`${protocol}//${host + pathname + search}#${url}`);
+        }
       } else {
-        window.history.pushState({ a: 1 }, null, url);
+        globalWindow.history[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);
         routerEventListener();
       }
-      // hash相同时强制执行回调
-    } else if (force === true) {
+    } else if (isReload === true) {
       routerEventListener();
     }
   }
 }
 
-function normalLocation(url) {
-  allowExecListener = false;
-  location(url);
+function location(...args) {
+  if (!args.length) {
+    return getLocation();
+  }
+  locationHandle('push', ...args);
+}
+
+function replace(...args) {
+  locationHandle('replace', ...args);
 }
 
 function reload() {
@@ -125,8 +122,17 @@ function reload() {
   location(url, true);
 }
 
-function replace() {
-  //
+function back() {
+  globalWindow.history.back();
+}
+
+function forward() {
+  globalWindow.history.forward();
+}
+
+function restoreLocation(url) {
+  allowCallListener = false;
+  location(url);
 }
 
 function removeListener(...args) {
@@ -157,10 +163,10 @@ function createRouter(routerOptions, callback) {
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
     listener(callback);
-    window.addEventListener(eventType, routerEventListener);
+    globalWindow.addEventListener(eventType, routerEventListener);
     return () => {
       created = false;
-      window.removeEventListener(eventType, routerEventListener);
+      globalWindow.removeEventListener(eventType, routerEventListener);
       removeListener();
       pathRegexps = {};
       options = defaultOptions;
@@ -241,11 +247,8 @@ function getParamsLocation(locationData, path) {
 
 export {
   getLocation,
-  normalLocation,
-  location,
-  listener,
+  restoreLocation,
   createRouter,
-  reload,
   matchPath,
   matchPathname,
   savePath,

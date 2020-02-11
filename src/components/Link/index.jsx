@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { location, combinePath } from '../../core/router';
+import router, { combinePath } from '../../core/router';
 
 class Link extends React.PureComponent {
   static propTypes = {
@@ -12,7 +12,7 @@ class Link extends React.PureComponent {
     e.preventDefault();
     const { to, reload } = this.props;
     if (to) {
-      location(to, null, reload, false);
+      router.location(to, null, reload, false);
     }
   };
 

@@ -1,8 +1,8 @@
 import proxyPolyfill from './proxyPolyfill';
 import { isNative } from './index';
+import globalWindow from './globalWindow';
 
-// 检测浏览器环境还是node环境
-const ProxyObject = typeof window === 'undefined' ? global.Proxy : window.Proxy;
+const ProxyObject = globalWindow.Proxy;
 
 // 是否原生支持Proxy
 const supportProxy = isNative(ProxyObject);

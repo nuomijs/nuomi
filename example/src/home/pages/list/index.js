@@ -17,4 +17,9 @@ export default {
       type: '$getList',
     });
   },
+  onLeave(leave) {
+    // leave();
+    // return false;
+    // return window.confirm('xxx');
+  },
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from '../Context';
-import { location as routerLocation } from '../../core/router';
+import router from '../../core/router';
 import parser from '../../utils/parser';
 
 class Redirect extends React.PureComponent {
@@ -44,7 +44,7 @@ class Redirect extends React.PureComponent {
             if ((from && this.matchPath(location)) || (!matched && !from)) {
               this.redirected = true;
               context.redirecting = true; // 防止同时执行多个Redirect
-              routerLocation(to, reload);
+              router.replace(to, reload);
             }
           } else if (this.redirected) {
             this.redirected = false;

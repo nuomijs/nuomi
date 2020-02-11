@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from '../Context';
 import RouteCore from '../RouteCore';
-import {
+import router, {
   matchPath,
   savePath,
   removePath,
   getParamsLocation,
-  normalLocation,
-  location as routerLocation,
+  restoreLocation,
 } from '../../core/router';
 import { getDefaultProps } from '../../core/nuomi';
 
@@ -104,15 +103,11 @@ class Route extends React.PureComponent {
                 const leave = () => {
                   // 1.防止跳转后再次执行onLeave导致死循环，2.用作调用leave后的标记
                   activeRouteComponent = null;
-                  routerLocation(location, location.data, location.reload);
+                  router.location(location, location.data, location.reload);
                 };
                 const leaveResult = props.onLeave(() => leave());
                 if (activeRouteComponent === null) {
-                  invariant(
-                    false,
-                    'onLeave中不能直接进行路由跳转，可以通过返回布尔值控制，' +
-                      '如果想确认框确认或者异步操作之后跳转，请将逻辑代码置于return false之前，在回调中调用leave方法。',
-                  );
+                  invariant(false, 'onLeave中进行跳转只能发生在异步操作或者确认框回调中');
                 }
                 // 防止onLeave重复执行
                 context.callOnLeave = true;
@@ -120,7 +115,7 @@ class Route extends React.PureComponent {
                   // 还原路由标记
                   context.restore = true;
                   // 还原为之前的路由，还原时所有的监听不会执行
-                  normalLocation(props.location);
+                  restoreLocation(props.location);
                   return this.routeComponent;
                 }
               }

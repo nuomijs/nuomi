@@ -2,6 +2,7 @@ import { createStore, compose } from 'redux';
 import warning from 'warning';
 import applyMiddleware from './applyMiddleware';
 import { isFunction } from '../../utils';
+import globalWindow from '../../utils/globalWindow';
 
 const rootReducer = () => {};
 const stores = {};
@@ -9,9 +10,9 @@ let middlewares = [];
 let usedDispatch = false;
 const composeEnhancers =
   /* eslint-disable no-underscore-dangle */
-  process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md#trace
-      window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
+      globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
     : compose;
 
 const rootStore = createStore(
