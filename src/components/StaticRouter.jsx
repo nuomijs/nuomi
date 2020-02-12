@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import invariant from 'invariant';
+import { clearStore } from '../core/redux/store';
 import Router from './Router';
 import { RouterContext } from './Context';
 import { noop, isString } from '../utils';
@@ -18,6 +18,11 @@ class StaticRouter extends React.Component {
     location: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     context: PropTypes.object,
   };
+
+  constructor(...args) {
+    super(...args);
+    clearStore();
+  }
 
   getStaticLocation() {
     const { location } = this.props;

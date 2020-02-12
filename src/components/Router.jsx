@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { RouterContext } from './Context';
 import { createRouter } from '../core/router';
+import { clearStore } from '../core/redux/store';
 
 class Router extends React.PureComponent {
   static defaultProps = {
@@ -22,7 +23,7 @@ class Router extends React.PureComponent {
     this.state = {};
     this.location = null;
     const { staticLocation } = this.context || {};
-    this.destroyRouter = createRouter(this.props, staticLocation, (location) => {
+    this.clearRouter = createRouter(this.props, staticLocation, (location) => {
       if (this.mounted) {
         this.setState({ location });
       } else {
@@ -43,10 +44,11 @@ class Router extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    if (this.destroyRouter) {
-      this.destroyRouter();
+    if (this.clearRouter) {
+      this.clearRouter();
       this.mounted = false;
       this.location = null;
+      clearStore();
     }
   }
 

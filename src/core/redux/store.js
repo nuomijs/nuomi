@@ -1,12 +1,11 @@
 import { createStore, compose } from 'redux';
 import warning from 'warning';
 import applyMiddleware from './applyMiddleware';
-import { isFunction, isObject } from '../../utils';
+import { isFunction, isObject, noop } from '../../utils';
 import globalWindow from '../../utils/globalWindow';
 
-const rootReducer = () => {};
-const stores = {};
 const defaultStates = {};
+let stores = {};
 let middlewares = [];
 let usedDispatch = false;
 const composeEnhancers =
@@ -17,7 +16,7 @@ const composeEnhancers =
     : compose;
 
 const rootStore = createStore(
-  rootReducer,
+  noop,
   // eslint-disable-next-line no-return-assign
   composeEnhancers(applyMiddleware(() => middlewares, () => (usedDispatch = true))),
 );
@@ -34,6 +33,11 @@ const setStore = (id, store) => {
   }
 };
 
+const clearStore = () => {
+  stores = {};
+  rootStore.replaceReducer(noop);
+};
+
 rootStore.getStore = getStore;
 
 rootStore.applyMiddleware = (...args) => {
@@ -46,20 +50,14 @@ rootStore.applyMiddleware = (...args) => {
 
 rootStore.createState = (state = {}) => {
   if (isObject(state)) {
-    const createdArray = [];
     Object.keys(state).forEach((key) => {
       if (!stores[key]) {
         defaultStates[key] = state[key];
-      } else {
-        createdArray.push(key);
       }
     });
-    if (createdArray.length) {
-      warning(false, `${createdArray.join(',')}已经被创建store，不能初始化state`);
-    }
   }
 };
 
-export { getStore, setStore, defaultStates };
+export { getStore, setStore, clearStore, defaultStates };
 
 export default rootStore;
