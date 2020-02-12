@@ -1,7 +1,6 @@
 import { useReducer, useContext, useEffect, useRef } from 'react';
 import invariant from 'invariant';
 import { NuomiContext } from '../components/Context';
-// eslint-disable-next-line import/no-named-default
 import { default as rootStore, getStore } from '../core/redux/store';
 import { isFunction, shallowEqual } from '../utils';
 

@@ -1,32 +1,32 @@
-import  { PureComponent, ComponentType } from 'react';
+import { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
 
 interface BaseRouter {
-  basename? : string,
-  context?: object,
+  basename?: string;
+  context?: object;
 }
 
 export interface RouterProps extends BaseRouter {
-  type?: 'hash' | 'browser',
+  type?: 'hash' | 'browser';
 }
 
 export interface StaticRouterProps extends BaseRouter {
-  location?: string | object,
+  location?: string | object;
 }
 
 export interface RedirectProps {
-  from?: string,
-  to?: string | object,
-  reload?: boolean,
+  from?: string;
+  to?: string | object;
+  reload?: boolean;
 }
 
 export interface LinkProps {
-  to?: string | object,
-  reload?: boolean,
+  to?: string | object;
+  reload?: boolean;
 }
 
 export interface Connect {
-  (): <P>(Component: ComponentType<P>) => ComponentType<P>,
+  (): <P>(Component: ComponentType<P>) => ComponentType<P>;
 }
 
 export class Nuomi<P extends Props> extends PureComponent<P, any> {}

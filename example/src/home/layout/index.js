@@ -12,7 +12,7 @@ export default {
     return new Effects(this);
   },
   render() {
-    return sessionStorage.getItem('isLogin') ? <Layout /> : <Redirect to="/" />;
+    return window.sessionStorage.getItem('isLogin') ? <Layout /> : <Redirect to="/" />;
   },
   onInit() {
     this.store.dispatch({

@@ -1,8 +1,8 @@
 import { Store, Middleware } from 'redux';
 
 export interface StoreAPI extends Store {
-  applyMiddleware(...middlewares: Middleware[]): void,
-  createState(state: object): void,
+  applyMiddleware(...middlewares: Middleware[]): void;
+  createState(state: object): void;
 }
 
 export const store: StoreAPI;
