@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import store, { setStore } from './store';
-import { noop } from '../../utils';
+import { noop as rootReducer } from '../../utils';
 
 const reducers = {};
 
@@ -8,7 +8,7 @@ const replaceReducer = () => {
   if (Object.keys(reducers).length) {
     store.replaceReducer(combineReducers(reducers));
   } else {
-    store.replaceReducer(noop);
+    store.replaceReducer(rootReducer);
   }
 };
 

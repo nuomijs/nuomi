@@ -6,3 +6,5 @@ export interface StoreAPI extends Store {
 }
 
 export const store: StoreAPI;
+
+export const INITIALISE_STATE: string;

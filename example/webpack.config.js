@@ -6,6 +6,7 @@ module.exports = {
     index: ['@babel/polyfill', './example/src'],
   },
   devServer: {
+    host: '0.0.0.0',
     port: 8000,
     stats: 'errors-only',
     contentBase: './dist',
@@ -35,7 +36,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, '../src'),
+      nuomi: path.resolve(__dirname, '../lib'),
     },
   },
   module: {

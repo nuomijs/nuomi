@@ -1,10 +1,10 @@
 import { createStore, compose } from 'redux';
 import warning from 'warning';
 import applyMiddleware from './applyMiddleware';
-import { isFunction, isObject, noop } from '../../utils';
+import { isFunction, isObject, noop as rootReducer } from '../../utils';
 import globalWindow from '../../utils/globalWindow';
 
-const defaultStates = {};
+const initialiseState = {};
 let stores = {};
 let middlewares = [];
 let usedDispatch = false;
@@ -16,7 +16,7 @@ const composeEnhancers =
     : compose;
 
 const rootStore = createStore(
-  noop,
+  rootReducer,
   // eslint-disable-next-line no-return-assign
   composeEnhancers(applyMiddleware(() => middlewares, () => (usedDispatch = true))),
 );
@@ -35,7 +35,7 @@ const setStore = (id, store) => {
 
 const clearStore = () => {
   stores = {};
-  rootStore.replaceReducer(noop);
+  rootStore.replaceReducer(rootReducer);
 };
 
 rootStore.getStore = getStore;
@@ -52,12 +52,14 @@ rootStore.createState = (state = {}) => {
   if (isObject(state)) {
     Object.keys(state).forEach((key) => {
       if (!stores[key]) {
-        defaultStates[key] = state[key];
+        initialiseState[key] = state[key];
       }
     });
   }
 };
 
-export { getStore, setStore, clearStore, defaultStates };
+export const INITIALISE_STATE = '__NUOMI_INITIALISE_STATE__';
+
+export { getStore, setStore, clearStore, initialiseState };
 
 export default rootStore;

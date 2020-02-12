@@ -2,11 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
 import { createReducer, removeReducer } from '../core/redux/reducer';
-import rootStore, { getStore, setStore, defaultStates } from '../core/redux/store';
+import rootStore, {
+  getStore,
+  setStore,
+  initialiseState,
+  INITIALISE_STATE,
+} from '../core/redux/store';
 import { isObject, isFunction } from '../utils';
-import nuomi, { getDefaultProps } from '../core/nuomi';
+import nuomi from '../core/nuomi';
 import EffectsProxy, { getClassEffects } from '../utils/effectsProxy';
 import { NuomiContext } from './Context';
+import globalWindow from '../utils/globalWindow';
 
 class BaseNuomi extends React.PureComponent {
   static propTypes = {
@@ -170,12 +176,12 @@ class BaseNuomi extends React.PureComponent {
   }
 
   createReducer() {
-    const { store, state: initialiseState, reducers } = this.props;
-    let defaultState = defaultStates[store.id];
+    const { store, state: stateData, reducers } = this.props;
+    let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
-      defaultState = nuomi.extend(getDefaultProps(), { state: defaultState }).state;
+      defaultState = nuomi.extend({ state: stateData }, { state: defaultState }).state;
     } else {
-      defaultState = initialiseState;
+      defaultState = stateData;
     }
     createReducer(store.id, (state = defaultState, action) => {
       const { type } = action;
