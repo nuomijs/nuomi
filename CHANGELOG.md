@@ -1,5 +1,88 @@
 # 更新日志：
 
+## 0.7.0 (2020-02-12)
+* 移除Router组件hashPrefix属性，新增type和basename属性
+* 新增StaticRouter组件用于服务端渲染
+* router对象增加replace方法
+* store对象增加createState方法
+* 新增INITIALISE_STATE导出属性
+```js
+import { createServer } from 'http';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter, Route, Redirect, Link, useConnect, store, INITIALISE_STATE } from 'nuomi';
+
+createServer((req, res) => {
+  new Promise((res) => {
+    // 模拟请求
+    setTimeout(() => {
+      res({
+        username: 'aniu',
+        list: [{ name: 'yinjiazeng' }, { name: 'liumengmei' }],
+      });
+    }, 1000);
+  }).then(({ username, list }) => {
+    // 初始化状态
+    const state = {
+      global: { username },
+      list: { dataSource: list },
+    };
+    store.createState(state);
+
+    const Home = () => {
+      const [{ username }] = useConnect();
+      return (
+        <div>
+          hello, <Link to="/list">{username}</Link>
+        </div>
+      );
+    };
+
+    const List = () => {
+      const [{ dataSource }] = useConnect();
+      return (
+        <ul>
+          {dataSource.map(({ name }) => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      );
+    };
+
+    const context = {};
+
+    const html = renderToString(
+      <StaticRouter location={req.url} context={context}>
+        <Route path="/" id="global" state={{ username: 'home' }}>
+          <Home />
+        </Route>
+        <Route path="/list" id="list" state={{ dataSource: [] }}>
+          <List />
+        </Route>
+        <Redirect to="/" />
+      </StaticRouter>
+    );
+
+    if (context.url) {
+      res.writeHead(302, {
+        Location: context.url
+      })
+      res.end();
+    } else {
+      res.setHeader('Content-Type','text/html');
+      res.end(`
+        <html>
+          <body>
+            <div id="root">${html}</div>
+            <script>window.${INITIALISE_STATE}=${JSON.stringify(state)}</script>
+          </body>
+        </html>
+      `);
+    }
+  })
+}).listen(3000);
+```
+
 ## 0.6.5 (2020-02-09)
 * 修复使用useConnect获取state返回undefined [#5](https://github.com/nuomijs/nuomi/issues/5)
 
