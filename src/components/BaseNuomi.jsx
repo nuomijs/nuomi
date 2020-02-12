@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
 import { createReducer, removeReducer } from '../core/redux/reducer';
-import rootStore, { getStore, setStore } from '../core/redux/store';
+import rootStore, { getStore, setStore, defaultStates } from '../core/redux/store';
 import { isObject, isFunction } from '../utils';
+import nuomi, { getDefaultProps } from '../core/nuomi';
 import EffectsProxy, { getClassEffects } from '../utils/effectsProxy';
 import { NuomiContext } from './Context';
 
@@ -169,7 +170,13 @@ class BaseNuomi extends React.PureComponent {
   }
 
   createReducer() {
-    const { store, state: defaultState, reducers } = this.props;
+    const { store, state: initialiseState, reducers } = this.props;
+    let defaultState = defaultStates[store.id];
+    if (defaultState) {
+      defaultState = nuomi.extend(getDefaultProps(), { state: defaultState }).state;
+    } else {
+      defaultState = initialiseState;
+    }
     createReducer(store.id, (state = defaultState, action) => {
       const { type } = action;
       const typePrefix = `${store.id}/`;

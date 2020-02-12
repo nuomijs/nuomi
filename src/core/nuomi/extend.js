@@ -1,4 +1,4 @@
-import { isObject, isFunction } from './index';
+import { isObject, isFunction } from '../../utils';
 
 export default (...args) => {
   const [object, newObject] = args;

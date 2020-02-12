@@ -3,7 +3,7 @@ import Layout from './components/Layout';
 import Effects from './effects';
 
 export default {
-  reload: true,
+  id: 'login',
   state: {
     username: '',
     password: '',

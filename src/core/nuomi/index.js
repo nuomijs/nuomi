@@ -1,13 +1,13 @@
 import defaultProps from './defaultProps';
-import extend from '../../utils/extend';
+import extend from './extend';
 
 let newProps = defaultProps;
 
-export const getDefaultProps = () => newProps;
-
-export const config = (props) => {
+const config = (props) => {
   newProps = extend(newProps, props);
 };
+
+export const getDefaultProps = () => newProps;
 
 export default {
   config,

@@ -1,11 +1,12 @@
 import { createStore, compose } from 'redux';
 import warning from 'warning';
 import applyMiddleware from './applyMiddleware';
-import { isFunction } from '../../utils';
+import { isFunction, isObject } from '../../utils';
 import globalWindow from '../../utils/globalWindow';
 
 const rootReducer = () => {};
 const stores = {};
+const defaultStates = {};
 let middlewares = [];
 let usedDispatch = false;
 const composeEnhancers =
@@ -43,6 +44,22 @@ rootStore.applyMiddleware = (...args) => {
   }
 };
 
-export { getStore, setStore };
+rootStore.createState = (state = {}) => {
+  if (isObject(state)) {
+    const createdArray = [];
+    Object.keys(state).forEach((key) => {
+      if (!stores[key]) {
+        defaultStates[key] = state[key];
+      } else {
+        createdArray.push(key);
+      }
+    });
+    if (createdArray.length) {
+      warning(false, `${createdArray.join(',')}已经被创建store，不能初始化state`);
+    }
+  }
+};
+
+export { getStore, setStore, defaultStates };
 
 export default rootStore;
