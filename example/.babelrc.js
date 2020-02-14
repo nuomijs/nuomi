@@ -1,5 +1,3 @@
-const { BABEL_ENV } = process.env;
-
 module.exports = {
   presets: [
     [
@@ -8,10 +6,10 @@ module.exports = {
         targets: {
           browsers: ['ie >= 9'],
         },
-        modules: BABEL_ENV === 'cjs' ? 'cjs' : false,
+        modules: false
       },
     ],
     '@babel/preset-react',
   ],
-  plugins: ['@babel/plugin-proposal-class-properties'],
+  plugins: ['@babel/plugin-proposal-class-properties', 'dynamic-import-webpack'],
 };

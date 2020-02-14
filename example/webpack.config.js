@@ -3,10 +3,9 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: ['@babel/polyfill', './example/src'],
+    index: ['@babel/polyfill', './src'],
   },
   devServer: {
-    host: '0.0.0.0',
     port: 8000,
     stats: 'errors-only',
     contentBase: './dist',
@@ -14,7 +13,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: 'example/index.html',
+      template: 'index.html',
       chunks: ['index', 'common'],
     }),
   ],

@@ -5,6 +5,7 @@ yarn add nuomi
 
 demo
 ```
+cd example
 yarn install
 yarn start
 ```

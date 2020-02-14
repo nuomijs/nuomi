@@ -8,6 +8,11 @@
     "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
   },
   "author": "yinjiazeng <yinjiazeng@163.com>",
+  "files": [
+    "lib",
+    "types"
+  ],
+  "sideEffects": false,
   "license": "MIT",
   "dependencies": {
     "invariant": "^2.2.4",
@@ -18,37 +23,21 @@
     "redux": "^4.0.1",
     "warning": "^4.0.3"
   },
-  "files": [
-    "lib",
-    "types"
-  ],
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
-    "@babel/node": "^7.8.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/polyfill": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-dynamic-import-webpack": "^1.1.0",
     "cross-env": "^5.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3",
-    "html-webpack-plugin": "^3.2.0",
     "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.12.0",
-    "redux-immutable-state-invariant": "^2.1.0",
-    "rimraf": "^2.6.3",
-    "typescript": "^3.5.2",
-    "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "rimraf": "^2.6.3"
   },
   "scripts": {
     "format": "prettier --write !**/lib/** !**/node_modules/** **/*{.js,.jsx} .",
@@ -58,7 +47,6 @@
     "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
     "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
     "clean": "rimraf lib",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --config example/webpack.config.js",
     "test": "jest"
   },
   "description": "``` npm i --save nuomi ```",
