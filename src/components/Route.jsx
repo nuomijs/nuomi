@@ -4,7 +4,6 @@ import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
 import router, {
-  matchPath,
   savePath,
   removePath,
   getParamsLocation,
@@ -77,7 +76,7 @@ class Route extends React.PureComponent {
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
           const { location } = context;
-          let match = matchPath(location, path);
+          let match = router.matchPath(location, path);
           // context.matched 表示同一个上下文中，多个路由只匹配一个
           if (context.matched && context.matched !== this) {
             match = false;

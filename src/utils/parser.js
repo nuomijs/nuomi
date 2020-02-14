@@ -1,12 +1,11 @@
 import { isObject, isString } from './index';
 
 function replacePath(path) {
-  return `${path}/`
-    // a//b//c => a/b/c
+  return `/${path}`
+    // /a//b//c => a/b/c
     .replace(/\/{2,}/g, '/')
-    // /a/b/c => a/b/c
-    // a/b/c/ => a/b/c
-    .replace(/^\/|\/$/, '');
+    // /a/b/c/ => /a/b/c
+    .replace(/\/$/, '');
 }
 
 function toRegexp(path) {
@@ -68,11 +67,11 @@ function restore(object) {
     path = url;
   } else if (!!pathname && isString(pathname)) {
     path = pathname;
-    if (isObject(params)) {
-      Object.values(params).forEach((param) => {
-        path += `/${param}`;
-      });
-    }
+    // if (isObject(params)) {
+    //   Object.values(params).forEach((param) => {
+    //     path += `/${param}`;
+    //   });
+    // }
     if (!!search && isString(search)) {
       if (search.indexOf('?') !== 0) {
         path += `?${search}`;
@@ -91,16 +90,10 @@ function restore(object) {
   return path;
 }
 
-function merge(...args) {
-  return replacePath(args.filter((path) => !!path).join('/'));
-}
-
 parser.replacePath = replacePath;
 
 parser.toRegexp = toRegexp;
 
 parser.restore = restore;
-
-parser.merge = merge;
 
 export default parser;

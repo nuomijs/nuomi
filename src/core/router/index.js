@@ -1,6 +1,7 @@
 import { isFunction, isObject } from '../../utils';
 import parser from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
+import { isString } from '../../utils';
 
 let globalLocation = globalWindow.location;
 // 监听列表
@@ -186,14 +187,14 @@ function createRouter(routerOptions, staticLocation, callback) {
   return clear;
 }
 
-function matchPathname({ pathname }) {
-  Object.keys(pathRegexps).forEach((i) => {
-    if (pathRegexps[i].test(pathname)) {
-      return true;
-    }
-  });
-  return false;
-}
+// function matchPathname({ pathname }) {
+//   Object.keys(pathRegexps).forEach((i) => {
+//     if (pathRegexps[i].test(pathname)) {
+//       return true;
+//     }
+//   });
+//   return false;
+// }
 
 function matchPath(currentLocation, path) {
   const normalPath = parser.replacePath(path);
@@ -223,11 +224,11 @@ function getParamsLocation(locationData, path) {
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
     const pathnameMatch = pathname.match(pathRegexp);
-    const pathMatch = path.match(/\/:([^/]+)/g);
+    const pathMatch = path.match(/\/:(\w+)/g);
     const params = {};
     const paramsPathArray = [];
-    let paramsPath = '';
-    let newPathname = pathname;
+    // let paramsPath = '';
+    // let newPathname = pathname;
     if (pathnameMatch && pathMatch) {
       pathMatch.forEach((param, i) => {
         const name = param.replace(/^\/:/, '');
@@ -238,29 +239,35 @@ function getParamsLocation(locationData, path) {
         }
       });
       // pathname排除params部分
-      if (paramsPathArray.length > 0) {
-        paramsPath = paramsPathArray.join('');
-        const lastIndex = pathname.lastIndexOf(paramsPath);
-        if (lastIndex !== -1) {
-          newPathname = pathname.substr(0, lastIndex);
-        }
-      }
+      // if (paramsPathArray.length > 0) {
+      //   paramsPath = paramsPathArray.join('');
+      //   const lastIndex = pathname.lastIndexOf(paramsPath);
+      //   if (lastIndex !== -1) {
+      //     newPathname = pathname.substr(0, lastIndex);
+      //   }
+      // }
     }
     return {
       ...rest,
-      pathname: newPathname,
+      // pathname: newPathname,
       params,
     };
   }
   return locationData;
 }
 
+function mergePath(...args) {
+  let paths = args.filter((path) => path && isString(path));
+  const maxIndex = paths.length - 1;
+  paths = paths.map((path, index) => index < maxIndex ? path.replace(/\*$/, '') : path);
+  return parser.replacePath(paths.join('/'));
+}
+
 export {
   getLocation,
   restoreLocation,
   createRouter,
-  matchPath,
-  matchPathname,
+  // matchPathname,
   savePath,
   removePath,
   getParamsLocation,
@@ -270,9 +277,10 @@ export {
 export default {
   listener,
   location,
-  matchPath,
   reload,
   replace,
   back,
   forward,
+  matchPath,
+  mergePath,
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { router, useConnect } from 'nuomi';
+import { router, useConnect, useNuomi } from 'nuomi';
 
 export default function Layout() {
   const [{ detail, count, loadings }, dispatch] = useConnect();
