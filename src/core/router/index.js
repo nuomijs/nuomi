@@ -196,7 +196,7 @@ function matchPathname({ pathname }) {
 }
 
 function matchPath(currentLocation, path) {
-  const normalPath = parser.normalize(path);
+  const normalPath = parser.replacePath(path);
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
     return pathRegexp.test(currentLocation.pathname);
@@ -205,7 +205,7 @@ function matchPath(currentLocation, path) {
 }
 
 function savePath(path) {
-  const normalPath = parser.normalize(path);
+  const normalPath = parser.replacePath(path);
   if (!pathRegexps[normalPath]) {
     pathRegexps[normalPath] = parser.toRegexp(normalPath);
     return true;
@@ -214,12 +214,12 @@ function savePath(path) {
 }
 
 function removePath(path) {
-  delete pathRegexps[parser.normalize(path)];
+  delete pathRegexps[parser.replacePath(path)];
 }
 
 function getParamsLocation(locationData, path) {
   const { pathname, ...rest } = locationData;
-  const normalPath = parser.normalize(path);
+  const normalPath = parser.replacePath(path);
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
     const pathnameMatch = pathname.match(pathRegexp);

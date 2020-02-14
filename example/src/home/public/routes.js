@@ -9,7 +9,7 @@ export default [
     async: () => import('../pages/list'),
   },
   {
-    path: '/home/detail/:id',
+    path: '/home/detail/:id?',
     async: (cb) => {
       require.ensure([], (require) => {
         cb(require('../pages/detail').default);

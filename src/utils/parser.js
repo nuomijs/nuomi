@@ -1,22 +1,27 @@
 import { isObject, isString } from './index';
 
 function replacePath(path) {
-  // a//b//c => a/b/c
-  // a/b/c => /a/b/c
   return `${path}/`
+    // a//b//c => a/b/c
     .replace(/\/{2,}/g, '/')
-    .replace(/^([^/])/, '/$1')
-    .replace(/([^/])\/$/, '$1');
-}
-
-function normalize(path) {
-  // /a/:b/ => /a/:b
-  // /a/b => /a/b/
-  return replacePath(path).replace(/(\/:[^/]+)\/$/, '$1');
+    // /a/b/c => a/b/c
+    // a/b/c/ => a/b/c
+    .replace(/^\/|\/$/, '');
 }
 
 function toRegexp(path) {
-  const regexpPath = path.replace(/\/:([^/]+)/g, '(/[^/]+)?').replace(/\//g, '\\/');
+  const regexpPath = path
+  // ( => (?:
+  // (?: => (?:
+  .replace(/(\()(?!\?[:=!<>])/g, '$1?:')
+  // /:id => /(\/\w+)
+  .replace(/\/:\w+/g, '(\/\\w+)')
+  // /a/b => \/a\/b
+  // a.html => a\.html
+  .replace(/([./])/g, '\\$1')
+  // * => (?:.*)?
+  // /* => (?:\/.*)?
+  .replace(/(\\\/)?\*/g, '(?:$1.*)?');
   return new RegExp(`^${regexpPath}\\/?$`, 'i');
 }
 
@@ -87,12 +92,10 @@ function restore(object) {
 }
 
 function merge(...args) {
-  return normalize(args.filter((path) => !!path).join('/'));
+  return replacePath(args.filter((path) => !!path).join('/'));
 }
 
 parser.replacePath = replacePath;
-
-parser.normalize = normalize;
 
 parser.toRegexp = toRegexp;
 
