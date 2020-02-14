@@ -3,7 +3,6 @@ module.exports = {
   parser: 'babel-eslint',
   extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:jsx-a11y/recommended'],
   rules: {
-    'max-len': ['error', { 'code': 30 }],
     'no-unused-vars': 1,
     'react/prop-types': 0,
     'jsx-a11y/click-events-have-key-events': 0,

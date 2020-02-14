@@ -35,7 +35,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, '../lib'),
+      nuomi: path.resolve(__dirname, '../src'),
     },
   },
   module: {
@@ -46,6 +46,21 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      browsers: ['ie >= 9'],
+                    },
+                    modules: false
+                  },
+                ],
+                '@babel/preset-react',
+              ],
+              plugins: ['@babel/plugin-proposal-class-properties', 'dynamic-import-webpack'],
+            },
           },
         ],
       },
