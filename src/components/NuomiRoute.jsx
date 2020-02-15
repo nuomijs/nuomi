@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import Nuomi from './Nuomi';
+import parser from '../utils/parser';
+import { isString } from '../utils';
 
 class NuomiRoute extends React.PureComponent {
   static propTypes = {
@@ -15,6 +17,7 @@ class NuomiRoute extends React.PureComponent {
     onInit: PropTypes.func,
     async: PropTypes.func,
     pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    pathname: PropTypes.string,
   };
 
   constructor(...args) {
@@ -22,15 +25,17 @@ class NuomiRoute extends React.PureComponent {
     this.routeComponent = null;
   }
 
-  matchPath(pathname) {
-    const { pathPrefix } = this.props;
-    if (pathPrefix) {
-      if (pathPrefix instanceof RegExp) {
-        return pathPrefix.test(pathname);
-      }
-      if (typeof pathPrefix === 'string') {
-        return pathname.indexOf(pathPrefix) === 0;
-      }
+  matchPath(location) {
+    const { pathname } = location;
+    const { pathPrefix, path } = this.props;
+    if (path) {
+      return parser.toRegexp(path).test(pathname);
+    }
+    if (pathPrefix instanceof RegExp) {
+      return pathPrefix.test(pathname);
+    }
+    if (isString(pathPrefix)) {
+      return pathname.indexOf(pathPrefix) === 0;
     }
     return false;
   }
@@ -46,7 +51,7 @@ class NuomiRoute extends React.PureComponent {
             return this.routeComponent;
           }
           this.routeComponent = null;
-          if (!context.matched && this.matchPath(location.pathname)) {
+          if (!context.matched && this.matchPath(location)) {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={{ ...context, matched: null }}>

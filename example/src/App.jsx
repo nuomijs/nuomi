@@ -11,8 +11,8 @@ class App extends React.Component {
     return (
       <Router>
         <Route path="/" {...login} />
-        {/* <NuomiRoute pathPrefix="/home" {...home} /> */}
-        <Route path="/home/*" {...home} />
+        <NuomiRoute path="/home/*" {...home} />
+        {/* <Route path="/home/*" {...home} /> */}
         <Redirect to="/" />
       </Router>
     );

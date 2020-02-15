@@ -21,7 +21,8 @@ export interface RouteProps extends Props {
 }
 
 export interface NuomiRouteProps extends Props {
-  pathPrefix?: string;
+  pathPrefix?: string | RegExp;
+  path?: string;
 }
 
 export interface NuomiProps extends RouteProps, NuomiRouteProps {}
