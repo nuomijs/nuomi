@@ -43,6 +43,8 @@ export class Redirect<P extends RedirectProps> extends PureComponent<P, any> {}
 
 export class Link<P extends LinkProps> extends PureComponent<P, any> {}
 
+export class NavLink<P extends LinkProps> extends PureComponent<P, any> {}
+
 export const connect: Connect;
 
 export function withNuomi<P>(Component: ComponentType<P>): ComponentType<P>;
