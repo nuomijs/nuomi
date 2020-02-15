@@ -58,7 +58,7 @@ class BaseRoute extends BaseNuomi {
     const { props } = this;
     props.store.dispatch({
       type: '_replaceState',
-      payload: props.state,
+      payload: { ...props.state },
     });
   }
 

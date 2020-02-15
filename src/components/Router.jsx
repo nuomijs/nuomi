@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import { RouterContext } from './Context';
 import { createRouter } from '../core/router';
 import { clearStore } from '../core/redux/store';
@@ -22,6 +23,7 @@ class Router extends React.PureComponent {
     this.mounted = false;
     this.state = {};
     this.location = null;
+    this.wrappers = [];
     const { staticLocation } = this.context || {};
     this.clearRouter = createRouter(this.props, staticLocation, (location) => {
       if (this.mounted) {
@@ -33,6 +35,9 @@ class Router extends React.PureComponent {
         }
       }
     });
+    if (!this.clearRouter) {
+      invariant(false, '<Router> 不能重复创建');
+    }
   }
 
   componentDidMount() {
@@ -56,10 +61,16 @@ class Router extends React.PureComponent {
     const { children } = this.props;
     const { location } = this.state;
     const { staticContext } = this.context || {};
+    const contextValue = {
+      location,
+      matched: null,
+      restore: false,
+      isLeave: false,
+      staticContext,
+      wrappers: this.wrappers,
+    };
     return (
-      <RouterContext.Provider
-        value={{ location, matched: null, restore: false, isLeave: false, staticContext }}
-      >
+      <RouterContext.Provider value={contextValue}>
         {children}
       </RouterContext.Provider>
     );

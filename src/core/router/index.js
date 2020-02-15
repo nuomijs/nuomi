@@ -122,7 +122,7 @@ function replace(...args) {
 
 function reload() {
   const { url } = getLocation();
-  location(url, true);
+  replace(url, true);
 }
 
 function back() {
@@ -173,7 +173,7 @@ function createRouter(routerOptions, staticLocation, callback) {
     const eventType = isHash ? 'hashchange' : 'popstate';
     listener(callback);
     globalWindow.addEventListener(eventType, routerEventListener);
-    clear = () => {
+    return clear = () => {
       created = false;
       globalWindow.removeEventListener(eventType, routerEventListener);
       removeListener();
@@ -184,7 +184,6 @@ function createRouter(routerOptions, staticLocation, callback) {
       clear = null;
     };
   }
-  return clear;
 }
 
 // function matchPathname({ pathname }) {

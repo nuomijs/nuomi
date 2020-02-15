@@ -40,30 +40,25 @@ class Route extends React.PureComponent {
     reducers: {},
   };
 
-  static childContextTypes = {
-    routeTempData: PropTypes.object,
-  };
-
   constructor(...args) {
     super(...args);
     this.store = {};
     this.routeTempData = {};
     this.ref = React.createRef();
     this.routeComponent = null;
+    this.wrappers = [];
     const { path } = this.props;
     savePath(path);
-  }
-
-  getChildContext() {
-    return {
-      routeTempData: this.routeTempData,
-    };
   }
 
   componentWillUnmount() {
     const { path } = this.props;
     if (activeRouteComponent === this.routeComponent) {
       activeRouteComponent = null;
+    }
+    // 嵌套路由时防止子路由被销毁后再创建无法匹配问题
+    if (this.context && this.context.matched === this) {
+      this.context.matched = null;
     }
     removePath(path);
   }
@@ -74,7 +69,14 @@ class Route extends React.PureComponent {
     return (
       <RouterContext.Consumer>
         {(context) => {
+          this.context = context;
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
+          const routeCoreContextValue = {
+            ...context,
+            wrappers: context.childrenWrappers || context.wrappers,
+            childrenWrappers: this.wrappers,
+            routeTempData: this.routeTempData,
+          };
           const { location } = context;
           let match = router.matchPath(location, path);
           // context.matched 表示同一个上下文中，多个路由只匹配一个
@@ -86,36 +88,37 @@ class Route extends React.PureComponent {
             return this.routeComponent;
           }
           // 还原路由时，不重新渲染组件
-          if (context.restore) {
-            return this.routeComponent;
-          }
+          // if (context.restore) {
+          //   return this.routeComponent;
+          // }
           // 检测之前的路由onLeave
-          if (!!activeRouteComponent && !!activeRouteComponent.ref.current && !context.isLeave) {
-            const baseRouteComponent = activeRouteComponent.ref.current.ref.current;
-            if (baseRouteComponent) {
-              const { props } = baseRouteComponent;
-              if (props.onLeave) {
-                const leave = () => {
-                  // 1.防止跳转后再次执行onLeave导致死循环，2.用作调用leave后的标记
-                  activeRouteComponent = null;
-                  router.location(location, location.data, location.reload);
-                };
-                const leaveResult = props.onLeave(() => leave());
-                if (activeRouteComponent === null) {
-                  invariant(false, 'onLeave中进行跳转只能发生在异步操作或者确认框回调中');
-                }
-                // 防止onLeave重复执行
-                context.isLeave = true;
-                if (leaveResult === false) {
-                  // 还原路由标记
-                  context.restore = true;
-                  // 还原为之前的路由，还原时所有的监听不会执行
-                  restoreLocation(props.location);
-                  return this.routeComponent;
-                }
-              }
-            }
-          }
+          // if (!!activeRouteComponent && !!activeRouteComponent.ref.current && !context.isLeave) {
+          //   const baseRouteComponent = activeRouteComponent.ref.current.ref.current;
+          //   if (baseRouteComponent) {
+          //     const { props } = baseRouteComponent;
+          //     if (props.onLeave) {
+          //       const leave = () => {
+          //         // 1.防止跳转后再次执行onLeave导致死循环，2.用作调用leave后的标记
+          //         activeRouteComponent = null;
+          //         router.location(location, location.data, location.reload);
+          //       };
+          //       const leaveResult = props.onLeave(() => leave());
+          //       if (activeRouteComponent === null) {
+          //         invariant(false, 'onLeave中进行跳转只能发生在异步操作或者确认框回调中');
+          //       }
+          //       // 防止onLeave重复执行
+          //       context.isLeave = true;
+          //       if (leaveResult === false) {
+          //         // 还原路由标记
+          //         context.restore = true;
+          //         // 还原为之前的路由，还原时所有的监听不会执行
+          //         restoreLocation(props.location);
+          //         return this.routeComponent;
+          //       }
+          //     }
+          //   }
+          // }
+
           // 初始化返回值
           this.routeComponent = null;
           if (match) {
@@ -130,7 +133,11 @@ class Route extends React.PureComponent {
                 ref={this.ref}
               />
             );
-            this.routeComponent = activeRouteComponent;
+            this.routeComponent = (
+              <RouterContext.Provider value={routeCoreContextValue}>
+                {activeRouteComponent}
+              </RouterContext.Provider>
+            );
           }
           return this.routeComponent;
         }}

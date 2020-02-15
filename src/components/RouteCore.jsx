@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction, isObject } from '../utils';
 import nuomi, { getDefaultProps } from '../core/nuomi';
-
-let wrappers = [];
 
 class RouteCore extends React.PureComponent {
   static propTypes = {
@@ -12,9 +11,7 @@ class RouteCore extends React.PureComponent {
     onEnter: PropTypes.func,
   };
 
-  static contextTypes = {
-    routeTempData: PropTypes.object,
-  };
+  static contextType = RouterContext;
 
   constructor(...args) {
     super(...args);
@@ -37,6 +34,7 @@ class RouteCore extends React.PureComponent {
 
   componentDidMount() {
     this.mounted = true;
+    const { wrappers } = this.context;
     const { current } = this.wrapperRef;
     const { loaded, nuomiProps } = this.state;
     if (current) {
@@ -66,6 +64,7 @@ class RouteCore extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { wrappers } = this.context;
     const { location, wrapper } = this.props;
     const { current } = this.wrapperRef;
     // 清理wrapper
@@ -165,7 +164,6 @@ class RouteCore extends React.PureComponent {
   }
 
   // 根据onEnter决定是否可以展示组件
-  // eslint-disable-next-line class-methods-use-this
   visibleHandler(nuomiProps, cb) {
     if (nuomiProps.onEnter) {
       if (
@@ -181,7 +179,11 @@ class RouteCore extends React.PureComponent {
   }
 
   visibleRoute(state) {
-    const { visible } = this.state;
+    const { visible, nuomiProps } = this.state;
+    // if (isFunction(nuomiProps.onLeave)) {
+    //   const leave = nuomiProps.onLeave();
+    //   location.block
+    // }
     if (this.mounted) {
       if (!visible) {
         this.setState({ visible: true, ...state });
@@ -199,13 +201,14 @@ class RouteCore extends React.PureComponent {
 
   // 移出当前wrapper
   removeWrapper() {
+    const { wrappers } = this.context;
     if (this.wrapper) {
-      wrappers = wrappers.filter((wrapper) => wrapper !== this.wrapper);
+      this.context.wrappers = wrappers.filter((wrapper) => wrapper !== this.wrapper);
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   hideWrapper() {
+    const { wrappers } = this.context;
     wrappers.forEach((wrapper) => {
       wrapper.style.display = 'none';
     });

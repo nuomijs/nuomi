@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 nuomi.config({
-  wrapper: true,
+  // wrapper: true,
   effects: {
     updateState(payload) {
       this.dispatch({

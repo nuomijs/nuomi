@@ -86,15 +86,22 @@ class BaseNuomi extends React.PureComponent {
 
     store.dispatch = async (action) => {
       const { type, payload } = action;
+
+      if (!store.id) {
+        return action;
+      }
+
       if (!this.effects) {
         this.effects = this.getEffects();
       }
+
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = type.indexOf('/');
       if (splitIndex === -1) {
         if (isObject(this.effects) && isFunction(this.effects[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
+          const loadingType = `${store.id}/_updateLoading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const effectsProxy = new EffectsProxy(this.effects, {
@@ -116,7 +123,7 @@ class BaseNuomi extends React.PureComponent {
                   }
                   // 更新loading状态
                   rootStore.dispatch({
-                    type: `${store.id}/_updateLoading`,
+                    type: loadingType,
                     payload: loadingPayload,
                   });
                   // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
@@ -133,7 +140,7 @@ class BaseNuomi extends React.PureComponent {
             }
           } finally {
             // 所有方法全部执行完，检测队列中是否有值，关闭剩余的loading
-            if (loadingQueue.length) {
+            if (store.id && loadingQueue.length) {
               // 最初的loading
               const loadingPayload = { [loadingQueue[0]]: false };
               // 末尾的loading
@@ -142,13 +149,13 @@ class BaseNuomi extends React.PureComponent {
                 loadingPayload[lastEffect] = false;
               }
               rootStore.dispatch({
-                type: `${store.id}/_updateLoading`,
+                type: loadingType,
                 payload: loadingPayload,
               });
             }
           }
           // effects不存在就执行reducers中方法直接更新状态
-        } else if (reducers[type]) {
+        } else if (reducers[type] && store.id) {
           return rootStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
@@ -172,6 +179,7 @@ class BaseNuomi extends React.PureComponent {
     };
 
     store.getState = () => rootStore.getState()[store.id] || props.state;
+
     setStore(store.id, store);
   }
 
