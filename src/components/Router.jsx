@@ -64,7 +64,6 @@ class Router extends React.PureComponent {
     const contextValue = {
       location,
       matched: null,
-      restore: false,
       isLeave: false,
       staticContext,
       wrappers: this.wrappers,

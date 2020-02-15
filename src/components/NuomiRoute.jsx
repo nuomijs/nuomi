@@ -46,10 +46,6 @@ class NuomiRoute extends React.PureComponent {
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NuomiRoute>');
           const { location } = context;
-          // 路由还原时不渲染组件
-          if (context.restore) {
-            return this.routeComponent;
-          }
           this.routeComponent = null;
           if (!context.matched && this.matchPath(location)) {
             context.matched = this;

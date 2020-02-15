@@ -1,6 +1,5 @@
 export default [
   {
-    wrapper: false,
     path: '/home',
     async: () => import('../pages/home'),
   },

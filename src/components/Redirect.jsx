@@ -37,10 +37,6 @@ class Redirect extends React.PureComponent {
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <Redirect>');
           const { matched, location, staticContext } = context;
-          // 路由还原时不执行重定向
-          if (context.restore) {
-            return null;
-          }
           if (to && !context.redirecting && !this.redirected) {
             if ((from && this.matchPath(location)) || (!matched && !from)) {
               this.redirected = true;

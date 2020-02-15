@@ -23,8 +23,12 @@ const defaultOptions = {
   // 路由路径通用前缀
   basename: '/',
 };
+// 路由选项
 let options = defaultOptions;
+// 清理路由数据
 let clear = null;
+// 阻塞路由控制
+let blockRouter = {};
 
 function getOriginPath() {
   const { pathname, search, hash } = globalLocation;
@@ -46,16 +50,43 @@ function getMergeLocation() {
   return mergeLocation;
 }
 
+function callListener() {
+  // 一次change可能有多个listeners，只创建一次location
+  let currentLocation = null;
+  listeners.forEach((callback) => {
+    if (!currentLocation) {
+      currentLocation = getMergeLocation();
+    }
+    callback(currentLocation);
+  });
+}
+
 function routerEventListener() {
   if (allowCallListener) {
-    // 一次change可能有多个listeners，只创建一次location
-    let currentLocation = null;
-    listeners.forEach((callback) => {
-      if (!currentLocation) {
-        currentLocation = getMergeLocation();
+    // 检测路由是否冻结
+    if (isFunction(blockRouter.callback)) {
+      // 记录待跳转的数据
+      if (!blockRouter.targetLocation) {
+        blockRouter.targetLocation = getMergeLocation();
       }
-      callback(currentLocation);
-    });
+      const { url, reload, data } = blockRouter.targetLocation;
+      blockRouter.callback((isLeave) => {
+        // 跳转到目标url
+        blockRouter = {};
+        allowCallListener = true;
+        if (isLeave) {
+          callListener();
+        } else {
+          location(url, data, reload);
+        }
+      }, (url) => {
+        // url还原
+        allowCallListener = false;
+        replace(url);
+      }, blockRouter.targetLocation);
+    } else {
+      callListener();
+    }
   } else {
     allowCallListener = true;
   }
@@ -133,11 +164,6 @@ function forward() {
   globalWindow.history.forward();
 }
 
-function restoreLocation(url) {
-  allowCallListener = false;
-  location(url);
-}
-
 function removeListener(...args) {
   // 移除所有
   if (!args.length) {
@@ -182,18 +208,10 @@ function createRouter(routerOptions, staticLocation, callback) {
       isHash = true;
       globalLocation = globalWindow.location;
       clear = null;
+      blockRouter = {};
     };
   }
 }
-
-// function matchPathname({ pathname }) {
-//   Object.keys(pathRegexps).forEach((i) => {
-//     if (pathRegexps[i].test(pathname)) {
-//       return true;
-//     }
-//   });
-//   return false;
-// }
 
 function matchPath(currentLocation, path) {
   const normalPath = parser.replacePath(path);
@@ -264,9 +282,8 @@ function mergePath(...args) {
 
 export {
   getLocation,
-  restoreLocation,
   createRouter,
-  // matchPathname,
+  blockRouter,
   savePath,
   removePath,
   getParamsLocation,

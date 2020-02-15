@@ -4,6 +4,7 @@ import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction, isObject } from '../utils';
 import nuomi, { getDefaultProps } from '../core/nuomi';
+import { blockRouter } from '../core/router';
 
 class RouteCore extends React.PureComponent {
   static propTypes = {
@@ -47,7 +48,7 @@ class RouteCore extends React.PureComponent {
       this.loadProps((nextNuomiProps) => {
         // 获取异步加载到的props
         this.visibleHandler(nextNuomiProps, () => {
-          this.showWrapper();
+          this.showWrapper(nextNuomiProps);
           // 合并state
           this.visibleRoute({
             loaded: true,
@@ -57,7 +58,7 @@ class RouteCore extends React.PureComponent {
       });
     } else {
       this.visibleHandler(nuomiProps, () => {
-        this.showWrapper();
+        this.showWrapper(nuomiProps);
         this.visibleRoute();
       });
     }
@@ -82,7 +83,7 @@ class RouteCore extends React.PureComponent {
         // 控制当前路由wrapper显示
         const { nuomiProps } = this.state;
         this.visibleHandler(nuomiProps, () => {
-          this.showWrapper();
+          this.showWrapper(nuomiProps);
         });
       }
     }
@@ -179,11 +180,7 @@ class RouteCore extends React.PureComponent {
   }
 
   visibleRoute(state) {
-    const { visible, nuomiProps } = this.state;
-    // if (isFunction(nuomiProps.onLeave)) {
-    //   const leave = nuomiProps.onLeave();
-    //   location.block
-    // }
+    const { visible } = this.state;
     if (this.mounted) {
       if (!visible) {
         this.setState({ visible: true, ...state });
@@ -193,7 +190,20 @@ class RouteCore extends React.PureComponent {
     }
   }
 
-  showWrapper() {
+  showWrapper(nuomiProps) {
+
+    const { url } = this.props.location;
+    if (isFunction(nuomiProps.onLeave)) {
+      blockRouter.callback = (leave, restore, targetLocation) => {
+        const isLeave = nuomiProps.onLeave(leave, targetLocation) !== false;
+        if (isLeave) {
+          leave(isLeave);
+        } else {
+          restore(url);
+        }
+      }
+    }
+
     if (this.wrapper) {
       this.wrapper.style.display = 'block';
     }

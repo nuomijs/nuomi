@@ -7,11 +7,8 @@ import router, {
   savePath,
   removePath,
   getParamsLocation,
-  restoreLocation,
 } from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
-
-let activeRouteComponent = null;
 
 class Route extends React.PureComponent {
   static propTypes = {
@@ -53,9 +50,6 @@ class Route extends React.PureComponent {
 
   componentWillUnmount() {
     const { path } = this.props;
-    if (activeRouteComponent === this.routeComponent) {
-      activeRouteComponent = null;
-    }
     // 嵌套路由时防止子路由被销毁后再创建无法匹配问题
     if (this.context && this.context.matched === this) {
       this.context.matched = null;
@@ -87,55 +81,20 @@ class Route extends React.PureComponent {
           if (wrapper === true && this.routeComponent !== null && !match) {
             return this.routeComponent;
           }
-          // 还原路由时，不重新渲染组件
-          // if (context.restore) {
-          //   return this.routeComponent;
-          // }
-          // 检测之前的路由onLeave
-          // if (!!activeRouteComponent && !!activeRouteComponent.ref.current && !context.isLeave) {
-          //   const baseRouteComponent = activeRouteComponent.ref.current.ref.current;
-          //   if (baseRouteComponent) {
-          //     const { props } = baseRouteComponent;
-          //     if (props.onLeave) {
-          //       const leave = () => {
-          //         // 1.防止跳转后再次执行onLeave导致死循环，2.用作调用leave后的标记
-          //         activeRouteComponent = null;
-          //         router.location(location, location.data, location.reload);
-          //       };
-          //       const leaveResult = props.onLeave(() => leave());
-          //       if (activeRouteComponent === null) {
-          //         invariant(false, 'onLeave中进行跳转只能发生在异步操作或者确认框回调中');
-          //       }
-          //       // 防止onLeave重复执行
-          //       context.isLeave = true;
-          //       if (leaveResult === false) {
-          //         // 还原路由标记
-          //         context.restore = true;
-          //         // 还原为之前的路由，还原时所有的监听不会执行
-          //         restoreLocation(props.location);
-          //         return this.routeComponent;
-          //       }
-          //     }
-          //   }
-          // }
 
           // 初始化返回值
           this.routeComponent = null;
           if (match) {
             context.matched = this; // 解决Route在更新时不匹配问题
-            // 记录当前路由
-            activeRouteComponent = (
-              <RouteCore
-                {...this.props}
-                wrapper={wrapper}
-                location={getParamsLocation(location, path)}
-                store={this.store}
-                ref={this.ref}
-              />
-            );
             this.routeComponent = (
               <RouterContext.Provider value={routeCoreContextValue}>
-                {activeRouteComponent}
+                <RouteCore
+                  {...this.props}
+                  wrapper={wrapper}
+                  location={getParamsLocation(location, path)}
+                  store={this.store}
+                  ref={this.ref}
+                />
               </RouterContext.Provider>
             );
           }
