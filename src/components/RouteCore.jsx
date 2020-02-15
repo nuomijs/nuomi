@@ -194,8 +194,8 @@ class RouteCore extends React.PureComponent {
 
     const { url } = this.props.location;
     if (isFunction(nuomiProps.onLeave)) {
-      blockRouter.callback = (leave, restore, targetLocation) => {
-        const isLeave = nuomiProps.onLeave(leave, targetLocation) !== false;
+      blockRouter.callback = (leave, restore, toLocation) => {
+        const isLeave = nuomiProps.onLeave(leave, toLocation) !== false;
         if (isLeave) {
           leave(isLeave);
         } else {

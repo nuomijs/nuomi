@@ -16,7 +16,7 @@ export default {
       type: 'initData',
     });
   },
-  onLeave(leave) {
-    return true;
-  },
+  // onLeave(leave) {
+  //   return true;
+  // },
 };

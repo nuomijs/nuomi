@@ -1,3 +1,4 @@
+import warning from 'warning';
 import { isFunction, isObject } from '../../utils';
 import parser from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
@@ -29,6 +30,10 @@ let options = defaultOptions;
 let clear = null;
 // 阻塞路由控制
 let blockRouter = {};
+// 当前location
+let currentLocation = null;
+// beforeEnter回调
+let beforeEnterCallback = null;
 
 function getOriginPath() {
   const { pathname, search, hash } = globalLocation;
@@ -50,28 +55,45 @@ function getMergeLocation() {
   return mergeLocation;
 }
 
+function beforeEnter(callback) {
+  if (!beforeEnterCallback) {
+    if (isFunction(callback)) {
+      beforeEnterCallback = (enter, restore, toLocation) => {
+        const isEnter = callback(currentLocation, toLocation, enter) !== false;
+        if (isEnter) {
+          enter(isEnter);
+        } else {
+          restore(currentLocation.url);
+        }
+      }
+    }
+  } else {
+    warning(false, 'beforeEnter只能创建一次');
+  }
+}
+
 function callListener() {
   // 一次change可能有多个listeners，只创建一次location
-  let currentLocation = null;
+  let current = null;
   listeners.forEach((callback) => {
-    if (!currentLocation) {
-      currentLocation = getMergeLocation();
+    if (!current) {
+      current = getMergeLocation();
     }
-    callback(currentLocation);
+    callback(current);
   });
 }
 
 function routerEventListener() {
   if (allowCallListener) {
     // 检测路由是否冻结
-    if (isFunction(blockRouter.callback)) {
+    if (isFunction(blockRouter.callback) || isFunction(beforeEnterCallback)) {
       // 记录待跳转的数据
-      if (!blockRouter.targetLocation) {
-        blockRouter.targetLocation = getMergeLocation();
+      if (!blockRouter.toLocation) {
+        blockRouter.toLocation = getMergeLocation();
       }
-      const { url, reload, data } = blockRouter.targetLocation;
-      blockRouter.callback((isLeave) => {
-        // 跳转到目标url
+      const { url, reload, data } = blockRouter.toLocation;
+      const callback = blockRouter.callback || beforeEnterCallback;
+      callback((isLeave) => {
         blockRouter = {};
         allowCallListener = true;
         if (isLeave) {
@@ -80,10 +102,9 @@ function routerEventListener() {
           location(url, data, reload);
         }
       }, (url) => {
-        // url还原
         allowCallListener = false;
         replace(url);
-      }, blockRouter.targetLocation);
+      }, blockRouter.toLocation);
     } else {
       callListener();
     }
@@ -197,7 +218,9 @@ function createRouter(routerOptions, staticLocation, callback) {
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    listener(callback);
+    listener((location) => {
+      callback(currentLocation = location);
+    });
     globalWindow.addEventListener(eventType, routerEventListener);
     return clear = () => {
       created = false;
@@ -208,16 +231,18 @@ function createRouter(routerOptions, staticLocation, callback) {
       isHash = true;
       globalLocation = globalWindow.location;
       clear = null;
+      currentLocation = null;
+      beforeEnterCallback = null;
       blockRouter = {};
     };
   }
 }
 
-function matchPath(currentLocation, path) {
+function matchPath(current, path) {
   const normalPath = parser.replacePath(path);
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
-    return pathRegexp.test(currentLocation.pathname);
+    return pathRegexp.test(current.pathname);
   }
   return false;
 }
@@ -299,4 +324,5 @@ export default {
   forward,
   matchPath,
   mergePath,
+  beforeEnter,
 };

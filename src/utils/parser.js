@@ -2,10 +2,10 @@ import { isObject, isString } from './index';
 
 function replacePath(path) {
   return `/${path}`
-    // /a//b//c => a/b/c
+    // /a//b//c => /a/b/c
     .replace(/\/{2,}/g, '/')
     // /a/b/c/ => /a/b/c
-    .replace(/\/$/, '');
+    .replace(/([^/])\/$/, '$1');
 }
 
 function toRegexp(path) {
