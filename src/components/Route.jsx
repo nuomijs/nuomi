@@ -9,7 +9,7 @@ import router, {
 import { getDefaultProps } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 
-class Route extends React.PureComponent {
+export default class Route extends React.PureComponent {
   static propTypes = RoutePropTypes;
 
   static defaultProps = {
@@ -87,5 +87,3 @@ class Route extends React.PureComponent {
     );
   }
 }
-
-export default Route;

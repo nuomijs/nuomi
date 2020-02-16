@@ -2,7 +2,7 @@ import BaseNuomi from './BaseNuomi';
 import { isFunction, isObject } from '../utils';
 import { RoutePropTypes } from './propTypes';
 
-class BaseRoute extends BaseNuomi {
+export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
 
   componentDidUpdate(prevProps) {
@@ -70,5 +70,3 @@ class BaseRoute extends BaseNuomi {
     }
   }
 }
-
-export default BaseRoute;

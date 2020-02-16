@@ -23,7 +23,7 @@ const connect = (...args) => {
         this.mounted = false;
         const { nuomiProps } = this.context;
         invariant(
-          nuomiProps,
+          !!nuomiProps,
           `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${Connect.displayName}`,
         );
         if (isObject(options) && options.withRef === true) {

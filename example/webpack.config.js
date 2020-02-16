@@ -1,11 +1,12 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+const path = require('path'
 
 module.exports = {
   entry: {
     index: ['@babel/polyfill', './src'],
   },
   devServer: {
+    host: '0.0.0.0',
     port: 8000,
     stats: 'errors-only',
     contentBase: './dist',
@@ -35,7 +36,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, '../src'),
+      nuomi: path.resolve(__dirname, '../lib'),
     },
   },
   module: {

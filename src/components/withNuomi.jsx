@@ -12,7 +12,7 @@ const withNuomi = (WrapperComponent) => {
       super(...args);
       const { nuomiProps } = this.context;
       invariant(
-        nuomiProps,
+        !!nuomiProps,
         `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${WithNuomi.displayName}`,
       );
     }

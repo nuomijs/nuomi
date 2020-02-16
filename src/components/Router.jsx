@@ -5,7 +5,7 @@ import { createRouter } from '../core/router';
 import { clearStore } from '../core/redux/store';
 import { RouterPropTypes } from './propTypes';
 
-class Router extends React.PureComponent {
+export default class Router extends React.PureComponent {
   static propTypes = RouterPropTypes;
 
   static defaultProps = {
@@ -72,5 +72,3 @@ class Router extends React.PureComponent {
     );
   }
 }
-
-export default Router;

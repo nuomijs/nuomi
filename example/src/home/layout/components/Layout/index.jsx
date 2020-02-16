@@ -26,10 +26,10 @@ class Layout extends React.PureComponent {
           <span style={{ marginLeft: 20 }}>欢迎您，{username}！</span>
         </div>
         <div>
-          {routes.map((route) => (
+          {/* {routes.map((route) => (
             <Route key={route.path} {...route} />
           ))}
-          <Route path="*">404</Route>
+          <Route path="*">404</Route> */}
           {/* <Route path="/home" async={() => import('../../../pages/home')} />
           <Route path="/home/list" async={() => import('../../../pages/list')} />
           <Route path="/home/detail/:id" async={() => import('../../../pages/detail')} /> */}

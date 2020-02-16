@@ -6,7 +6,7 @@ import parser from '../utils/parser';
 import { isString } from '../utils';
 import { NuomiRoutePropTypes } from './propTypes';
 
-class NuomiRoute extends React.PureComponent {
+export default class NuomiRoute extends React.PureComponent {
   static propTypes = NuomiRoutePropTypes;
 
   constructor(...args) {
@@ -50,5 +50,3 @@ class NuomiRoute extends React.PureComponent {
     );
   }
 }
-
-export default NuomiRoute;

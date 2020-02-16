@@ -18,6 +18,10 @@ export const NuomiRoutePropTypes = {
   path: PropTypes.string,
 };
 
+export const ShapeRoutePropTypes = {
+  routes: PropTypes.arrayOf(PropTypes.object),
+};
+
 export const RoutePropTypes = {
   ...NuomiPropTypes,
   path: PropTypes.string,
@@ -37,10 +41,6 @@ export const StaticRouterPropTypes = {
   basename: PropTypes.string,
   location: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   context: PropTypes.object,
-};
-
-export const ShapeRouterPropTypes = {
-
 };
 
 export const LinkPropTypes = {

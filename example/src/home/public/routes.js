@@ -1,14 +1,14 @@
 export default [
   {
-    path: '/home',
+    path: '/',
     async: () => import('../pages/home'),
   },
   {
-    path: '/home/list',
+    path: '/list',
     async: () => import('../pages/list'),
   },
   {
-    path: '/home/detail/:id?',
+    path: '/detail/:id?',
     async: (cb) => {
       require.ensure([], (require) => {
         cb(require('../pages/detail').default);

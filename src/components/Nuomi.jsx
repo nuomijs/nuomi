@@ -4,7 +4,7 @@ import nuomi, { getDefaultProps } from '../core/nuomi';
 import { isFunction } from '../utils';
 import { NuomiPropTypes } from './propTypes';
 
-class Nuomi extends React.PureComponent {
+export default class Nuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
 
   static defaultProps = {
@@ -66,5 +66,3 @@ class Nuomi extends React.PureComponent {
     return null;
   }
 }
-
-export default Nuomi;

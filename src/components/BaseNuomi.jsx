@@ -14,7 +14,7 @@ import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
 import { NuomiPropTypes } from './propTypes';
 
-class BaseNuomi extends React.PureComponent {
+export default class BaseNuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
 
   static nuomiId = 0;
@@ -217,11 +217,12 @@ class BaseNuomi extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const children = props.render ? props.render() : props.children;
-    return children ? (
-      <NuomiContext.Provider value={this.contextValue}>{children}</NuomiContext.Provider>
+    const childrenContent = props.children;
+    const renderContent = props.render ? props.render() : null;
+    return childrenContent || renderContent ? (
+      <NuomiContext.Provider value={this.contextValue}>
+        {renderContent}{childrenContent}
+      </NuomiContext.Provider>
     ) : null;
   }
 }
-
-export default BaseNuomi;

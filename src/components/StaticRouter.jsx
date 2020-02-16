@@ -6,7 +6,7 @@ import { noop, isString } from '../utils';
 import parser from '../utils/parser';
 import { StaticRouterPropTypes } from './propTypes';
 
-class StaticRouter extends React.Component {
+export default class StaticRouter extends React.Component {
   static propTypes = StaticRouterPropTypes;
 
   static defaultProps = {
@@ -45,5 +45,3 @@ class StaticRouter extends React.Component {
     );
   }
 }
-
-export default StaticRouter;

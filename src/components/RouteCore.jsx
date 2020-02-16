@@ -6,7 +6,7 @@ import nuomi, { getDefaultProps } from '../core/nuomi';
 import { blockData } from '../core/router';
 import { RoutePropTypes } from './propTypes';
 
-class RouteCore extends React.PureComponent {
+export default class RouteCore extends React.PureComponent {
   static propTypes = RoutePropTypes;
 
   static contextType = RouterContext;
@@ -244,5 +244,3 @@ class RouteCore extends React.PureComponent {
     return null;
   }
 }
-
-export default RouteCore;

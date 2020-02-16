@@ -6,7 +6,7 @@ import parser from '../utils/parser';
 import { isObject } from '../utils';
 import { RedirectPropTypes } from './propTypes';
 
-class Redirect extends React.PureComponent {
+export default class Redirect extends React.PureComponent {
   static propTypes = RedirectPropTypes;
 
   static defaultProps = {
@@ -52,5 +52,3 @@ class Redirect extends React.PureComponent {
     );
   }
 }
-
-export default Redirect;
