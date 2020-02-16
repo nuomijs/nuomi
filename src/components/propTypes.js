@@ -25,7 +25,7 @@ export const ShapeRoutePropTypes = {
 export const RoutePropTypes = {
   ...NuomiPropTypes,
   path: PropTypes.string,
-  wrapper: PropTypes.bool,
+  cache: PropTypes.oneOf(['state', true, false]),
   reload: PropTypes.bool,
   onEnter: PropTypes.func,
   onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),

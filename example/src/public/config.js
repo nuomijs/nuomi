@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 // });
 
 nuomi.config({
-  // wrapper: true,
+  cache: 'state',
   effects: {
     updateState(payload) {
       this.dispatch({

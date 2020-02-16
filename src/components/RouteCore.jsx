@@ -62,20 +62,20 @@ export default class RouteCore extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     const { wrappers } = this.context;
-    const { location, wrapper } = this.props;
+    const { location, cache } = this.props;
     const { current } = this.wrapperRef;
     // 清理wrapper
-    if (wrapper === false && this.wrapper) {
+    if (cache !== true && this.wrapper) {
       this.removeWrapper();
       this.wrapper = null;
-    } else if (wrapper === true && !this.wrapper && current) {
+    } else if (cache === true && !this.wrapper && current) {
       this.wrapper = current;
       wrappers.push(current);
     }
     if (location !== prevProps.location) {
       // 切换当前路由后，隐藏所有wrapper
       this.hideWrapper();
-      if (wrapper === true) {
+      if (cache === true) {
         // 控制当前路由wrapper显示
         const { nuomiProps } = this.state;
         this.visibleHandler(nuomiProps, () => {
@@ -221,18 +221,18 @@ export default class RouteCore extends React.PureComponent {
   }
 
   render() {
-    const { location, wrapper } = this.props;
+    const { location, cache } = this.props;
     const { nuomiProps, visible, loaded } = this.state;
     const { data, reload = nuomiProps.reload } = location;
     this.restoreData();
     if (isObject(data)) {
       this.setData(data);
     }
-    if (wrapper || (loaded && visible)) {
+    if (cache === true || (loaded && visible)) {
       const baseRoute = (
         <BaseRoute {...nuomiProps} reload={reload} location={location} />
       );
-      if (wrapper) {
+      if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">
             {loaded && visible && baseRoute}

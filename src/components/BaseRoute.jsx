@@ -1,9 +1,19 @@
 import BaseNuomi from './BaseNuomi';
 import { isFunction, isObject } from '../utils';
 import { RoutePropTypes } from './propTypes';
+import { removeReducer } from '../core/redux/reducer';
 
 export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
+
+  componentWillUnmount() {
+    const { store, id, cache } = this.props;
+    if (cache !== 'state' || !id) {
+      removeReducer(store.id);
+      store.id = null;
+    }
+    this.removeListener();
+  }
 
   componentDidUpdate(prevProps) {
     const { props } = this;

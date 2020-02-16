@@ -42,7 +42,7 @@ export default class Route extends React.PureComponent {
 
   render() {
     const defaultProps = getDefaultProps();
-    const { path, wrapper = defaultProps.wrapper } = this.props;
+    const { path, cache = defaultProps.cache } = this.props;
     return (
       <RouterContext.Consumer>
         {(context) => {
@@ -62,7 +62,7 @@ export default class Route extends React.PureComponent {
             match = false;
           }
           // 设置了wrapper没有匹配路由，不销毁，只隐藏
-          if (wrapper === true && this.routeComponent !== null && !match) {
+          if (cache === true && this.routeComponent !== null && !match) {
             return this.routeComponent;
           }
 
@@ -74,7 +74,7 @@ export default class Route extends React.PureComponent {
               <RouterContext.Provider value={routeCoreContextValue}>
                 <RouteCore
                   {...this.props}
-                  wrapper={wrapper}
+                  cache={cache}
                   location={matchResult || location}
                   store={this.store}
                 />

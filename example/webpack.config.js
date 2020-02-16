@@ -1,5 +1,5 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const path = require('path'
+const path = require('path');
 
 module.exports = {
   entry: {
@@ -36,7 +36,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, '../lib'),
+      nuomi: path.resolve(__dirname, '../src'),
     },
   },
   module: {
