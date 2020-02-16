@@ -52,6 +52,7 @@ export const LinkPropTypes = {
 
 export const NavLinkPropTypes = {
   ...LinkPropTypes,
+  path: PropTypes.string,
   activeClassName: PropTypes.string,
   activeStyle: PropTypes.object,
   isActice: PropTypes.func,

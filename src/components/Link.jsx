@@ -2,6 +2,7 @@ import React from 'react';
 import router, { combinePath } from '../core/router';
 import { LinkPropTypes } from './propTypes';
 import { isFunction } from '../utils';
+import parser from '../utils/parser';
 
 export class Link extends React.PureComponent {
   static propTypes = LinkPropTypes;
@@ -19,12 +20,12 @@ export class Link extends React.PureComponent {
     if (isFunction(onClick) && onClick(e) === false) {
       return;
     }
-    router[replace ? 'replace' : 'location'](to, data, reload);
+    router[replace ? 'replace' : 'location'](parser.replacePath(to), data, reload);
   };
 
   render() {
     const { to, reload, data, replace, forwardRef, ...rest } = this.props;
-    return <a href={to ? combinePath(to) : ''} {...rest} onClick={this.onClick} ref={forwardRef} />;
+    return <a href={combinePath(to)} {...rest} onClick={this.onClick} ref={forwardRef} />;
   }
 }
 

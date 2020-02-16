@@ -30,6 +30,7 @@ function parser(path) {
   let hash = '';
   let search = '';
   const query = {};
+  const params = {};
   const hashIndex = pathname.indexOf('#');
   if (hashIndex !== -1) {
     hash = pathname.substr(hashIndex);
@@ -57,6 +58,7 @@ function parser(path) {
     hash,
     search,
     query,
+    params,
   };
 }
 

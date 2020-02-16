@@ -13,15 +13,16 @@ class NavLink extends Link {
 
   static defaultProps = {
     to: '',
+    path: '',
     data: null,
     replace: false,
     reload: false,
   };
 
   isActive(location) {
-    const { isActive, to } = this.props;
+    const { isActive, to, path } = this.props;
     const { pathname } = parser(parser.restore(to));
-    const match = router.matchPath(location, pathname);
+    const match = router.matchPath(location, path || pathname);
     if (isFunction(isActive)) {
       return isActive(match, location) !== false;
     }
@@ -39,13 +40,13 @@ class NavLink extends Link {
   }
 
   render() {
-    const { to, reload, data, replace, activeClassName, activeStyle, isActive, forwardRef, ...rest } = this.props;
+    const { to, path, reload, data, replace, activeClassName, activeStyle, isActive, forwardRef, ...rest } = this.props;
     return (
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NavLink>');
           const { location } = context;
-          return <a href={to ? combinePath(to) : ''} {...rest} {...this.getActiveProps(location)} onClick={this.onClick} ref={forwardRef} />;
+          return <a href={combinePath(to)} {...rest} {...this.getActiveProps(location)} onClick={this.onClick} ref={forwardRef} />;
         }}
       </RouterContext.Consumer>
     );

@@ -232,10 +232,27 @@ function createRouter(routerOptions, staticLocation, callback) {
 }
 
 function matchPath(location, path) {
+  const { pathname } = location;
   const normalPath = parser.replacePath(path);
   const pathRegexp = pathRegexps[normalPath];
-  if (pathRegexp) {
-    return pathRegexp.test(location.pathname);
+  let pathnameMatch;
+  if (pathRegexp && !!(pathnameMatch = pathname.match(pathRegexp))) {
+    const pathMatch = path.match(/\/:(\w+)/g);
+    if (pathMatch) {
+      const params = {};
+      pathMatch.forEach((param, i) => {
+        const name = param.replace(/^\/:/, '');
+        const value = pathnameMatch[i + 1];
+        if (value !== undefined) {
+          params[name] = value.replace(/^\//, '');
+        }
+      });
+      return {
+        ...location,
+        params,
+      };
+    }
+    return location;
   }
   return false;
 }
@@ -253,44 +270,6 @@ function removePath(path) {
   delete pathRegexps[parser.replacePath(path)];
 }
 
-function getParamsLocation(locationData, path) {
-  const { pathname, ...rest } = locationData;
-  const normalPath = parser.replacePath(path);
-  const pathRegexp = pathRegexps[normalPath];
-  if (pathRegexp) {
-    const pathnameMatch = pathname.match(pathRegexp);
-    const pathMatch = path.match(/\/:(\w+)/g);
-    const params = {};
-    const paramsPathArray = [];
-    // let paramsPath = '';
-    // let newPathname = pathname;
-    if (pathnameMatch && pathMatch) {
-      pathMatch.forEach((param, i) => {
-        const name = param.replace(/^\/:/, '');
-        const value = pathnameMatch[i + 1];
-        paramsPathArray.push(value);
-        if (value !== undefined) {
-          params[name] = value.replace(/^\//, '');
-        }
-      });
-      // pathname排除params部分
-      // if (paramsPathArray.length > 0) {
-      //   paramsPath = paramsPathArray.join('');
-      //   const lastIndex = pathname.lastIndexOf(paramsPath);
-      //   if (lastIndex !== -1) {
-      //     newPathname = pathname.substr(0, lastIndex);
-      //   }
-      // }
-    }
-    return {
-      ...rest,
-      // pathname: newPathname,
-      params,
-    };
-  }
-  return locationData;
-}
-
 function mergePath(...args) {
   let paths = args.filter((path) => path && isString(path));
   const maxIndex = paths.length - 1;
@@ -304,7 +283,6 @@ export {
   blockData,
   savePath,
   removePath,
-  getParamsLocation,
   combinePath,
 };
 

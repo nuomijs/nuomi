@@ -5,7 +5,6 @@ import RouteCore from './RouteCore';
 import router, {
   savePath,
   removePath,
-  getParamsLocation,
 } from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
@@ -56,7 +55,8 @@ class Route extends React.PureComponent {
             routeTempData: this.routeTempData,
           };
           const { location } = context;
-          let match = router.matchPath(location, path);
+          const matchResult = router.matchPath(location, path);
+          let match = matchResult !== false;
           // context.matched 表示同一个上下文中，多个路由只匹配一个
           if (context.matched && context.matched !== this) {
             match = false;
@@ -75,7 +75,7 @@ class Route extends React.PureComponent {
                 <RouteCore
                   {...this.props}
                   wrapper={wrapper}
-                  location={getParamsLocation(location, path)}
+                  location={matchResult || location}
                   store={this.store}
                 />
               </RouterContext.Provider>
