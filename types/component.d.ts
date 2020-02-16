@@ -1,9 +1,14 @@
 import { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
+import { Location } from './router';
 
 interface BaseRouter {
   basename?: string;
   context?: object;
+}
+
+export interface ShapeRouteProps {
+  routes: object[];
 }
 
 export interface RouterProps extends BaseRouter {
@@ -11,18 +16,25 @@ export interface RouterProps extends BaseRouter {
 }
 
 export interface StaticRouterProps extends BaseRouter {
-  location?: string | object;
+  location?: string | Location;
 }
 
 export interface RedirectProps {
   from?: string;
-  to?: string | object;
+  to?: string | Location;
   reload?: boolean;
 }
 
 export interface LinkProps {
-  to?: string | object;
+  to?: string | Location;
   reload?: boolean;
+}
+
+export interface NavLinkProps extends LinkProps {
+  path? :string;
+  activeClassName?: string,
+  activeStyle?: object,
+  isActice(match: boolean | Location, location: Location): boolean,
 }
 
 export interface Connect {
@@ -35,15 +47,17 @@ export class Route<P extends RouteProps> extends PureComponent<P, any> {}
 
 export class NuomiRoute<P extends NuomiRouteProps> extends PureComponent<P, any> {}
 
+export class ShapeRoute<P extends ShapeRouteProps> extends PureComponent<P, any> {}
+
 export class Router<P extends RouterProps> extends PureComponent<P, any> {}
 
-export class Router<P extends StaticRouterProps> extends PureComponent<P, any> {}
+export class StaticRouter<P extends StaticRouterProps> extends PureComponent<P, any> {}
 
 export class Redirect<P extends RedirectProps> extends PureComponent<P, any> {}
 
 export class Link<P extends LinkProps> extends PureComponent<P, any> {}
 
-export class NavLink<P extends LinkProps> extends PureComponent<P, any> {}
+export class NavLink<P extends NavLinkProps> extends PureComponent<P, any> {}
 
 export const connect: Connect;
 

@@ -170,12 +170,12 @@ function reload() {
   replace(url, true);
 }
 
-function back() {
-  globalWindow.history.back();
+function back(step) {
+  globalWindow.history.back(step);
 }
 
-function forward() {
-  globalWindow.history.forward();
+function forward(step) {
+  globalWindow.history.forward(step);
 }
 
 function removeListener(...args) {
@@ -225,7 +225,7 @@ function createRouter(routerOptions, staticLocation, callback) {
       globalLocation = globalWindow.location;
       clear = null;
       currentLocation = null;
-      beforeEnterCallback = null;
+      blockCallback = null;
       blockData = {};
     };
   }

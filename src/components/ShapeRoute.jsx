@@ -1,5 +1,6 @@
 import React from 'react';
 import invariant from 'invariant';
+import warning from 'warning';
 import { isArray } from '../utils';
 import router from '../core/router';
 import { ShapeRoutePropTypes } from './propTypes';
@@ -11,11 +12,22 @@ import Redirect from './Redirect';
 class Shape extends React.PureComponent {
   static propTypes = ShapeRoutePropTypes;
 
+  getKey(key, i) {
+    if (key) {
+      return `${key}_${i}`;
+    }
+    return i;
+  }
+
   getComponents(routes, parentPath) {
-    if (isArray(routes)) {
-      const conponents = [];
-      routes.forEach(({ key, route, routes: childrenRoutes, ...props }, i) => {
+    const conponents = [];
+    routes.filter((obj) => !!obj).forEach((obj, i) => {
+      if (React.isValidElement(obj)) {
+        conponents.push(React.cloneElement(obj, { key: this.getKey(obj.key, i) }));
+      } else {
+        const { key, route, children: childrenRoutes, ...props } = obj;
         const newProps = { ...props };
+        const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
         let Component = Route;
         if (props.to) {
           Component = Redirect;
@@ -23,15 +35,13 @@ class Shape extends React.PureComponent {
           Component = NuomiRoute;
         }
         if (newProps.path) {
-          const hasChildren = isArray(childrenRoutes) && childrenRoutes.length;
-          newProps.path = router.mergePath(parentPath, newProps.path, hasChildren ? '/*' : '');
+          newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');
         }
-        const children = this.getComponents(childrenRoutes, newProps.path);
-        conponents.push(<Component key={key || i} {...newProps} children={children} />);
-      });
-      return conponents;
-    }
-    return null;
+        const children = isRoutes ? this.getComponents(childrenRoutes, newProps.path) : childrenRoutes;
+        conponents.push(<Component key={this.getKey(key, i)} {...newProps} children={children} />);
+      }
+    });
+    return conponents;
   }
 
   render() {
@@ -44,6 +54,8 @@ class Shape extends React.PureComponent {
 export default class ShapeRoute extends React.Component {
   static propTypes = ShapeRoutePropTypes;
 
+  static defaultProps = { routes: [] };
+
   static contextType = RouterContext;
 
   constructor(...args) {
@@ -53,6 +65,8 @@ export default class ShapeRoute extends React.Component {
   }
 
   render() {
+    const { routes } = this.props;
+    warning(!!routes.length, 'routes不能是空数组');
     return <Shape {...this.props} />
   }
 }

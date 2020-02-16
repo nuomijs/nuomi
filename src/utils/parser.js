@@ -72,11 +72,11 @@ function restore(object) {
     path = url;
   } else if (!!pathname && isString(pathname)) {
     path = pathname;
-    // if (isObject(params)) {
-    //   Object.values(params).forEach((param) => {
-    //     path += `/${param}`;
-    //   });
-    // }
+    if (isObject(params)) {
+      Object.values(params).forEach((param) => {
+        path += `/${param}`;
+      });
+    }
     if (!!search && isString(search)) {
       if (search.indexOf('?') !== 0) {
         path += `?${search}`;

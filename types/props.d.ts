@@ -1,3 +1,5 @@
+import { Location } from './router';
+
 export interface Props {
   id?: string;
   state?: object;
@@ -12,12 +14,13 @@ export interface Props {
 
 export interface RouteProps extends Props {
   path?: string;
-  wrapper?: boolean;
+  cache?: boolean | 'state';
   reload?: boolean;
-  readonly location?: object;
+  readonly location?: Location;
   onEnter?: (enter: () => void) => boolean;
   onChange?: () => void;
-  onLeave?: (leave: () => void) => boolean;
+  onChange?: object;
+  onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
 export interface NuomiRouteProps extends Props {

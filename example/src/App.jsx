@@ -17,7 +17,7 @@ class App extends React.Component {
       path: '/home',
       route: false,
       ...home,
-      routes,
+      children: routes,
     }, {
       to: '/',
     }];
@@ -25,7 +25,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
+      <Router type="browser">
         <ShapeRoute routes={this.routes} />
         {/* <Route path="/" {...login} />
         <NuomiRoute path="/home/*" {...home} /> */}
