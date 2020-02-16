@@ -21,26 +21,34 @@ class Shape extends React.PureComponent {
 
   getComponents(routes, parentPath) {
     const conponents = [];
-    routes.filter((obj) => !!obj).forEach((obj, i) => {
-      if (React.isValidElement(obj)) {
-        conponents.push(React.cloneElement(obj, { key: this.getKey(obj.key, i) }));
-      } else {
-        const { key, route, children: childrenRoutes, ...props } = obj;
-        const newProps = { ...props };
-        const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
-        let Component = Route;
-        if (props.to) {
-          Component = Redirect;
-        } else if(props.path && route === false) {
-          Component = NuomiRoute;
+    routes
+      .filter((obj) => !!obj)
+      .forEach((obj, i) => {
+        if (React.isValidElement(obj)) {
+          conponents.push(React.cloneElement(obj, { key: this.getKey(obj.key, i) }));
+        } else {
+          const { key, route, children: childrenRoutes, ...props } = obj;
+          const newProps = { ...props };
+          const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
+          let Component = Route;
+          if (props.to) {
+            Component = Redirect;
+          } else if (props.path && route === false) {
+            Component = NuomiRoute;
+          }
+          if (newProps.path) {
+            newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');
+          }
+          const children = isRoutes
+            ? this.getComponents(childrenRoutes, newProps.path)
+            : childrenRoutes;
+          conponents.push(
+            <Component key={this.getKey(key, i)} {...newProps}>
+              {children}
+            </Component>,
+          );
         }
-        if (newProps.path) {
-          newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');
-        }
-        const children = isRoutes ? this.getComponents(childrenRoutes, newProps.path) : childrenRoutes;
-        conponents.push(<Component key={this.getKey(key, i)} {...newProps} children={children} />);
-      }
-    });
+      });
     return conponents;
   }
 
@@ -67,6 +75,6 @@ export default class ShapeRoute extends React.Component {
   render() {
     const { routes } = this.props;
     warning(!!routes.length, 'routes不能是空数组');
-    return <Shape {...this.props} />
+    return <Shape {...this.props} />;
   }
 }

@@ -65,10 +65,6 @@ export default class Router extends React.PureComponent {
       staticContext,
       wrappers: this.wrappers,
     };
-    return (
-      <RouterContext.Provider value={contextValue}>
-        {children}
-      </RouterContext.Provider>
-    );
+    return <RouterContext.Provider value={contextValue}>{children}</RouterContext.Provider>;
   }
 }

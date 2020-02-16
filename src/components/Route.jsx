@@ -2,10 +2,7 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
-import router, {
-  savePath,
-  removePath,
-} from '../core/router';
+import router, { savePath, removePath } from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 

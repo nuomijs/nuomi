@@ -2,7 +2,9 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:jsx-a11y/recommended'],
+  plugins: ['prettier'],
   rules: {
+    'react/display-name': 0,
     'no-unused-vars': 1,
     'react/prop-types': 0,
     'jsx-a11y/click-events-have-key-events': 0,

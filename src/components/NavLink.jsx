@@ -40,13 +40,32 @@ class NavLink extends Link {
   }
 
   render() {
-    const { to, path, reload, data, replace, activeClassName, activeStyle, isActive, forwardRef, ...rest } = this.props;
+    const {
+      to,
+      path,
+      reload,
+      data,
+      replace,
+      activeClassName,
+      activeStyle,
+      isActive,
+      forwardRef,
+      ...rest
+    } = this.props;
     return (
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NavLink>');
           const { location } = context;
-          return <a href={combinePath(to)} {...rest} {...this.getActiveProps(location)} onClick={this.onClick} ref={forwardRef} />;
+          return (
+            <a
+              href={combinePath(to)}
+              {...rest}
+              {...this.getActiveProps(location)}
+              onClick={this.onClick}
+              ref={forwardRef}
+            />
+          );
         }}
       </RouterContext.Consumer>
     );

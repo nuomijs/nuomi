@@ -14,7 +14,7 @@ function toRegexp(path) {
   // (?: => (?:
   .replace(/(\()(?!\?[:=!<>])/g, '$1?:')
   // /:id => /(\/\w+)
-  .replace(/\/:\w+/g, '(\/\\w+)')
+  .replace(/\/:\w+/g, '(/\\w+)')
   // /a/b => \/a\/b
   // a.html => a\.html
   .replace(/([./])/g, '\\$1')
@@ -72,11 +72,11 @@ function restore(object) {
     path = url;
   } else if (!!pathname && isString(pathname)) {
     path = pathname;
-    if (isObject(params)) {
-      Object.values(params).forEach((param) => {
-        path += `/${param}`;
-      });
-    }
+    // if (isObject(params)) {
+    //   Object.values(params).forEach((param) => {
+    //     path += `/${param}`;
+    //   });
+    // }
     if (!!search && isString(search)) {
       if (search.indexOf('?') !== 0) {
         path += `?${search}`;

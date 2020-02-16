@@ -55,7 +55,7 @@ module.exports = {
                     targets: {
                       browsers: ['ie >= 9'],
                     },
-                    modules: false
+                    modules: false,
                   },
                 ],
                 '@babel/preset-react',

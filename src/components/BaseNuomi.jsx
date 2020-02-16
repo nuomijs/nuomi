@@ -221,7 +221,8 @@ export default class BaseNuomi extends React.PureComponent {
     const renderContent = props.render ? props.render() : null;
     return childrenContent || renderContent ? (
       <NuomiContext.Provider value={this.contextValue}>
-        {renderContent}{childrenContent}
+        {renderContent}
+        {childrenContent}
       </NuomiContext.Provider>
     ) : null;
   }

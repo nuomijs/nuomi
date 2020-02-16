@@ -187,7 +187,6 @@ export default class RouteCore extends React.PureComponent {
   }
 
   showWrapper(nuomiProps) {
-
     const { url } = this.props.location;
     if (isFunction(nuomiProps.onLeave)) {
       blockData.callback = (leave, restore, toLocation) => {
@@ -197,7 +196,7 @@ export default class RouteCore extends React.PureComponent {
         } else {
           restore(url);
         }
-      }
+      };
     }
 
     if (this.wrapper) {
@@ -229,9 +228,7 @@ export default class RouteCore extends React.PureComponent {
       this.setData(data);
     }
     if (cache === true || (loaded && visible)) {
-      const baseRoute = (
-        <BaseRoute {...nuomiProps} reload={reload} location={location} />
-      );
+      const baseRoute = <BaseRoute {...nuomiProps} reload={reload} location={location} />;
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">
