@@ -4,8 +4,8 @@
 * Route组件支持嵌套
 ```js
 <Router type="browser">
-  <Route path="/">
-    <Route path="/home">
+  <Route path="/*">
+    <Route path="/home/*">
       <Route path="/home/list" />
     </Route>
   </Route>
