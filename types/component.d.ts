@@ -2,21 +2,19 @@ import { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
 import { Location } from './router';
 
-interface BaseRouter {
-  basename?: string;
-  context?: object;
-}
-
 export interface ShapeRouteProps {
   routes: object[];
 }
 
-export interface RouterProps extends BaseRouter {
+export interface RouterProps {
+  basename?: string;
   type?: 'hash' | 'browser';
 }
 
-export interface StaticRouterProps extends BaseRouter {
+export interface StaticRouterProps {
+  basename?: string;
   location?: string | Location;
+  context?: object;
 }
 
 export interface RedirectProps {

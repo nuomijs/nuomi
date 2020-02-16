@@ -1,5 +1,66 @@
 # 更新日志：
 
+## 0.8.0 (2020-02-16)
+* Route组件支持嵌套
+```js
+<Router type="browser">
+  <Route path="/">
+    <Route path="/home">
+      <Route path="/home/list" />
+    </Route>
+  </Route>
+</Router>
+```
+* 新增NavLink、ShapeRoute组件
+```js
+// 子路由path不用把祖先path加上
+const routes = [{
+  path: '/',
+  children: [{
+    path: '/home',
+    children: [{
+      path: '/list',
+    }]
+  }]
+}];
+<Router type="hash">
+  <ShapeRoute routes={routes} />
+</Router>
+```
+* NuomiRoute组件增加path属性
+* path匹配规则优化，此优化影响Route与NuomiRoute组件path属性
+```
+/api/:id
+/api/1    √
+/api      ×
+/api/1/2  ×
+
+/api/:id?
+/api/1    √
+/api      √
+
+/api/*
+/api      √
+/api/a    √
+/api2     ×
+```
+* 新增router.block方法
+```js
+router.block((from, to) => {
+  // 路由跳转时，path为/list页面无法展示
+  if (to.pathname === '/list') {
+    return false;
+  }
+});
+```
+* 新增router.mergePath方法
+```js
+router.mergePath('/', '/home', '/list'); // /home/list
+```
+* Route组件wrapper属性更改为cache
+* router.matchPath匹配成功返回匹配对象
+
+
 ## 0.7.0 (2020-02-12)
 * 移除Router组件hashPrefix属性，新增type和basename属性
 * 新增StaticRouter组件用于服务端渲染

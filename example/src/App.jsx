@@ -8,11 +8,14 @@ import {
   Link,
   NavLink,
   ShapeRoute,
+  router,
 } from 'nuomi';
 import home from './home';
 import login from './login';
 import './public/config';
 import routes from './home/public/routes';
+
+// console.log(router.mergePath('/', '/home', '/list'))
 
 // const loadHome = () => import('./home');
 
@@ -28,7 +31,7 @@ class App extends React.Component {
         path: '/home',
         route: false,
         ...home,
-        children: routes,
+        children: [...routes, { path: '*', children: '404' }],
       },
       {
         to: '/',
@@ -38,7 +41,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router type="browser">
+      <Router>
         <ShapeRoute routes={this.routes} />
         {/* <Route path="/" {...login} />
         <NuomiRoute path="/home/*" {...home} /> */}
