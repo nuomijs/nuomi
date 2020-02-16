@@ -28,12 +28,12 @@ const defaultOptions = {
 let options = defaultOptions;
 // 清理路由数据
 let clear = null;
-// 阻塞路由控制
-let blockRouter = {};
 // 当前location
 let currentLocation = null;
-// beforeEnter回调
-let beforeEnterCallback = null;
+// 阻塞路由控制
+let blockData = {};
+// 阻塞回调
+let blockCallback = null;
 
 function getOriginPath() {
   const { pathname, search, hash } = globalLocation;
@@ -55,10 +55,10 @@ function getMergeLocation() {
   return mergeLocation;
 }
 
-function beforeEnter(callback) {
-  if (!beforeEnterCallback) {
+function block(callback) {
+  if (!blockCallback) {
     if (isFunction(callback)) {
-      beforeEnterCallback = (enter, restore, toLocation) => {
+      blockCallback = (enter, restore, toLocation) => {
         const isEnter = callback(currentLocation, toLocation, enter) !== false;
         if (isEnter) {
           enter(isEnter);
@@ -68,7 +68,7 @@ function beforeEnter(callback) {
       }
     }
   } else {
-    warning(false, 'beforeEnter只能创建一次');
+    warning(false, 'router.block只能创建一次');
   }
 }
 
@@ -86,15 +86,15 @@ function callListener() {
 function routerEventListener() {
   if (allowCallListener) {
     // 检测路由是否冻结
-    if (isFunction(blockRouter.callback) || isFunction(beforeEnterCallback)) {
+    if (isFunction(blockData.callback) || isFunction(blockCallback)) {
       // 记录待跳转的数据
-      if (!blockRouter.toLocation) {
-        blockRouter.toLocation = getMergeLocation();
+      if (!blockData.toLocation) {
+        blockData.toLocation = getMergeLocation();
       }
-      const { url, reload, data } = blockRouter.toLocation;
-      const callback = blockRouter.callback || beforeEnterCallback;
+      const { url, reload, data } = blockData.toLocation;
+      const callback = blockData.callback || blockCallback;
       callback((isLeave) => {
-        blockRouter = {};
+        blockData = {};
         allowCallListener = true;
         if (isLeave) {
           callListener();
@@ -104,7 +104,7 @@ function routerEventListener() {
       }, (url) => {
         allowCallListener = false;
         replace(url);
-      }, blockRouter.toLocation);
+      }, blockData.toLocation);
     } else {
       callListener();
     }
@@ -233,7 +233,7 @@ function createRouter(routerOptions, staticLocation, callback) {
       clear = null;
       currentLocation = null;
       beforeEnterCallback = null;
-      blockRouter = {};
+      blockData = {};
     };
   }
 }
@@ -308,7 +308,7 @@ function mergePath(...args) {
 export {
   getLocation,
   createRouter,
-  blockRouter,
+  blockData,
   savePath,
   removePath,
   getParamsLocation,
@@ -324,5 +324,5 @@ export default {
   forward,
   matchPath,
   mergePath,
-  beforeEnter,
+  block,
 };

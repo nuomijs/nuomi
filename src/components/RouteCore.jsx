@@ -4,7 +4,7 @@ import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction, isObject } from '../utils';
 import nuomi, { getDefaultProps } from '../core/nuomi';
-import { blockRouter } from '../core/router';
+import { blockData } from '../core/router';
 
 class RouteCore extends React.PureComponent {
   static propTypes = {
@@ -194,7 +194,7 @@ class RouteCore extends React.PureComponent {
 
     const { url } = this.props.location;
     if (isFunction(nuomiProps.onLeave)) {
-      blockRouter.callback = (leave, restore, toLocation) => {
+      blockData.callback = (leave, restore, toLocation) => {
         const isLeave = nuomiProps.onLeave(leave, toLocation) !== false;
         if (isLeave) {
           leave(isLeave);

@@ -17,7 +17,7 @@ class NuomiRoute extends React.PureComponent {
     onInit: PropTypes.func,
     async: PropTypes.func,
     pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    pathname: PropTypes.string,
+    path: PropTypes.string,
   };
 
   constructor(...args) {

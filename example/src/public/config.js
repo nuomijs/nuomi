@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
   store.applyMiddleware(immutable());
 }
 
-// router.beforeEnter((from, to, enter) => {
+// router.block((from, to, enter) => {
 //   enter();
 // });
 
