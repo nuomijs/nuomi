@@ -114,21 +114,14 @@ function routerEventListener() {
 }
 
 function combinePath(path = '') {
-  return parser.replacePath(`${options.basename}/${path}`);
+  return parser.replacePath(`${options.basename}/${parser.restore(path)}`);
 }
 
 function locationHandle(...args) {
   const type = args[0];
-  let path = args[1];
+  const path = args[1];
   const data = args[2];
   let isReload = args[3];
-  if (path && (typeof path === 'string' || isObject(path))) {
-    if (isObject(path)) {
-      path = parser.restore(path);
-    }
-  } else {
-    path = null;
-  }
   if (path) {
     if (typeof data === 'boolean') {
       isReload = data;
@@ -238,11 +231,11 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function matchPath(current, path) {
+function matchPath(location, path) {
   const normalPath = parser.replacePath(path);
   const pathRegexp = pathRegexps[normalPath];
   if (pathRegexp) {
-    return pathRegexp.test(current.pathname);
+    return pathRegexp.test(location.pathname);
   }
   return false;
 }

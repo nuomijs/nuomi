@@ -26,7 +26,6 @@ class Route extends React.PureComponent {
     super(...args);
     this.store = {};
     this.routeTempData = {};
-    this.ref = React.createRef();
     this.routeComponent = null;
     this.wrappers = [];
     const { path } = this.props;
@@ -78,7 +77,6 @@ class Route extends React.PureComponent {
                   wrapper={wrapper}
                   location={getParamsLocation(location, path)}
                   store={this.store}
-                  ref={this.ref}
                 />
               </RouterContext.Provider>
             );

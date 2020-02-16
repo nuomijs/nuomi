@@ -45,11 +45,16 @@ export const ShapeRouterPropTypes = {
 
 export const LinkPropTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  data: PropTypes.object,
   reload: PropTypes.bool,
+  replace: PropTypes.bool,
 };
 
 export const NavLinkPropTypes = {
-
+  ...LinkPropTypes,
+  activeClassName: PropTypes.string,
+  activeStyle: PropTypes.object,
+  isActice: PropTypes.func,
 };
 
 export const RedirectPropTypes = {

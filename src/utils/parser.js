@@ -61,6 +61,9 @@ function parser(path) {
 }
 
 function restore(object) {
+  if (isString(object)) {
+    return object;
+  }
   let path = '';
   const { pathname, params, query, search, url } = object;
   if (!!url && isString(url)) {

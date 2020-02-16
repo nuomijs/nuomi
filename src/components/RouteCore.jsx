@@ -13,7 +13,6 @@ class RouteCore extends React.PureComponent {
 
   constructor(...args) {
     super(...args);
-    this.ref = React.createRef();
     this.wrapperRef = React.createRef();
     this.mounted = false;
     this.wrapper = null;
@@ -231,7 +230,7 @@ class RouteCore extends React.PureComponent {
     }
     if (wrapper || (loaded && visible)) {
       const baseRoute = (
-        <BaseRoute ref={this.ref} {...nuomiProps} reload={reload} location={location} />
+        <BaseRoute {...nuomiProps} reload={reload} location={location} />
       );
       if (wrapper) {
         return (
