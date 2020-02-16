@@ -1,19 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import { createRouter } from '../core/router';
 import { clearStore } from '../core/redux/store';
+import { RouterPropTypes } from './propTypes';
 
 class Router extends React.PureComponent {
+  static propTypes = RouterPropTypes;
+
   static defaultProps = {
     basename: '/',
     type: 'hash',
-  };
-
-  static propTypes = {
-    basename: PropTypes.string,
-    type: PropTypes.oneOf(['hash', 'browser']),
   };
 
   static contextType = RouterContext;

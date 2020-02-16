@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import warning from 'warning';
 import { createReducer, removeReducer } from '../core/redux/reducer';
 import rootStore, {
@@ -13,18 +12,10 @@ import nuomi from '../core/nuomi';
 import EffectsProxy, { getClassEffects } from '../utils/effectsProxy';
 import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
+import { NuomiPropTypes } from './propTypes';
 
 class BaseNuomi extends React.PureComponent {
-  static propTypes = {
-    id: PropTypes.string,
-    state: PropTypes.object,
-    data: PropTypes.object,
-    store: PropTypes.object,
-    reducers: PropTypes.objectOf(PropTypes.func),
-    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    render: PropTypes.func,
-    onInit: PropTypes.func,
-  };
+  static propTypes = NuomiPropTypes;
 
   static nuomiId = 0;
 

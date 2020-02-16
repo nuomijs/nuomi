@@ -1,12 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import router, { combinePath } from '../core/router';
+import { LinkPropTypes } from './propTypes';
 
 class Link extends React.PureComponent {
-  static propTypes = {
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    reload: PropTypes.bool,
-  };
+  static propTypes = LinkPropTypes;
 
   onClick = (e) => {
     e.preventDefault();

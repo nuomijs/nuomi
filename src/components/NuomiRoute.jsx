@@ -1,24 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import Nuomi from './Nuomi';
 import parser from '../utils/parser';
 import { isString } from '../utils';
+import { NuomiRoutePropTypes } from './propTypes';
 
 class NuomiRoute extends React.PureComponent {
-  static propTypes = {
-    id: PropTypes.string,
-    state: PropTypes.object,
-    data: PropTypes.object,
-    reducers: PropTypes.objectOf(PropTypes.func),
-    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    render: PropTypes.func,
-    onInit: PropTypes.func,
-    async: PropTypes.func,
-    pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    path: PropTypes.string,
-  };
+  static propTypes = NuomiRoutePropTypes;
 
   constructor(...args) {
     super(...args);

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
@@ -9,24 +8,10 @@ import router, {
   getParamsLocation,
 } from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
+import { RoutePropTypes } from './propTypes';
 
 class Route extends React.PureComponent {
-  static propTypes = {
-    path: PropTypes.string,
-    wrapper: PropTypes.bool,
-    id: PropTypes.string,
-    reload: PropTypes.bool,
-    state: PropTypes.object,
-    data: PropTypes.object,
-    reducers: PropTypes.objectOf(PropTypes.func),
-    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    render: PropTypes.func,
-    onEnter: PropTypes.func,
-    onInit: PropTypes.func,
-    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    onLeave: PropTypes.func,
-    async: PropTypes.func,
-  };
+  static propTypes = RoutePropTypes;
 
   static defaultProps = {
     id: '',

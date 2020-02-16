@@ -1,22 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import router from '../core/router';
 import parser from '../utils/parser';
 import { isObject } from '../utils';
+import { RedirectPropTypes } from './propTypes';
 
 class Redirect extends React.PureComponent {
+  static propTypes = RedirectPropTypes;
+
   static defaultProps = {
     from: '',
     to: '',
     reload: false,
-  };
-
-  static propTypes = {
-    from: PropTypes.string,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    reload: PropTypes.bool,
   };
 
   constructor(...args) {

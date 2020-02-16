@@ -1,20 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import BaseNuomi from './BaseNuomi';
 import nuomi, { getDefaultProps } from '../core/nuomi';
 import { isFunction } from '../utils';
+import { NuomiPropTypes } from './propTypes';
 
 class Nuomi extends React.PureComponent {
-  static propTypes = {
-    id: PropTypes.string,
-    state: PropTypes.object,
-    data: PropTypes.object,
-    reducers: PropTypes.objectOf(PropTypes.func),
-    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    render: PropTypes.func,
-    onInit: PropTypes.func,
-    async: PropTypes.func,
-  };
+  static propTypes = NuomiPropTypes;
 
   static defaultProps = {
     id: '',

@@ -1,16 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction, isObject } from '../utils';
 import nuomi, { getDefaultProps } from '../core/nuomi';
 import { blockData } from '../core/router';
+import { RoutePropTypes } from './propTypes';
 
 class RouteCore extends React.PureComponent {
-  static propTypes = {
-    async: PropTypes.func,
-    onEnter: PropTypes.func,
-  };
+  static propTypes = RoutePropTypes;
 
   static contextType = RouterContext;
 

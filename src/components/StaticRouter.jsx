@@ -1,22 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { clearStore } from '../core/redux/store';
 import Router from './Router';
 import { RouterContext } from './Context';
 import { noop, isString } from '../utils';
 import parser from '../utils/parser';
+import { StaticRouterPropTypes } from './propTypes';
 
 class StaticRouter extends React.Component {
+  static propTypes = StaticRouterPropTypes;
+
   static defaultProps = {
     basename: '/',
     location: {},
     context: {},
-  };
-
-  static propTypes = {
-    basename: PropTypes.string,
-    location: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    context: PropTypes.object,
   };
 
   constructor(...args) {

@@ -1,23 +1,9 @@
-import PropTypes from 'prop-types';
 import BaseNuomi from './BaseNuomi';
 import { isFunction, isObject } from '../utils';
+import { RoutePropTypes } from './propTypes';
 
 class BaseRoute extends BaseNuomi {
-  static propTypes = {
-    id: PropTypes.string,
-    reload: PropTypes.bool,
-    state: PropTypes.object,
-    data: PropTypes.object,
-    store: PropTypes.object,
-    location: PropTypes.object,
-    reducers: PropTypes.objectOf(PropTypes.func),
-    effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    render: PropTypes.func,
-    onEnter: PropTypes.func,
-    onInit: PropTypes.func,
-    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    onLeave: PropTypes.func,
-  };
+  static propTypes = RoutePropTypes;
 
   componentDidUpdate(prevProps) {
     const { props } = this;
