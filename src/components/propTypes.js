@@ -45,7 +45,7 @@ export const StaticRouterPropTypes = {
 
 export const LinkPropTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   reload: PropTypes.bool,
   replace: PropTypes.bool,
 };

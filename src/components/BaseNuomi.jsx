@@ -23,7 +23,6 @@ export default class BaseNuomi extends React.PureComponent {
     super(...args);
     this.unListener = null;
     this.effects = null;
-    this.contextValue = { nuomiProps: this.props };
     this.initialize();
   }
 
@@ -220,7 +219,7 @@ export default class BaseNuomi extends React.PureComponent {
     const childrenContent = props.children;
     const renderContent = props.render ? props.render() : null;
     return childrenContent || renderContent ? (
-      <NuomiContext.Provider value={this.contextValue}>
+      <NuomiContext.Provider value={{ nuomiProps: this.props }}>
         {renderContent}
         {childrenContent}
       </NuomiContext.Provider>

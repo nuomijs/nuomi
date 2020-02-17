@@ -1,5 +1,9 @@
 # 更新日志：
 
+## 0.8.1 (2020-02-17)
+* 修复path改变nuomiProps.location不变问题 [#6](https://github.com/nuomijs/nuomi/issues/6)
+* 更新ts声明文件，增加Link、NavlLink组件上个版本新增属性支持
+
 ## 0.8.0 (2020-02-16)
 * Route组件支持嵌套
 ```js
@@ -27,6 +31,7 @@ const routes = [{
   <ShapeRoute routes={routes} />
 </Router>
 ```
+* Link组件新增data、replace属性
 * NuomiRoute组件增加path属性
 * path匹配规则优化，此优化影响Route与NuomiRoute组件path属性
 ```
