@@ -12,6 +12,6 @@ export default {
     return new Effects(this);
   },
   render() {
-    return <Layout />;
+    return <Layout>{this.children}</Layout>;
   },
 };

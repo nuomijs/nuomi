@@ -1,5 +1,9 @@
 # 更新日志：
 
+## 0.8.2 (2020-02-20)
+* 修复Route children重复渲染问题 [#8](https://github.com/nuomijs/nuomi/issues/8)
+* 修复ShapeRoute动态渲染问题 [#7](https://github.com/nuomijs/nuomi/issues/7)
+
 ## 0.8.1 (2020-02-17)
 * 修复path改变nuomiProps.location不变问题 [#6](https://github.com/nuomijs/nuomi/issues/6)
 * 更新ts声明文件，增加Link、NavlLink组件上个版本新增属性支持

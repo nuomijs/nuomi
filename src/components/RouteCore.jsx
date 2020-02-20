@@ -220,7 +220,7 @@ export default class RouteCore extends React.PureComponent {
   }
 
   render() {
-    const { location, cache } = this.props;
+    const { location, cache, children } = this.props;
     const { nuomiProps, visible, loaded } = this.state;
     const { data, reload = nuomiProps.reload } = location;
     this.restoreData();
@@ -228,7 +228,11 @@ export default class RouteCore extends React.PureComponent {
       this.setData(data);
     }
     if (cache === true || (loaded && visible)) {
-      const baseRoute = <BaseRoute {...nuomiProps} reload={reload} location={location} />;
+      const baseRoute = (
+        <BaseRoute {...nuomiProps} reload={reload} location={location}>
+          {children}
+        </BaseRoute>
+      );
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">

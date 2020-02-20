@@ -1,7 +1,7 @@
 import React from 'react';
 import { useConnect } from 'nuomi';
 
-const Layout = () => {
+const Layout = ({ children }) => {
   const [{ username, password, loadings }, dispatch] = useConnect();
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -37,10 +37,10 @@ const Layout = () => {
         Password：
         <input type="password" value={password} name="password" onChange={onChange} />
       </p>
-      账号密码：nuomi
       <p>
         <button onClick={login}>{loadings.$login ? '正在登录...' : '登录'}</button>
       </p>
+      {children}
     </div>
   );
 };
