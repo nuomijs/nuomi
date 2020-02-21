@@ -16,7 +16,12 @@ export default {
       type: 'initData',
     });
   },
-  // onLeave(leave) {
-  //   return true;
-  // },
+  onLeave(leave) {
+    setTimeout(() => {
+      if (window.confirm('您确定要离开吗')) {
+        leave();
+      }
+    });
+    return false;
+  },
 };

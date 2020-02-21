@@ -1,14 +1,16 @@
 import { isObject, isString } from './index';
 
-function replacePath(path) {
+export function normalizePath(path) {
   return `/${path}`
     // /a//b//c => /a/b/c
     .replace(/\/{2,}/g, '/')
     // /a/b/c/ => /a/b/c
-    .replace(/([^/])\/$/, '$1');
+    .replace(/([^/])\/$/, '$1')
+    // /a/***/b/*** => /a/*/b/*
+    .replace(/\*{2,}/g, '*');
 }
 
-function toRegexp(path) {
+export function pathToRegexp(path) {
   const regexpPath = path
   // ( => (?:
   // (?: => (?:
@@ -24,7 +26,35 @@ function toRegexp(path) {
   return new RegExp(`^${regexpPath}\\/?$`, 'i');
 }
 
-function parser(path) {
+export function restorePath(object) {
+  if (isString(object)) {
+    return object;
+  }
+  let path = '';
+  const { pathname, query, search, url } = object;
+  if (!!url && isString(url)) {
+    path = url;
+  } else if (!!pathname && isString(pathname)) {
+    path = pathname;
+    if (!!search && isString(search)) {
+      if (search.indexOf('?') !== 0) {
+        path += `?${search}`;
+      } else {
+        path += search;
+      }
+    } else if (isObject(query)) {
+      path += '?';
+      const querys = [];
+      Object.keys(query).forEach((key) => {
+        querys.push(`${key}=${query[key]}`);
+      });
+      path += querys.join('&');
+    }
+  }
+  return path;
+}
+
+export default function parser(path) {
   let pathname = path;
   let url = '';
   let hash = '';
@@ -50,7 +80,7 @@ function parser(path) {
       });
     pathname = pathname.substr(0, searchIndex);
   }
-  pathname = replacePath(pathname);
+  pathname = normalizePath(pathname);
   url = pathname + search + hash;
   return {
     pathname,
@@ -61,44 +91,3 @@ function parser(path) {
     params,
   };
 }
-
-function restore(object) {
-  if (isString(object)) {
-    return object;
-  }
-  let path = '';
-  const { pathname, params, query, search, url } = object;
-  if (!!url && isString(url)) {
-    path = url;
-  } else if (!!pathname && isString(pathname)) {
-    path = pathname;
-    // if (isObject(params)) {
-    //   Object.values(params).forEach((param) => {
-    //     path += `/${param}`;
-    //   });
-    // }
-    if (!!search && isString(search)) {
-      if (search.indexOf('?') !== 0) {
-        path += `?${search}`;
-      } else {
-        path += search;
-      }
-    } else if (isObject(query)) {
-      path += '?';
-      const querys = [];
-      Object.keys(query).forEach((key) => {
-        querys.push(`${key}=${query[key]}`);
-      });
-      path += querys.join('&');
-    }
-  }
-  return path;
-}
-
-parser.replacePath = replacePath;
-
-parser.toRegexp = toRegexp;
-
-parser.restore = restore;
-
-export default parser;

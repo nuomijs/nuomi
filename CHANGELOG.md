@@ -1,5 +1,11 @@
 # 更新日志：
 
+## 0.8.3 (2020-02-21)
+* Route组件reload属性增加null值，设置为null后路由无法刷新
+* 修复Redirect组件from属性值不支持path规则问题
+* 修复Nuomi组件无法动态设置children问题
+* 修复Route path属性无法动态设置问题
+
 ## 0.8.2 (2020-02-20)
 * 修复Route children重复渲染问题 [#8](https://github.com/nuomijs/nuomi/issues/8)
 * 修复ShapeRoute动态渲染问题 [#7](https://github.com/nuomijs/nuomi/issues/7)

@@ -3,7 +3,7 @@ import { clearStore } from '../core/redux/store';
 import Router from './Router';
 import { RouterContext } from './Context';
 import { noop, isString } from '../utils';
-import parser from '../utils/parser';
+import parser, { normalizePath } from '../utils/parser';
 import { StaticRouterPropTypes } from './propTypes';
 
 export default class StaticRouter extends React.Component {
@@ -30,7 +30,7 @@ export default class StaticRouter extends React.Component {
     return {
       search,
       hash,
-      pathname: parser.replacePath(pathname),
+      pathname: normalizePath(pathname),
       replace: noop,
     };
   }

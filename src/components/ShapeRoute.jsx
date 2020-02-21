@@ -9,8 +9,9 @@ import Route from './Route';
 import NuomiRoute from './NuomiRoute';
 import Redirect from './Redirect';
 
-class Shape extends React.PureComponent {
+class ShapeComponent extends React.PureComponent {
   static propTypes = ShapeRoutePropTypes;
+  static defaultProps = { routes: [] };
 
   getKey(key, i) {
     if (key) {
@@ -54,27 +55,21 @@ class Shape extends React.PureComponent {
 
   render() {
     const { routes } = this.props;
-    const components = this.getComponents(routes);
-    return <React.Fragment>{components}</React.Fragment>;
+    warning(routes.length, 'routes不能是空数组');
+    return this.getComponents(routes);
   }
 }
 
-export default class ShapeRoute extends React.Component {
-  static propTypes = ShapeRoutePropTypes;
+const ShapeRoute = (props) => {
+  return (
+    <RouterContext.Consumer>
+      {(context) => {
+        invariant(context, '不允许在 <Router> 外部使用 <ShapeRoute>');
 
-  static defaultProps = { routes: [] };
+        return <ShapeComponent {...props} />;
+      }}
+    </RouterContext.Consumer>
+  );
+};
 
-  static contextType = RouterContext;
-
-  constructor(...args) {
-    super(...args);
-    const { location } = this.context;
-    invariant(!!location, '不允许在 <Router> 外部使用 <ShapeRoute>');
-  }
-
-  render() {
-    const { routes } = this.props;
-    warning(!!routes.length, 'routes不能是空数组');
-    return <Shape {...this.props} />;
-  }
-}
+export default ShapeRoute;

@@ -2,17 +2,14 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
-import router, { savePath, removePath } from '../core/router';
+import router from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 
 export default class Route extends React.PureComponent {
   static propTypes = RoutePropTypes;
-
   static defaultProps = {
-    id: '',
     path: '',
-    reload: false,
     state: {},
     data: {},
     reducers: {},
@@ -24,17 +21,13 @@ export default class Route extends React.PureComponent {
     this.routeTempData = {};
     this.routeComponent = null;
     this.wrappers = [];
-    const { path } = this.props;
-    savePath(path);
   }
 
   componentWillUnmount() {
-    const { path } = this.props;
     // 嵌套路由时防止子路由被销毁后再创建无法匹配问题
     if (this.context && this.context.matched === this) {
       this.context.matched = null;
     }
-    removePath(path);
   }
 
   render() {
@@ -43,41 +36,45 @@ export default class Route extends React.PureComponent {
     return (
       <RouterContext.Consumer>
         {(context) => {
-          this.context = context;
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
-          const routeCoreContextValue = {
+
+          this.context = context;
+          const { location } = context;
+          const matchLocation = router.matchPath(location, path);
+          const match = matchLocation !== false;
+
+          // context.matched 表示同一个上下文中，多个路由只匹配一个
+          if (!match || (context.matched && context.matched !== this)) {
+            // 设置了cache没有匹配路由，不销毁，只隐藏
+            if (cache === true && this.routeComponent !== null) {
+              return this.routeComponent;
+            }
+            return null;
+          }
+
+          this.routeComponent = null;
+          const contextValue = {
             ...context,
+            matched: null,
             wrappers: context.childrenWrappers || context.wrappers,
             childrenWrappers: this.wrappers,
             routeTempData: this.routeTempData,
           };
-          const { location } = context;
-          const matchResult = router.matchPath(location, path);
-          let match = matchResult !== false;
-          // context.matched 表示同一个上下文中，多个路由只匹配一个
-          if (context.matched && context.matched !== this) {
-            match = false;
-          }
-          // 设置了wrapper没有匹配路由，不销毁，只隐藏
-          if (cache === true && this.routeComponent !== null && !match) {
-            return this.routeComponent;
-          }
 
-          // 初始化返回值
-          this.routeComponent = null;
           if (match) {
-            context.matched = this; // 解决Route在更新时不匹配问题
+            context.matched = this;
             this.routeComponent = (
-              <RouterContext.Provider value={routeCoreContextValue}>
+              <RouterContext.Provider value={contextValue}>
                 <RouteCore
                   {...this.props}
                   cache={cache}
-                  location={matchResult || location}
+                  location={matchLocation}
                   store={this.store}
                 />
               </RouterContext.Provider>
             );
           }
+
           return this.routeComponent;
         }}
       </RouterContext.Consumer>

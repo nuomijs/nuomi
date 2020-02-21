@@ -20,7 +20,7 @@ export const createReducer = (key, reducer) => {
 };
 
 export const removeReducer = (key) => {
-  if (key) {
+  if (reducers[key]) {
     delete reducers[key];
     setStore(key, null);
     replaceReducer();

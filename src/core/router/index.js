@@ -1,6 +1,6 @@
 import warning from 'warning';
 import { isFunction, isObject } from '../../utils';
-import parser from '../../utils/parser';
+import parser, { pathToRegexp, normalizePath, restorePath } from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
 import { isString } from '../../utils';
 
@@ -103,6 +103,7 @@ function routerEventListener() {
         }
       }, (url) => {
         allowCallListener = false;
+        blockData.toLocation = null;
         replace(url);
       }, blockData.toLocation);
     } else {
@@ -114,7 +115,7 @@ function routerEventListener() {
 }
 
 function combinePath(path = '') {
-  return parser.replacePath(`${options.basename}/${parser.restore(path)}`);
+  return normalizePath(`${options.basename}/${restorePath(path)}`);
 }
 
 function locationHandle(...args) {
@@ -231,12 +232,20 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function matchPath(location, path) {
+function match(location, path, returnLocation) {
   const { pathname } = location;
-  const normalPath = parser.replacePath(path);
-  const pathRegexp = pathRegexps[normalPath];
-  let pathnameMatch;
-  if (pathRegexp && !!(pathnameMatch = pathname.match(pathRegexp))) {
+  const normalPath = normalizePath(path);
+  let pathRegexp = pathRegexps[normalPath];
+
+  if (!pathRegexp) {
+    pathRegexp = pathToRegexp(normalPath);
+    pathRegexps[normalPath] = pathRegexp;
+  }
+
+  const pathnameMatch = pathname.match(pathRegexp);
+  const isMatch = !!pathnameMatch;
+
+  if (isMatch && returnLocation) {
     const pathMatch = path.match(/\/:(\w+)/g);
     if (pathMatch) {
       const params = {};
@@ -254,36 +263,27 @@ function matchPath(location, path) {
     }
     return location;
   }
-  return false;
+
+  return isMatch;
 }
 
-function savePath(path) {
-  const normalPath = parser.replacePath(path);
-  if (!pathRegexps[normalPath]) {
-    pathRegexps[normalPath] = parser.toRegexp(normalPath);
-    return true;
-  }
-  return false;
-}
-
-function removePath(path) {
-  delete pathRegexps[parser.replacePath(path)];
+function matchPath(...args) {
+  return match(...args, true);
 }
 
 function mergePath(...args) {
   let paths = args.filter((path) => path && isString(path));
   const maxIndex = paths.length - 1;
   paths = paths.map((path, index) => index < maxIndex ? path.replace(/\*$/, '') : path);
-  return parser.replacePath(paths.join('/'));
+  return normalizePath(paths.join('/'));
 }
 
 export {
   getLocation,
   createRouter,
   blockData,
-  savePath,
-  removePath,
   combinePath,
+  match,
 };
 
 export default {

@@ -5,7 +5,6 @@ import { NuomiContext } from './Context';
 const withNuomi = (WrapperComponent) => {
   return class WithNuomi extends React.PureComponent {
     static contextType = NuomiContext;
-
     static displayName = `withNuomi(${WrapperComponent.displayName || WrapperComponent.name})`;
 
     constructor(...args) {

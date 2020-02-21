@@ -15,7 +15,7 @@ export interface Props {
 export interface RouteProps extends Props {
   path?: string;
   cache?: boolean | 'state';
-  reload?: boolean;
+  reload?: boolean | null;
   readonly location?: Location;
   onEnter?: (enter: () => void) => boolean;
   onChange?: () => void;

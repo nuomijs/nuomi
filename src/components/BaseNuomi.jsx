@@ -16,7 +16,6 @@ import { NuomiPropTypes } from './propTypes';
 
 export default class BaseNuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
-
   static nuomiId = 0;
 
   constructor(...args) {
@@ -216,7 +215,7 @@ export default class BaseNuomi extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const children = props.render ? props.render() : props.children;
+    const children = props.render ? props.render(props.children) : props.children;
     return children ? (
       <NuomiContext.Provider value={{ nuomiProps: this.props }}>{children}</NuomiContext.Provider>
     ) : null;

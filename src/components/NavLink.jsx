@@ -6,14 +6,14 @@ import { combinePath } from '../core/router';
 import { isFunction } from '../utils';
 import { RouterContext } from './Context';
 import router from '../core/router';
-import parser from '../utils/parser';
+import parser, { restorePath } from '../utils/parser';
 
 class NavLink extends Link {
   static propTypes = NavLinkPropTypes;
-
   static defaultProps = {
     to: '',
     path: '',
+    activeClassName: 'active',
     data: null,
     replace: false,
     reload: false,
@@ -21,7 +21,7 @@ class NavLink extends Link {
 
   isActive(location) {
     const { isActive, to, path } = this.props;
-    const { pathname } = parser(parser.restore(to));
+    const { pathname } = parser(restorePath(to));
     const match = router.matchPath(location, path || pathname);
     if (isFunction(isActive)) {
       return isActive(match, location) !== false;

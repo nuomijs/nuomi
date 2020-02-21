@@ -15,7 +15,6 @@ const connect = (...args) => {
   return (WrapperComponent) => {
     return class Connect extends React.PureComponent {
       static contextType = NuomiContext;
-
       static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
 
       constructor(...arg) {

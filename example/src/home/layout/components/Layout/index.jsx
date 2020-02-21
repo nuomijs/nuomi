@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, withNuomi, Link, Route, Redirect, router } from 'nuomi';
+import { connect, withNuomi, Link, NavLink, Route, Redirect, router } from 'nuomi';
 import routes from '../../../public/routes';
 
 const style = {
@@ -8,24 +8,25 @@ const style = {
 
 class Layout extends React.PureComponent {
   render() {
-    const { username, loadings, nuomiProps } = this.props;
+    const { username, loadings, nuomiProps, children } = this.props;
     return loadings.$getInfo === true ? (
       '正在初始化...'
     ) : (
       <div>
         <div>
-          <Link to={router.mergePath(nuomiProps.path, '/')} style={style}>
+          <NavLink to={router.mergePath(nuomiProps.path, '/')} style={style}>
             首页
-          </Link>
-          <Link to={router.mergePath(nuomiProps.path, '/list')} style={style}>
+          </NavLink>
+          <NavLink to={router.mergePath(nuomiProps.path, '/list')} style={style}>
             列表
-          </Link>
-          <Link to={router.mergePath(nuomiProps.path, '/detail')} style={style}>
+          </NavLink>
+          <NavLink to={router.mergePath(nuomiProps.path, '/detail')} style={style}>
             详情
-          </Link>
+          </NavLink>
           <span style={{ marginLeft: 20 }}>欢迎您，{username}！</span>
         </div>
         <div>
+          {children}
           {/* {routes.map((route) => (
             <Route key={route.path} {...route} />
           ))}

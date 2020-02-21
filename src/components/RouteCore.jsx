@@ -8,7 +8,6 @@ import { RoutePropTypes } from './propTypes';
 
 export default class RouteCore extends React.PureComponent {
   static propTypes = RoutePropTypes;
-
   static contextType = RouterContext;
 
   constructor(...args) {
@@ -220,19 +219,23 @@ export default class RouteCore extends React.PureComponent {
   }
 
   render() {
-    const { location, cache, children } = this.props;
+    const { location, cache, path, children } = this.props;
     const { nuomiProps, visible, loaded } = this.state;
-    const { data, reload = nuomiProps.reload } = location;
-    this.restoreData();
-    if (isObject(data)) {
-      this.setData(data);
+    let { reload } = nuomiProps;
+
+    if (reload !== null && location.reload !== undefined) {
+      reload = location.reload;
     }
+
+    const props = { location, path, cache, reload, children };
+
+    this.restoreData();
+    if (isObject(location.data)) {
+      this.setData(location.data);
+    }
+
     if (cache === true || (loaded && visible)) {
-      const baseRoute = (
-        <BaseRoute {...nuomiProps} reload={reload} location={location}>
-          {children}
-        </BaseRoute>
-      );
+      const baseRoute = <BaseRoute {...nuomiProps} {...props} />;
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">
@@ -242,6 +245,7 @@ export default class RouteCore extends React.PureComponent {
       }
       return baseRoute;
     }
+
     return null;
   }
 }

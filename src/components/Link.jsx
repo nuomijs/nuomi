@@ -2,11 +2,10 @@ import React from 'react';
 import router, { combinePath } from '../core/router';
 import { LinkPropTypes } from './propTypes';
 import { isFunction } from '../utils';
-import parser from '../utils/parser';
+import { normalizePath } from '../utils/parser';
 
 export class Link extends React.PureComponent {
   static propTypes = LinkPropTypes;
-
   static defaultProps = {
     to: '',
     data: null,
@@ -20,7 +19,7 @@ export class Link extends React.PureComponent {
     if (isFunction(onClick) && onClick(e) === false) {
       return;
     }
-    router[replace ? 'replace' : 'location'](parser.replacePath(to), data, reload);
+    router[replace ? 'replace' : 'location'](normalizePath(to), data, reload);
   };
 
   render() {

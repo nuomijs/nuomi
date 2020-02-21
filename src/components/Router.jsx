@@ -7,13 +7,11 @@ import { RouterPropTypes } from './propTypes';
 
 export default class Router extends React.PureComponent {
   static propTypes = RouterPropTypes;
-
+  static contextType = RouterContext;
   static defaultProps = {
     basename: '/',
     type: 'hash',
   };
-
-  static contextType = RouterContext;
 
   constructor(...args) {
     super(...args);
@@ -60,9 +58,8 @@ export default class Router extends React.PureComponent {
     const { staticContext } = this.context || {};
     const contextValue = {
       location,
-      matched: null,
-      isLeave: false,
       staticContext,
+      matched: null,
       wrappers: this.wrappers,
     };
     return <RouterContext.Provider value={contextValue}>{children}</RouterContext.Provider>;

@@ -30,8 +30,8 @@ class App extends React.Component {
         },
         {
           path: '/home',
-          route: false,
           ...home,
+          route: false,
           children: [...routes, { path: '*', children: '404' }],
         },
         {

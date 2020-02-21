@@ -6,9 +6,7 @@ import { NuomiPropTypes } from './propTypes';
 
 export default class Nuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
-
   static defaultProps = {
-    id: '',
     state: {},
     data: {},
     reducers: {},
@@ -60,8 +58,13 @@ export default class Nuomi extends React.PureComponent {
 
   render() {
     const { loaded, nuomiProps } = this.state;
+    const { children } = this.props;
     if (loaded) {
-      return <BaseNuomi {...nuomiProps} store={this.store} />;
+      return (
+        <BaseNuomi {...nuomiProps} store={this.store}>
+          {children}
+        </BaseNuomi>
+      );
     }
     return null;
   }

@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 
 export default {
   id: 'global',
+  reload: null,
   state: {
     username: '',
   },
@@ -12,7 +13,7 @@ export default {
     return new Effects(this);
   },
   render() {
-    return window.sessionStorage.getItem('isLogin') ? <Layout /> : <Redirect to="/" />;
+    return window.sessionStorage.getItem('isLogin') ? <Layout>{this.children}</Layout> : <Redirect to="/" />;
   },
   onInit() {
     this.store.dispatch({
