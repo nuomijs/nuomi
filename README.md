@@ -3,7 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/nuomi)](https://npmjs.org/package/nuomi)
 [![NPM downloads](https://img.shields.io/npm/dm/nuomi)](https://npmjs.org/package/nuomi)
 
-`nuomi` 是基于 [react](https://github.com/facebook/react) 和 [redux](https://github.com/reduxjs/redux) 开发的一套数据流解决方案，也可以看成轻量级业务框架，它可以规范和简化使用 `redux` 进行状态管理的开发流程，与 `路由` 完美结合，使用者可以更高效开发单页应用。
+`nuomi` 是基于 [react](https://github.com/facebook/react) 和 [redux](https://github.com/reduxjs/redux) 开发的一套数据流解决方案，也可以看成轻量级业务框架，它可以规范和简化使用 `redux` 进行状态管理的开发流程，与 `路由` 完美结合可以更高效开发单页应用。
 
 ## 特性
 
