@@ -7,8 +7,8 @@ export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
 
   componentWillUnmount() {
-    const { store, id, cache } = this.props;
-    if (cache !== 'state' || !id) {
+    const { store, cache } = this.props;
+    if (cache !== 'state' && cache !== true) {
       removeReducer(store.id);
       store.id = null;
     }

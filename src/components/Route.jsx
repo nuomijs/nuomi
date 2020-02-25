@@ -5,6 +5,7 @@ import RouteCore from './RouteCore';
 import router from '../core/router';
 import { getDefaultProps } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
+import { removeReducer } from '../core/redux/reducer';
 
 export default class Route extends React.PureComponent {
   static propTypes = RoutePropTypes;
@@ -24,6 +25,7 @@ export default class Route extends React.PureComponent {
   }
 
   componentWillUnmount() {
+    removeReducer(this.store.id);
     // 嵌套路由时防止子路由被销毁后再创建无法匹配问题
     if (this.context && this.context.matched === this) {
       this.context.matched = null;

@@ -41,7 +41,7 @@ export default (...args) => {
       if (isObject(onChange)) {
         currentObject.onChange = { ...currentObject.onChange, ...onChange };
       } else if (isFunction(onChange)) {
-        currentObject.onChange = { ...currentObject.onChange, _onChange: onChange };
+        currentObject.onChange = { ...currentObject.onChange, __ONCHANGE__: onChange };
       } else {
         currentObject.onChange = onChange;
       }

@@ -33,13 +33,14 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   getId() {
-    const { id } = this.props;
-    // 没有定义id或者id已经被使用
-    if (!id || !!getStore(id)) {
-      BaseNuomi.nuomiId += 1;
-      const newId = `nuomi_${BaseNuomi.nuomiId}`;
-      warning(!id, `storeId：${id} 已被使用，将由 ${newId} 替代`);
-      return newId;
+    const { id, store } = this.props;
+    if (store.id) {
+      return store.id;
+    }
+    if (!id) {
+      return `@@nuomi_${++BaseNuomi.nuomiId}`;
+    } else if (getStore(id)) {
+      throw new Error(`storeId：${id} 已被定义，请重新命名！`);
     }
     return id;
   }
@@ -84,19 +85,21 @@ export default class BaseNuomi extends React.PureComponent {
         this.effects = this.getEffects();
       }
 
+      const effects = this.effects;
+
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = type.indexOf('/');
       if (splitIndex === -1) {
-        if (isObject(this.effects) && isFunction(this.effects[type])) {
+        if (isObject(effects) && isFunction(effects[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
           const loadingType = `${store.id}/_updateLoading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
-            const effectsProxy = new EffectsProxy(this.effects, {
+            const effectsProxy = new EffectsProxy(effects, {
               // name是当前调用的方法或者属性名
               get: (target, name) => {
-                const effect = this.effects[name];
+                const effect = effects[name];
                 // $开头的方法进行loading特殊处理
                 if (isFunction(effect) && name.indexOf('$') === 0) {
                   // 获取上一次调用的方法
@@ -190,7 +193,7 @@ export default class BaseNuomi extends React.PureComponent {
         }
         warning(
           false,
-          `未定义actionType为 ${type} 的reducer，如果你是想调用effects中的方法，请使用
+          `未定义actionType为 ${type} 的 reducer，如果你想调用 effects 中的方法，请使用
           \nstore.getStore('${store.id}').dispatch({\n  type: '${key}',\n  payload,\n})`,
         );
       }
