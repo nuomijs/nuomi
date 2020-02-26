@@ -104,7 +104,7 @@ export default class RouteCore extends React.PureComponent {
       routeTempData.prev = {};
       keys.forEach((key) => {
         if (dataKeys.includes(key)) {
-          routeTempData.prev[key] = dataKeys[key];
+          routeTempData.prev[key] = data[key];
         }
         data[key] = locationData[key];
       });
@@ -130,7 +130,7 @@ export default class RouteCore extends React.PureComponent {
       const prevDataKeys = Object.keys(routeTempData.prev);
       if (prevDataKeys.length) {
         prevDataKeys.forEach((key) => {
-          data[key] = this.oldData[key];
+          data[key] = routeTempData.prev[key];
         });
         routeTempData.prev = null;
       }

@@ -34,34 +34,34 @@ class App extends React.Component {
           route: false,
           children: [...routes, { path: '*', children: '404' }],
         },
-        {
-          to: '/',
-        },
+        // {
+        //   to: '/',
+        // },
       ],
     };
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        routes: [
-          {
-            path: '/',
-            ...login,
-            children: '账号密码：nuomi',
-          },
-          {
-            path: '/home',
-            route: false,
-            ...home,
-            children: [...routes, { path: '*', children: '404' }],
-          },
-          {
-            to: '/',
-          },
-        ],
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({
+    //     routes: [
+    //       {
+    //         path: '/a',
+    //         ...login,
+    //         children: '账号密码：nuomi',
+    //       },
+    //       {
+    //         path: '/home',
+    //         route: false,
+    //         ...home,
+    //         children: [...routes, { path: '*', children: '404' }],
+    //       },
+    //       // {
+    //       //   to: '/a',
+    //       // },
+    //     ],
+    //   });
+    // }, 1000);
   }
 
   render() {
