@@ -1,7 +1,9 @@
-import { useReducer, useContext, useEffect, useRef } from 'react';
+import {
+  useReducer, useContext, useEffect, useRef,
+} from 'react';
 import invariant from 'invariant';
 import { NuomiContext } from '../components/Context';
-import { default as rootStore, getStore } from '../core/redux/store';
+import globalStore, { getStore } from '../core/redux/store';
 import { isFunction, shallowEqual } from '../utils';
 
 const useConnect = (callback) => {
@@ -14,11 +16,12 @@ const useConnect = (callback) => {
   // 用于记忆旧状态
   const selectedState = useRef();
   // 获取最新状态
+  // eslint-disable-next-line consistent-return
   const getState = () => {
     if (getStore(store.id)) {
       if (isFunction(callback)) {
         // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
-        return callback(store.getState(), rootStore.getState());
+        return callback(store.getState(), globalStore.getState());
       }
       return store.getState();
     }
@@ -29,7 +32,7 @@ const useConnect = (callback) => {
 
   useEffect(() => {
     // 订阅状态变化触发组件更新
-    const unSubcribe = rootStore.subscribe(() => {
+    const unSubcribe = globalStore.subscribe(() => {
       const newState = getState();
       // 浅比较旧状态与新状态，发生变化则更新组件
       if (shallowEqual(state, newState)) {

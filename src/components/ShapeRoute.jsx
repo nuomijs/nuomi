@@ -9,16 +9,17 @@ import Route from './Route';
 import NuomiRoute from './NuomiRoute';
 import Redirect from './Redirect';
 
+const getKey = (key, i) => {
+  if (key) {
+    return `${key}_${i}`;
+  }
+  return i;
+};
+
 class ShapeComponent extends React.PureComponent {
   static propTypes = ShapeRoutePropTypes;
-  static defaultProps = { routes: [] };
 
-  getKey(key, i) {
-    if (key) {
-      return `${key}_${i}`;
-    }
-    return i;
-  }
+  static defaultProps = { routes: [] };
 
   getComponents(routes, parentPath) {
     const conponents = [];
@@ -28,7 +29,9 @@ class ShapeComponent extends React.PureComponent {
         if (React.isValidElement(obj)) {
           conponents.push(React.cloneElement(obj, { key: this.getKey(obj.key, i) }));
         } else {
-          const { key, route, children: childrenRoutes, ...props } = obj;
+          const {
+            key, route, children: childrenRoutes, ...props
+          } = obj;
           const newProps = { ...props };
           const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
           let Component = Route;
@@ -44,7 +47,7 @@ class ShapeComponent extends React.PureComponent {
             ? this.getComponents(childrenRoutes, newProps.path)
             : childrenRoutes;
           conponents.push(
-            <Component key={this.getKey(key, i)} {...newProps}>
+            <Component key={getKey(key, i)} {...newProps}>
               {children}
             </Component>,
           );
@@ -60,16 +63,14 @@ class ShapeComponent extends React.PureComponent {
   }
 }
 
-const ShapeRoute = (props) => {
-  return (
-    <RouterContext.Consumer>
-      {(context) => {
-        invariant(context, '不允许在 <Router> 外部使用 <ShapeRoute>');
+const ShapeRoute = (props) => (
+  <RouterContext.Consumer>
+    {(context) => {
+      invariant(context, '不允许在 <Router> 外部使用 <ShapeRoute>');
 
-        return <ShapeComponent {...props} />;
-      }}
-    </RouterContext.Consumer>
-  );
-};
+      return <ShapeComponent {...props} />;
+    }}
+  </RouterContext.Consumer>
+);
 
 export default ShapeRoute;

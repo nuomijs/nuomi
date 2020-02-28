@@ -1,20 +1,22 @@
 import React from 'react';
 import invariant from 'invariant';
 import { isFunction, isObject } from '../utils';
-import { default as rootStore, getStore } from '../core/redux/store';
+import globalStore, { getStore } from '../core/redux/store';
 import { NuomiContext } from './Context';
 
-const defaultMergeProps = (props, stateProps, dispatchProps) => {
-  return { ...props, ...stateProps, ...dispatchProps };
-};
+const defaultMergeProps = (props, stateProps, dispatchProps) => ({
+  ...props,
+  ...stateProps,
+  ...dispatchProps,
+});
 
 const connect = (...args) => {
   const [mapStateToProps, mapDispatch, merge, options] = args;
   const mapDispatchToProps = isFunction(mapDispatch) ? mapDispatch : () => {};
   const mergeProps = isFunction(merge) ? merge : defaultMergeProps;
-  return (WrapperComponent) => {
-    return class Connect extends React.PureComponent {
+  return (WrapperComponent) => class Connect extends React.PureComponent {
       static contextType = NuomiContext;
+
       static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
 
       constructor(...arg) {
@@ -32,7 +34,7 @@ const connect = (...args) => {
           // 初始化state
           this.state = this.getState();
           // 订阅更新状态
-          this.unSubcribe = rootStore.subscribe(() => {
+          this.unSubcribe = globalStore.subscribe(() => {
             if (this.mounted && getStore(nuomiProps.store.id)) {
               this.setState(this.getState());
             }
@@ -54,7 +56,7 @@ const connect = (...args) => {
 
       getState() {
         const { store } = this.context.nuomiProps;
-        const state = mapStateToProps(store.getState(), rootStore.getState());
+        const state = mapStateToProps(store.getState(), globalStore.getState());
         return isObject(state) ? state : {};
       }
 
@@ -79,7 +81,6 @@ const connect = (...args) => {
         };
         return <WrapperComponent {...props} />;
       }
-    };
   };
 };
 

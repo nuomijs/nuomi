@@ -23,7 +23,10 @@ class Layout extends React.PureComponent {
           <NavLink to={router.mergePath(nuomiProps.path, '/detail')} style={style}>
             详情
           </NavLink>
-          <span style={{ marginLeft: 20 }}>欢迎您，{username}！</span>
+          <span style={{ marginLeft: 20 }}>
+            欢迎您，
+            {username}！
+          </span>
         </div>
         <div>
           {children}

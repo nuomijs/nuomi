@@ -8,6 +8,7 @@ import { RoutePropTypes } from './propTypes';
 
 export default class RouteCore extends React.PureComponent {
   static propTypes = RoutePropTypes;
+
   static contextType = RouterContext;
 
   constructor(...args) {
@@ -33,10 +34,12 @@ export default class RouteCore extends React.PureComponent {
     const { wrappers } = this.context;
     const { current } = this.wrapperRef;
     const { loaded, nuomiProps } = this.state;
+
     if (current) {
       this.wrapper = current;
       wrappers.push(current);
     }
+
     // 路由加载后，隐藏所有wrapper
     this.hideWrapper();
     if (!loaded) {
@@ -63,6 +66,7 @@ export default class RouteCore extends React.PureComponent {
     const { wrappers } = this.context;
     const { location, cache } = this.props;
     const { current } = this.wrapperRef;
+
     // 清理wrapper
     if (cache !== true && this.wrapper) {
       this.removeWrapper();
@@ -91,11 +95,12 @@ export default class RouteCore extends React.PureComponent {
   }
 
   // 设置data临时数据，保存设置前的数据
-  setData(locationData) {
+  setTempData(locationData) {
     const { nuomiProps } = this.state;
     const { data } = nuomiProps;
     const { routeTempData } = this.context;
     const keys = Object.keys(locationData);
+
     if (keys.length) {
       const dataKeys = Object.keys(data);
       // 存储临时数据
@@ -115,6 +120,7 @@ export default class RouteCore extends React.PureComponent {
     const { nuomiProps } = this.state;
     const { data } = nuomiProps;
     const { routeTempData } = this.context;
+
     // 删除临时数据
     if (routeTempData.temp) {
       const tempDataKeys = Object.keys(routeTempData.temp);
@@ -125,6 +131,7 @@ export default class RouteCore extends React.PureComponent {
         routeTempData.temp = null;
       }
     }
+
     // 还原旧数据
     if (routeTempData.prev) {
       const prevDataKeys = Object.keys(routeTempData.prev);
@@ -160,6 +167,7 @@ export default class RouteCore extends React.PureComponent {
   }
 
   // 根据onEnter决定是否可以展示组件
+  // eslint-disable-next-line class-methods-use-this
   visibleHandler(nuomiProps, cb) {
     if (nuomiProps.onEnter) {
       if (
@@ -218,20 +226,33 @@ export default class RouteCore extends React.PureComponent {
     });
   }
 
-  render() {
-    const { location, cache, path, children } = this.props;
-    const { nuomiProps, visible, loaded } = this.state;
-    let { reload } = nuomiProps;
+  getNextProps() {
+    const { props } = this;
+    const { location } = props;
+    const nextProps = { location };
+    const { nuomiProps } = this.state;
 
-    if (reload !== null && location.reload !== undefined) {
-      reload = location.reload;
+    ['path', 'cache', 'reload', 'children'].forEach((value) => {
+      // 优先使用props
+      nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
+    });
+
+    if (nextProps.reload !== null && location.reload !== undefined) {
+      // 优先使用location.reload
+      nextProps.reload = location.reload;
     }
 
-    const props = { location, path, cache, reload, children };
+    return nextProps;
+  }
+
+  render() {
+    const props = this.getNextProps();
+    const { cache, location } = props;
+    const { nuomiProps, visible, loaded } = this.state;
 
     this.restoreData();
     if (isObject(location.data)) {
-      this.setData(location.data);
+      this.setTempData(location.data);
     }
 
     if (cache === true || (loaded && visible)) {

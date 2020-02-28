@@ -5,7 +5,9 @@ export default (...args) => {
   let currentObject = { ...object };
   if (isObject(newObject)) {
     const keys = Object.keys(newObject);
-    const { state, data, reducers, effects, onChange, ...rest } = newObject;
+    const {
+      state, data, reducers, effects, onChange, ...rest
+    } = newObject;
     currentObject = { ...currentObject, ...rest };
     if (isObject(state)) {
       const { loadings, ...restState } = state;

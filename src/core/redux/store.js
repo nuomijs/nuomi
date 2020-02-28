@@ -8,22 +8,17 @@ const initialiseState = {};
 let stores = {};
 let middlewares = [];
 let usedDispatch = false;
-const composeEnhancers =
-  /* eslint-disable no-underscore-dangle */
-  process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md#trace
-      globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
-    : compose;
+const composeEnhancers = process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
+  : compose;
 
-const rootStore = createStore(
+const globalStore = createStore(
   rootReducer,
   // eslint-disable-next-line no-return-assign
   composeEnhancers(applyMiddleware(() => middlewares, () => (usedDispatch = true))),
 );
 
-const getStore = (id) => {
-  return stores[id];
-};
+const getStore = (id) => stores[id];
 
 const setStore = (id, store) => {
   if (!stores[id]) {
@@ -35,12 +30,12 @@ const setStore = (id, store) => {
 
 const clearStore = () => {
   stores = {};
-  rootStore.replaceReducer(rootReducer);
+  globalStore.replaceReducer(rootReducer);
 };
 
-rootStore.getStore = getStore;
+globalStore.getStore = getStore;
 
-rootStore.applyMiddleware = (...args) => {
+globalStore.applyMiddleware = (...args) => {
   if (!usedDispatch) {
     middlewares = middlewares.concat(args.filter((middleware) => isFunction(middleware)));
   } else {
@@ -48,7 +43,7 @@ rootStore.applyMiddleware = (...args) => {
   }
 };
 
-rootStore.createState = (state = {}) => {
+globalStore.createState = (state = {}) => {
   if (isObject(state)) {
     Object.keys(state).forEach((key) => {
       if (!stores[key]) {
@@ -60,6 +55,8 @@ rootStore.createState = (state = {}) => {
 
 export const INITIALISE_STATE = '__NUOMI_INITIALISE_STATE__';
 
-export { getStore, setStore, clearStore, initialiseState };
+export {
+  getStore, setStore, clearStore, initialiseState,
+};
 
-export default rootStore;
+export default globalStore;

@@ -6,6 +6,7 @@ import { normalizePath } from '../utils/parser';
 
 export class Link extends React.PureComponent {
   static propTypes = LinkPropTypes;
+
   static defaultProps = {
     to: '',
     data: null,
@@ -15,7 +16,9 @@ export class Link extends React.PureComponent {
 
   onClick = (e) => {
     e.preventDefault();
-    const { to, reload, data, replace, onClick } = this.props;
+    const {
+      to, reload, data, replace, onClick,
+    } = this.props;
     if (isFunction(onClick) && onClick(e) === false) {
       return;
     }
@@ -23,7 +26,9 @@ export class Link extends React.PureComponent {
   };
 
   render() {
-    const { to, reload, data, replace, forwardRef, ...rest } = this.props;
+    const {
+      to, reload, data, replace, forwardRef, ...rest
+    } = this.props;
     return <a href={combinePath(to)} {...rest} onClick={this.onClick} ref={forwardRef} />;
   }
 }

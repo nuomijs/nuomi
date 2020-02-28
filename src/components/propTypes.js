@@ -63,5 +63,3 @@ export const RedirectPropTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   reload: PropTypes.bool,
 };
-
-

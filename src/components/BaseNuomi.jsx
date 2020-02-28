@@ -1,7 +1,7 @@
 import React from 'react';
 import warning from 'warning';
 import { createReducer, removeReducer } from '../core/redux/reducer';
-import rootStore, {
+import globalStore, {
   getStore,
   setStore,
   initialiseState,
@@ -16,6 +16,7 @@ import { NuomiPropTypes } from './propTypes';
 
 export default class BaseNuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
+
   static nuomiId = 0;
 
   constructor(...args) {
@@ -39,7 +40,8 @@ export default class BaseNuomi extends React.PureComponent {
     }
     if (!id) {
       return `@@nuomi_${++BaseNuomi.nuomiId}`;
-    } else if (getStore(id)) {
+    }
+    if (getStore(id)) {
       throw new Error(`storeId：${id} 已被定义，请重新命名！`);
     }
     return id;
@@ -85,7 +87,7 @@ export default class BaseNuomi extends React.PureComponent {
         this.effects = this.getEffects();
       }
 
-      const effects = this.effects;
+      const { effects } = this;
 
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = type.indexOf('/');
@@ -114,7 +116,7 @@ export default class BaseNuomi extends React.PureComponent {
                     loadingQueue.pop();
                   }
                   // 更新loading状态
-                  rootStore.dispatch({
+                  globalStore.dispatch({
                     type: loadingType,
                     payload: loadingPayload,
                   });
@@ -140,7 +142,7 @@ export default class BaseNuomi extends React.PureComponent {
               if (lastEffect) {
                 loadingPayload[lastEffect] = false;
               }
-              rootStore.dispatch({
+              globalStore.dispatch({
                 type: loadingType,
                 payload: loadingPayload,
               });
@@ -148,7 +150,7 @@ export default class BaseNuomi extends React.PureComponent {
           }
           // effects不存在就执行reducers中方法直接更新状态
         } else if (reducers[type] && store.id) {
-          return rootStore.dispatch({
+          return globalStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
@@ -170,7 +172,7 @@ export default class BaseNuomi extends React.PureComponent {
       }
     };
 
-    store.getState = () => rootStore.getState()[store.id] || props.state;
+    store.getState = () => globalStore.getState()[store.id] || props.state;
 
     setStore(store.id, store);
   }

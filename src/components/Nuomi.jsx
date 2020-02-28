@@ -6,6 +6,7 @@ import { NuomiPropTypes } from './propTypes';
 
 export default class Nuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
+
   static defaultProps = {
     state: {},
     data: {},

@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
   "repository": {
@@ -29,13 +29,16 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "cross-env": "^5.2.0",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.12.0",
@@ -51,7 +54,7 @@
     "clean": "rimraf lib",
     "test": "jest"
   },
-  "description": "``` npm i --save nuomi ```",
+  "description": "nuomi是基于react和redux开发的一套数据流解决方案，也可以看成轻量级业务框架，它可以规范和简化使用redux 进行状态管理的开发流程，与 路由 完美结合可以更高效开发单页应用。",
   "bugs": {
     "url": "https://github.com/nuomijs/nuomi/issues"
   },
@@ -62,8 +65,10 @@
   },
   "keywords": [
     "nuomi",
-    "redux",
     "nuomijs",
+    "nuomi-router",
+    "nuomi-redux",
+    "redux",
     "router"
   ]
 }

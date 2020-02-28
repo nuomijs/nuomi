@@ -7,7 +7,9 @@ import { RouterPropTypes } from './propTypes';
 
 export default class Router extends React.PureComponent {
   static propTypes = RouterPropTypes;
+
   static contextType = RouterContext;
+
   static defaultProps = {
     basename: '/',
     type: 'hash',

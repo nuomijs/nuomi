@@ -2,11 +2,7 @@
  * 检测类型方法
  * @param {String} type
  */
-export const isType = (type) => {
-  return (obj) => {
-    return {}.toString.call(obj) === `[object ${type}]`;
-  };
-};
+export const isType = (type) => (obj) => ({}.toString.call(obj) === `[object ${type}]`);
 
 /**
  * @fucntion 检测对象是否是函数
@@ -67,8 +63,8 @@ export const shallowEqual = (objA, objB) => {
   // 遍历检测比较对象属性值是否相同
   for (let i = 0; i < keysA.length; i++) {
     if (
-      !Object.prototype.hasOwnProperty.call(objB, keysA[i]) ||
-      !Object.is(objA[keysA[i]], objB[keysA[i]])
+      !Object.prototype.hasOwnProperty.call(objB, keysA[i])
+      || !Object.is(objA[keysA[i]], objB[keysA[i]])
     ) {
       return false;
     }

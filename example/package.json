@@ -24,6 +24,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.8.3"
+    "@babel/polyfill": "^7.8.3",
+    "nuomi-request": "^0.2.4"
   }
 }

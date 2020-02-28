@@ -1,7 +1,6 @@
-import createServices from '../../public/utils/createServices';
+import { createServices } from 'nuomi-request';
 import mock from './mock';
 
 export default createServices({
-  login: '/path/login:post',
-  ...mock,
-});
+  login: 'POST /path/login',
+}, mock);

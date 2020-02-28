@@ -29,52 +29,62 @@ class App extends React.Component {
           ...login,
         },
         {
+          path: '/a',
+          children: [{
+            path: '/b',
+            children: '11'
+          }],
+        },
+        {
           path: '/home',
           ...home,
           route: false,
           children: [...routes, { path: '*', children: '404' }],
         },
-        // {
-        //   to: '/',
-        // },
+        {
+          to: '/',
+        },
       ],
     };
   }
 
   componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({
-    //     routes: [
-    //       {
-    //         path: '/a',
-    //         ...login,
-    //         children: '账号密码：nuomi',
-    //       },
-    //       {
-    //         path: '/home',
-    //         route: false,
-    //         ...home,
-    //         children: [...routes, { path: '*', children: '404' }],
-    //       },
-    //       // {
-    //       //   to: '/a',
-    //       // },
-    //     ],
-    //   });
-    // }, 1000);
+    setTimeout(() => {
+      this.setState({
+        routes: [
+          {
+            path: '/',
+            ...login,
+            children: '账号密码：nuomi',
+          },
+          {
+            path: '/home',
+            route: false,
+            ...home,
+            children: [...routes, { path: '*', children: '404' }],
+          },
+          {
+            to: '/',
+          },
+        ],
+      });
+    }, 1000);
   }
 
   render() {
-    return (
-      <Router>
-        <ShapeRoute routes={this.state.routes} />
-        {/* <Route path="/" {...login} />
-        <NuomiRoute path="/home/*" {...home} /> */}
-        {/* <Route path="/home/*" {...home} /> */}
-        {/* <Redirect to="/" /> */}
-      </Router>
-    );
+    return <ShapeRoute routes={this.state.routes} />;
   }
+}
+
+{
+  /* <Route path="/" {...login} />
+        <NuomiRoute path="/home/*" {...home} /> */
+}
+{
+  /* <Route path="/home/*" {...home} /> */
+}
+{
+  /* <Redirect to="/" /> */
 }
 
 export default App;

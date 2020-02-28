@@ -8,6 +8,7 @@ import { RedirectPropTypes } from './propTypes';
 
 export default class Redirect extends React.PureComponent {
   static propTypes = RedirectPropTypes;
+
   static defaultProps = {
     from: '',
     to: '',
@@ -32,7 +33,8 @@ export default class Redirect extends React.PureComponent {
           if (to && !context.redirecting && !this.redirected) {
             if ((from && match(location, from)) || (!matched && !from)) {
               this.redirected = true;
-              context.redirecting = true; // 防止同时执行多个Redirect
+              // 防止同时执行多个Redirect
+              context.redirecting = true;
               router.replace(to, reload);
               // 服务器渲染时捕获重定向URL
               if (staticContext) {

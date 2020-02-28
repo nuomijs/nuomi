@@ -1,8 +1,7 @@
 import warning from 'warning';
-import { isFunction, isObject } from '../../utils';
+import { isFunction, isObject, isString } from '../../utils';
 import parser, { pathToRegexp, normalizePath, restorePath } from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
-import { isString } from '../../utils';
 
 let globalLocation = globalWindow.location;
 // 监听列表
@@ -31,6 +30,7 @@ let clear = null;
 // 当前location
 let currentLocation = null;
 // 阻塞路由控制
+// eslint-disable-next-line import/no-mutable-exports
 let blockData = {};
 // 阻塞回调
 let blockCallback = null;
@@ -65,7 +65,7 @@ function block(callback) {
         } else {
           restore(currentLocation.url);
         }
-      }
+      };
     }
   } else {
     warning(false, 'router.block只能创建一次');
@@ -91,7 +91,7 @@ function routerEventListener() {
       if (!blockData.toLocation) {
         blockData.toLocation = getMergeLocation();
       }
-      const { url, reload, data } = blockData.toLocation;
+      const { url, reload: isReload, data } = blockData.toLocation;
       const callback = blockData.callback || blockCallback;
       callback((isLeave) => {
         blockData = {};
@@ -99,12 +99,14 @@ function routerEventListener() {
         if (isLeave) {
           callListener();
         } else {
-          location(url, data, reload);
+          // eslint-disable-next-line no-use-before-define
+          location(url, data, isReload);
         }
-      }, (url) => {
+      }, (path) => {
         allowCallListener = false;
         blockData.toLocation = null;
-        replace(url);
+        // eslint-disable-next-line no-use-before-define
+        replace(path);
       }, blockData.toLocation);
     } else {
       callListener();
@@ -212,8 +214,8 @@ function createRouter(routerOptions, staticLocation, callback) {
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    listener((location) => {
-      callback(currentLocation = location);
+    listener((locationData) => {
+      callback(currentLocation = locationData);
     });
     globalWindow.addEventListener(eventType, routerEventListener);
     return clear = () => {
@@ -232,8 +234,8 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function match(location, path, returnLocation) {
-  const { pathname } = location;
+function match(locationData, path, returnLocation) {
+  const { pathname } = locationData;
   const normalPath = normalizePath(path);
   let pathRegexp = pathRegexps[normalPath];
 
@@ -257,24 +259,24 @@ function match(location, path, returnLocation) {
         }
       });
       return {
-        ...location,
+        ...locationData,
         params,
       };
     }
-    return location;
+    return locationData;
   }
 
   return isMatch;
 }
 
 function matchPath(...args) {
-  return match(...args, true);
+  return match(args[0], args[1], true);
 }
 
 function mergePath(...args) {
   let paths = args.filter((path) => path && isString(path));
   const maxIndex = paths.length - 1;
-  paths = paths.map((path, index) => index < maxIndex ? path.replace(/\*$/, '') : path);
+  paths = paths.map((path, index) => (index < maxIndex ? path.replace(/\*$/, '') : path));
   return normalizePath(paths.join('/'));
 }
 

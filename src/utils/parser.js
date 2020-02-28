@@ -12,17 +12,17 @@ export function normalizePath(path) {
 
 export function pathToRegexp(path) {
   const regexpPath = path
-  // ( => (?:
-  // (?: => (?:
-  .replace(/(\()(?!\?[:=!<>])/g, '$1?:')
-  // /:id => /(\/\w+)
-  .replace(/\/:\w+/g, '(/\\w+)')
-  // /a/b => \/a\/b
-  // a.html => a\.html
-  .replace(/([./])/g, '\\$1')
-  // * => (?:.*)?
-  // /* => (?:\/.*)?
-  .replace(/(\\\/)?\*/g, '(?:$1.*)?');
+    // ( => (?:
+    // (?: => (?:
+    .replace(/(\()(?!\?[:=!<>])/g, '$1?:')
+    // /:id => /(\/\w+)
+    .replace(/\/:\w+/g, '(/\\w+)')
+    // /a/b => \/a\/b
+    // a.html => a\.html
+    .replace(/([./])/g, '\\$1')
+    // * => (?:.*)?
+    // /* => (?:\/.*)?
+    .replace(/(\\\/)?\*/g, '(?:$1.*)?');
   return new RegExp(`^${regexpPath}\\/?$`, 'i');
 }
 
@@ -31,7 +31,9 @@ export function restorePath(object) {
     return object;
   }
   let path = '';
-  const { pathname, query, search, url } = object;
+  const {
+    pathname, query, search, url,
+  } = object;
   if (!!url && isString(url)) {
     path = url;
   } else if (!!pathname && isString(pathname)) {

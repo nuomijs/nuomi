@@ -3,6 +3,7 @@ import effects from './effects';
 import Layout from './components/Layout';
 
 export default {
+  cache: true,
   state: {
     detail: '',
     count: 0,

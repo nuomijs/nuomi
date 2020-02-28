@@ -2,9 +2,9 @@ import React from 'react';
 import invariant from 'invariant';
 import { NuomiContext } from './Context';
 
-const withNuomi = (WrapperComponent) => {
-  return class WithNuomi extends React.PureComponent {
+const withNuomi = (WrapperComponent) => class WithNuomi extends React.PureComponent {
     static contextType = NuomiContext;
+
     static displayName = `withNuomi(${WrapperComponent.displayName || WrapperComponent.name})`;
 
     constructor(...args) {
@@ -20,7 +20,6 @@ const withNuomi = (WrapperComponent) => {
       const { nuomiProps } = this.context;
       return <WrapperComponent {...this.props} nuomiProps={nuomiProps} />;
     }
-  };
 };
 
 export default withNuomi;

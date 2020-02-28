@@ -2,14 +2,14 @@ import React from 'react';
 import invariant from 'invariant';
 import { Link } from './Link';
 import { NavLinkPropTypes } from './propTypes';
-import { combinePath } from '../core/router';
+import router, { combinePath } from '../core/router';
 import { isFunction } from '../utils';
 import { RouterContext } from './Context';
-import router from '../core/router';
 import parser, { restorePath } from '../utils/parser';
 
 class NavLink extends Link {
   static propTypes = NavLinkPropTypes;
+
   static defaultProps = {
     to: '',
     path: '',
@@ -30,7 +30,9 @@ class NavLink extends Link {
   }
 
   getActiveProps(location) {
-    const { className, style, activeClassName, activeStyle } = this.props;
+    const {
+      className, style, activeClassName, activeStyle,
+    } = this.props;
     const props = { className, style };
     if (this.isActive(location)) {
       props.className = [className, activeClassName].filter((name) => !!name).join(' ');

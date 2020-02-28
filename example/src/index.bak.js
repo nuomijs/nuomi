@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, useConnect, Link, Route, Redirect } from 'nuomi';
+import {
+  Router, useConnect, Link, Route, Redirect,
+} from 'nuomi';
 
 const Home = () => {
   const [{ username }] = useConnect();
   return (
     <div>
-      hello, <Link to="/list">{username}</Link>
+      hello,
+      {' '}
+      <Link to="/list">{username}</Link>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { removeReducer } from '../core/redux/reducer';
 
 export default class Route extends React.PureComponent {
   static propTypes = RoutePropTypes;
+
   static defaultProps = {
     path: '',
     state: {},
@@ -26,8 +27,7 @@ export default class Route extends React.PureComponent {
 
   componentWillUnmount() {
     removeReducer(this.store.id);
-    // 嵌套路由时防止子路由被销毁后再创建无法匹配问题
-    if (this.context && this.context.matched === this) {
+    if (this.context.matched === this) {
       this.context.matched = null;
     }
   }
@@ -41,12 +41,11 @@ export default class Route extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
 
           this.context = context;
-          const { location } = context;
-          const matchLocation = router.matchPath(location, path);
-          const match = matchLocation !== false;
+          // 同一个context只匹配一次
+          const allowMatch = !context.matched || context.matched === this;
+          const matchLocation = allowMatch && router.matchPath(context.location, path);
 
-          // context.matched 表示同一个上下文中，多个路由只匹配一个
-          if (!match || (context.matched && context.matched !== this)) {
+          if (!matchLocation) {
             // 设置了cache没有匹配路由，不销毁，只隐藏
             if (cache === true && this.routeComponent !== null) {
               return this.routeComponent;
@@ -63,7 +62,7 @@ export default class Route extends React.PureComponent {
             routeTempData: this.routeTempData,
           };
 
-          if (match) {
+          if (matchLocation) {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>
