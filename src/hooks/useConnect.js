@@ -1,10 +1,11 @@
 import {
-  useReducer, useContext, useEffect, useRef,
+  useReducer, useContext, useRef,
 } from 'react';
 import invariant from 'invariant';
 import { NuomiContext } from '../components/Context';
 import globalStore, { getStore } from '../core/redux/store';
 import { isFunction, shallowEqual } from '../utils';
+import useEffect from './useEffect';
 
 const useConnect = (callback) => {
   const { nuomiProps } = useContext(NuomiContext);

@@ -6,7 +6,7 @@ export interface Props {
   data?: object;
   reducers?: object;
   effects?: object;
-  readonly store?: object;
+  store?: object;
   async?: (loadProps: (props: NuomiProps) => void) => void;
   render?: () => any;
   onInit?: () => any;
@@ -16,7 +16,7 @@ export interface RouteProps extends Props {
   path?: string;
   cache?: boolean | 'state';
   reload?: boolean | null;
-  readonly location?: Location;
+  location?: Location;
   onEnter?: (enter: () => void) => boolean;
   onChange?: () => void;
   onChange?: object;

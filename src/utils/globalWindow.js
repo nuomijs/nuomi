@@ -1,6 +1,6 @@
 import { noop } from './index';
 
-export default typeof window !== 'undefined'
+export default typeof window !== 'undefined' && typeof window.document !== 'undefined'
   ? window
   : {
     Proxy: global.Proxy,

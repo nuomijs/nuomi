@@ -30,10 +30,12 @@ class App extends React.Component {
         },
         {
           path: '/a',
-          children: [{
-            path: '/b',
-            children: '11'
-          }],
+          children: [
+            {
+              path: '/b',
+              children: '11',
+            },
+          ],
         },
         {
           path: '/home',
