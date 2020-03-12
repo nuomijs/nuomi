@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
   "repository": {
@@ -18,9 +18,9 @@
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "redux": "^4.0.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "redux": "^4.0.0",
     "warning": "^4.0.3"
   },
   "devDependencies": {
@@ -43,6 +43,11 @@
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.12.0",
     "rimraf": "^2.6.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0",
+    "redux": ">=4.0.0"
   },
   "scripts": {
     "format": "prettier --write !**/lib/** !**/node_modules/** **/*{.js,.jsx} .",
