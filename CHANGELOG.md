@@ -1,7 +1,7 @@
 # 更新日志：
 
-## 0.8.7 (2020-03-12)
-* package.json增加peerDependencies项，指定react,react-dom,redux版本范围，防止和宿主环境版本不一致问题
+## 0.8.8 (2020-03-12)
+修复安装nuomi后，react,react-dom和宿主环境不一致问题
 
 ## 0.8.6 (2020-03-02)
 * 修复useConnect无法更新状态问题
