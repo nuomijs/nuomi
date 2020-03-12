@@ -39,14 +39,14 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "jest": "^25.1.0",
     "prettier": "^1.18.2",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "react-test-renderer": "^16.12.0",
     "rimraf": "^2.6.3"
   },
   "peerDependencies": {
-    "react": ">=16.0.0",
-    "react-dom": ">=16.0.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "scripts": {
     "format": "prettier --write !**/lib/** !**/node_modules/** **/*{.js,.jsx} .",
