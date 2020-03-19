@@ -5,3 +5,4 @@ export * from './store';
 export * from './router';
 export * from './hooks';
 export * from './component';
+export * from './props';
