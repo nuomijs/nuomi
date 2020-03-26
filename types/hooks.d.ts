@@ -1,12 +1,7 @@
-import { Dispatch } from 'redux';
 import { NuomiProps } from './props';
+import { ConnectGetState, NuomiState } from './connect';
+import { NuomiStoreDispatch } from './store';
 
-interface GetState {
-  <State>(): State;
-  <State>(nuomiState: State): State;
-  <State>(nuomiState: State, reduxState: State): State;
-}
-
-export function useConnect<State>(getState?: GetState): [State, Dispatch];
+export function useConnect(getState?: ConnectGetState): [NuomiState, NuomiStoreDispatch];
 
 export function useNuomi(): { nuomiProps: NuomiProps };

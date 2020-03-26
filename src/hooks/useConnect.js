@@ -29,14 +29,16 @@ const useConnect = (callback) => {
   };
 
   // 当前组件状态
-  const state = selectedState.current || getState();
+  if (!selectedState.current) {
+    selectedState.current = getState();
+  }
 
   useEffect(() => {
     // 订阅状态变化触发组件更新
     const unSubcribe = globalStore.subscribe(() => {
       const newState = getState();
       // 浅比较旧状态与新状态，发生变化则更新组件
-      if (shallowEqual(state, newState)) {
+      if (shallowEqual(selectedState.current, newState)) {
         return;
       }
       // 记忆状态
@@ -48,7 +50,7 @@ const useConnect = (callback) => {
     return () => unSubcribe();
   }, []);
 
-  return [state, store.dispatch];
+  return [selectedState.current, store.dispatch];
 };
 
 export default useConnect;

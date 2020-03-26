@@ -1,6 +1,7 @@
 import { PureComponent, ComponentType } from 'react';
 import { Props, RouteProps, NuomiRouteProps } from './props';
 import { Location } from './router';
+import { ConnectGetState, ConnectGetDispatch } from './connect';
 
 export interface ShapeRouteProps {
   routes: object[];
@@ -38,7 +39,7 @@ export interface NavLinkProps extends LinkProps {
 }
 
 export interface Connect {
-  (): <P>(Component: ComponentType<P>) => ComponentType<P>;
+  (getState?: ConnectGetState, getDispatch?: ConnectGetDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
 }
 
 export class Nuomi<P extends Props> extends PureComponent<P, any> {}
