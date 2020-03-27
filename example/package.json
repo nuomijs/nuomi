@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
-    "nuomi-request": "^0.2.4"
+    "nuomi-request": "^0.2.6"
   }
 }

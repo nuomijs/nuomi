@@ -1,6 +1,5 @@
 import React from 'react';
 import invariant from 'invariant';
-import warning from 'warning';
 import { isArray } from '../utils';
 import router from '../core/router';
 import { ShapeRoutePropTypes } from './propTypes';
@@ -58,7 +57,6 @@ class ShapeComponent extends React.PureComponent {
 
   render() {
     const { routes } = this.props;
-    warning(routes.length, 'routes不能是空数组');
     return this.getComponents(routes);
   }
 }

@@ -27,6 +27,7 @@ class App extends React.Component {
         {
           path: '/',
           ...login,
+          children: '账号密码：nuomi',
         },
         {
           path: '/a',
@@ -40,7 +41,6 @@ class App extends React.Component {
         {
           path: '/home',
           ...home,
-          route: false,
           children: [...routes, { path: '*', children: '404' }],
         },
         {
@@ -61,7 +61,6 @@ class App extends React.Component {
           },
           {
             path: '/home',
-            route: false,
             ...home,
             children: [...routes, { path: '*', children: '404' }],
           },

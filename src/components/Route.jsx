@@ -39,8 +39,8 @@ export default class Route extends React.PureComponent {
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
-
           this.context = context;
+
           // 同一个context只匹配一次
           const allowMatch = !context.matched || context.matched === this;
           const matchLocation = allowMatch && router.matchPath(context.location, path);

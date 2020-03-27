@@ -4,15 +4,13 @@ import services from '../services';
 
 export default class Effects extends BaseEffects {
   async $login() {
-    try {
-      const { username, password } = this.getState();
-      await services.login({ username, password });
+    const { username, password } = this.getState();
+    const { data } = await services.login({ username, password });
+    if (data.status === 200) {
       sessionStorage.setItem('isLogin', 1);
       router.location('/home');
-    } catch (e) {
-      if (e.status === 300) {
-        window.alert(e.message);
-      }
+    } else {
+      window.alert(data.message);
     }
   }
 }

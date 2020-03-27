@@ -32,7 +32,7 @@ export function restorePath(object) {
   }
   let path = '';
   const {
-    pathname, query, search, url,
+    pathname, query, search, url, hash,
   } = object;
   if (!!url && isString(url)) {
     path = url;
@@ -44,13 +44,20 @@ export function restorePath(object) {
       } else {
         path += search;
       }
-    } else if (isObject(query)) {
+    } else if (isObject(query) && Object.keys(query).length) {
       path += '?';
       const querys = [];
       Object.keys(query).forEach((key) => {
         querys.push(`${key}=${query[key]}`);
       });
       path += querys.join('&');
+    }
+    if (hash && isString(hash)) {
+      if (hash.indexOf('#') === 0) {
+        path += hash;
+      } else {
+        path += `#${hash}`;
+      }
     }
   }
   return path;
