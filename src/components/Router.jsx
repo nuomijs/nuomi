@@ -55,7 +55,7 @@ export default class Router extends React.PureComponent {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, basename, type } = this.props;
     const { location } = this.state;
     const { staticContext } = this.context || {};
     const contextValue = {
@@ -63,6 +63,8 @@ export default class Router extends React.PureComponent {
       staticContext,
       matched: null,
       wrappers: this.wrappers,
+      basename,
+      type,
     };
     return <RouterContext.Provider value={contextValue}>{children}</RouterContext.Provider>;
   }

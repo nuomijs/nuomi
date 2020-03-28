@@ -3,15 +3,19 @@ export interface Location {
   url?: string;
   search?: string;
   hash?: string;
-  query?: object;
-  params?: object;
+  query?: {
+    [key: string]: any;
+  };
+  params?: {
+    [key: string]: any;
+  };
 }
 
 export interface RouterAPI {
   location(): Location;
   location(path?: string | Location, data?: any, reload?: boolean): void;
   replace(path?: string | Location, data?: any, reload?: boolean): void;
-  listener(callback: () => void): Function;
+  listener(callback: (location: Location, isInit?: boolean) => void): Function;
   reload(): void;
   back(step?: number): void;
   forward(step?: number): void;

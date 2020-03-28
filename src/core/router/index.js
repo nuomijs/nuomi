@@ -4,6 +4,7 @@ import parser, { pathToRegexp, normalizePath, restorePath } from '../../utils/pa
 import globalWindow from '../../utils/globalWindow';
 
 let globalLocation = globalWindow.location;
+const globalHistory = globalWindow.history;
 // 监听列表
 let listeners = [];
 // location额外的数据
@@ -136,11 +137,11 @@ function locationHandle(...args) {
       extraData.data = data;
     }
 
-    const url = combinePath(path);
+    let url = combinePath(path);
     const originPath = getOriginPath();
 
     if (url !== originPath) {
-      if (isHash) {
+      if (isHash && !globalHistory.pushState && !globalHistory.replaceState) {
         if (type === 'push') {
           globalLocation.hash = url;
         } else {
@@ -148,7 +149,10 @@ function locationHandle(...args) {
           globalLocation.replace(`${pathname + search}#${url}`);
         }
       } else {
-        globalWindow.history[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);
+        if (isHash) {
+          url = `#${url}`;
+        }
+        globalHistory[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);
         routerEventListener();
       }
     } else if (isReload === true) {
@@ -174,11 +178,11 @@ function reload() {
 }
 
 function back(step) {
-  globalWindow.history.back(step);
+  globalHistory.back(step);
 }
 
 function forward(step) {
-  globalWindow.history.forward(step);
+  globalHistory.forward(step);
 }
 
 function removeListener(...args) {
@@ -194,7 +198,7 @@ function listener(callback) {
   if (isFunction(callback)) {
     listeners.push(callback);
     // 执行一次
-    callback(getLocation());
+    callback(getLocation(), true);
     return () => {
       removeListener(callback);
     };
