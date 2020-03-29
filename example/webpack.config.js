@@ -11,6 +11,7 @@ module.exports = {
     disableHostCheck: true,
     stats: 'errors-only',
     contentBase: './dist',
+    historyApiFallback: true,
   },
   plugins: [
     new HTMLWebpackPlugin({
