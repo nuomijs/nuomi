@@ -118,7 +118,21 @@ function routerEventListener() {
 }
 
 function combinePath(path = '') {
-  return normalizePath(`${options.basename}/${restorePath(path)}`);
+  const url = restorePath(path);
+  const searchIndex = url.indexOf('?');
+  const hashIndex = url.indexOf('#');
+  let pathname = url;
+  let rest = '';
+
+  if (searchIndex !== -1) {
+    pathname = url.substr(0, searchIndex);
+    rest = url.substr(searchIndex);
+  } else if (hashIndex !== -1) {
+    pathname = url.substr(0, hashIndex);
+    rest = url.substr(hashIndex);
+  }
+
+  return normalizePath(`${options.basename}/${pathname}`) + rest;
 }
 
 function locationHandle(...args) {

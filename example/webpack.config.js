@@ -7,6 +7,7 @@ module.exports = {
   },
   devServer: {
     port: 8080,
+    host: '0.0.0.0',
     disableHostCheck: true,
     stats: 'errors-only',
     contentBase: './dist',
@@ -36,7 +37,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      nuomi: path.resolve(__dirname, '../src'),
+      nuomi: path.resolve(__dirname, '../lib'),
       react: path.resolve(__dirname, '../node_modules/react'),
       'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
     },
