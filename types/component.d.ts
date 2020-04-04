@@ -35,7 +35,7 @@ export interface NavLinkProps extends LinkProps {
   path? :string;
   activeClassName?: string,
   activeStyle?: object,
-  isActice(match: boolean | Location, location: Location): boolean,
+  isActice?: (match: boolean | Location, location: Location, props: NavLinkProps) => boolean,
 }
 
 export interface Connect {

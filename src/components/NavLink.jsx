@@ -20,11 +20,12 @@ class NavLink extends Link {
   };
 
   isActive(location) {
-    const { isActive, to, path } = this.props;
+    const { props } = this;
+    const { isActive, to, path } = props;
     const { pathname } = parser(restorePath(to));
     const match = router.matchPath(location, path || pathname);
     if (isFunction(isActive)) {
-      return isActive(match, location) !== false;
+      return isActive(match, location, props) !== false;
     }
     return match;
   }
