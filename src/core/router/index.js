@@ -38,10 +38,15 @@ let blockCallback = null;
 
 function getOriginPath() {
   const { pathname, search, hash } = globalLocation;
+  let originPath = '';
+
   if (isHash) {
-    return hash.substr(1);
+    originPath = hash.substr(1);
+  } else {
+    originPath = pathname + search + hash;
   }
-  return decodeURI(pathname + search + hash);
+
+  return decodeURI(originPath);
 }
 
 function getLocation() {

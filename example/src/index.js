@@ -4,7 +4,7 @@ import App from './App';
 import { Router } from 'nuomi';
 
 ReactDOM.render((
-  <Router type="browser">
+  <Router>
     <App />
   </Router>
 ), document.querySelector('#root'));
