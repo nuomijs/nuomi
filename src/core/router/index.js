@@ -41,7 +41,7 @@ function getOriginPath() {
   if (isHash) {
     return hash.substr(1);
   }
-  return pathname + search + hash;
+  return decodeURI(pathname + search + hash);
 }
 
 function getLocation() {

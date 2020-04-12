@@ -30,7 +30,7 @@ class App extends React.Component {
           children: '账号密码：nuomi',
         },
         {
-          path: '/a',
+          path: '/哈',
           children: [
             {
               path: '/b',
