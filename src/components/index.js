@@ -9,3 +9,4 @@ export { default as Link } from './Link';
 export { default as NavLink } from './NavLink';
 export { default as connect } from './connect';
 export { default as withNuomi } from './withNuomi';
+export * from './Context';
