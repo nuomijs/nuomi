@@ -1,0 +1,18 @@
+.docfree-logo {
+  background: url(/images/logo.png) no-repeat left center;
+  background-size: 36px;
+  padding-left: 36px;
+  width: 36px;
+  overflow: hidden;
+}
+
+.logos a {
+  margin-right: 12px;
+}
+.logos img {
+  width: 110px;
+}
+
+.hljs {
+  background: rgba(0, 0, 0, 0.04) !important;
+}

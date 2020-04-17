@@ -24,6 +24,7 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "cross-env": "^5.2.0",
+    "docfree": "^0.3.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.20.1",
@@ -33,9 +34,9 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
+    "husky": "^4.2.3",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
-    "husky": "^4.2.3",
     "prettier": "^1.18.2",
     "rimraf": "^2.6.3"
   },
@@ -43,6 +44,8 @@
     "dev": "cross-env NODE_ENV=development gulp",
     "build": "cross-env NODE_ENV=production npm run clean && gulp",
     "clean": "rimraf packages/**/lib",
-    "publish": "npm run clean && npm run build && lerna publish"
+    "publish": "npm run clean && npm run build && lerna publish",
+    "doc:dev": "docfree dev docs",
+    "doc:build": "docfree build docs"
   }
 }
