@@ -1,26 +1,20 @@
 {
   "name": "nuomi",
-  "version": "0.8.17",
-  "main": "lib/index.js",
-  "typings": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
   },
+  "private": true,
   "author": "yinjiazeng <yinjiazeng@163.com>",
-  "files": [
-    "lib",
-    "types"
-  ],
-  "sideEffects": false,
   "license": "MIT",
-  "dependencies": {
-    "invariant": "^2.2.4",
-    "prop-types": "^15.7.2",
-    "proxy-polyfill": "^0.3.0",
-    "redux": "^4.0.0",
-    "warning": "^4.0.3"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
@@ -37,42 +31,18 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.5.0",
-    "jest": "^25.1.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "lerna": "^3.20.2",
+    "lint-staged": "^10.0.8",
+    "husky": "^4.2.3",
     "prettier": "^1.18.2",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-test-renderer": "^16.12.0",
     "rimraf": "^2.6.3"
   },
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
-  },
   "scripts": {
-    "format": "prettier --write !**/lib/** !**/node_modules/** **/*{.js,.jsx} .",
-    "lint": "npm run format && eslint --fix --ext '.js,.jsx' .",
-    "build": "npm run clean && npm run build:cjs && npm run build:copy && npm run build:proxy",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-    "build:proxy": "cross-env BABEL_ENV=cjs babel lib/utils/proxyPolyfill.js --out-file lib/utils/proxyPolyfill.js",
-    "build:copy": "cross-env BABEL_ENV=cjs babel node_modules/proxy-polyfill/src/proxy.js --out-file lib/utils/proxyPolyfill.js --copy-files",
-    "clean": "rimraf lib",
-    "test": "jest"
-  },
-  "description": "nuomi是基于react和redux开发的一套数据流解决方案，也可以看成轻量级业务框架，它可以规范和简化使用redux 进行状态管理的开发流程，与 路由 完美结合可以更高效开发单页应用。",
-  "bugs": {
-    "url": "https://github.com/nuomijs/nuomi/issues"
-  },
-  "homepage": "https://github.com/nuomijs/nuomi#readme",
-  "directories": {
-    "example": "example",
-    "lib": "lib"
-  },
-  "keywords": [
-    "nuomi",
-    "nuomijs",
-    "nuomi-router",
-    "nuomi-redux",
-    "redux",
-    "router"
-  ]
+    "dev": "cross-env NODE_ENV=development gulp",
+    "build": "cross-env NODE_ENV=production npm run clean && gulp",
+    "clean": "rimraf packages/**/lib",
+    "publish": "npm run clean && npm run build && lerna publish"
+  }
 }

@@ -1,0 +1,44 @@
+{
+  "name": "nuomi",
+  "version": "0.8.17",
+  "main": "lib/index.js",
+  "typings": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
+  },
+  "author": "yinjiazeng <yinjiazeng@163.com>",
+  "files": [
+    "lib",
+    "types"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "dependencies": {
+    "invariant": "^2.2.4",
+    "prop-types": "^15.7.2",
+    "redux": "^4.0.0",
+    "warning": "^4.0.3"
+  },
+  "devDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "description": "nuomi是基于react和redux开发的一套数据流解决方案，也可以看成轻量级业务框架，它可以规范和简化使用redux 进行状态管理的开发流程，与 路由 完美结合可以更高效开发单页应用。",
+  "bugs": {
+    "url": "https://github.com/nuomijs/nuomi/issues"
+  },
+  "homepage": "https://github.com/nuomijs/nuomi#readme",
+  "keywords": [
+    "nuomi",
+    "nuomijs",
+    "nuomi-router",
+    "nuomi-redux",
+    "redux",
+    "router"
+  ]
+}
