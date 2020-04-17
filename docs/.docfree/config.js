@@ -22,10 +22,6 @@ module.exports = {
         title: '指南',
         menus: ['README', 'quick-start', 'examples'],
       },
-      '/api': {
-        title: 'API',
-        menus: ['README'],
-      },
     }
   },
   footer: require.resolve('./footer.js'),

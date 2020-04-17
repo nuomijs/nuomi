@@ -1,3 +1,7 @@
+---
+title: API
+---
+
 ## 组件
 ### Nuomi
 |  props   | value  |  介绍  |
