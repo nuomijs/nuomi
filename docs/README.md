@@ -32,7 +32,7 @@ title: Nuomijs
 
 <div class="logos">
 
-[<img src="/images/logos/nuonuo.png" alt="诺诺网" />](https://www.jss.com.cn/)
-[<img src="/images/logos/wanke.png" alt="万克能源" />](http://www.wankeauto.com/)
+[<img src="/imgs/logos/nuonuo.png" alt="诺诺网" />](https://www.jss.com.cn/)
+[<img src="/imgs/logos/wanke.png" alt="万克能源" />](http://www.wankeauto.com/)
 
 </div>
