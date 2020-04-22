@@ -1,5 +1,8 @@
 # 更新日志：
 
+## 0.8.18 (2020-04-22)
+* 修复Link，NavLink组件在Router设置了basename后跳转路径失效问题
+
 ## 0.8.17 (2020-04-14)
 * 增加导出RouterContext、NuomiContext
 

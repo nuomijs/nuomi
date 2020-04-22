@@ -21,7 +21,7 @@ export class Link extends React.PureComponent {
     if (isFunction(onClick) && onClick(e) === false) {
       return;
     }
-    router[replace ? 'replace' : 'location'](combinePath(to), data, reload);
+    router[replace ? 'replace' : 'location'](to, data, reload);
   };
 
   render() {
