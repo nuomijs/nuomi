@@ -8,8 +8,16 @@
   <title><%= htmlWebpackPlugin.options.title %></title>
   <link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.publicPath %>imgs/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.publicPath %>css/style.css">
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.publicPath %>css/nprogress.css">
 </head>
 <body>
   <div id="root"></div>
+  <script src="<%= htmlWebpackPlugin.options.publicPath %>js/nprogress.js"></script>
+  <script>
+  NProgress.start();
+  </script>
 </body>
+  <script>
+  NProgress.done();
+  </script>
 </html>
