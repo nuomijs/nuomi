@@ -15,9 +15,10 @@
   "sideEffects": false,
   "license": "MIT",
   "dependencies": {
+    "@react-navigation/native": "^5.5.0",
     "invariant": "^2.2.4",
+    "nuomi": "^0.8.18",
     "prop-types": "^15.7.2",
-    "redux": "^4.0.0",
     "warning": "^4.0.3"
   },
   "devDependencies": {
