@@ -15,17 +15,17 @@
   "sideEffects": false,
   "license": "MIT",
   "dependencies": {
-    "@react-navigation/native": "^5.5.0",
     "invariant": "^2.2.4",
     "nuomi": "^0.8.18",
-    "prop-types": "^15.7.2",
-    "warning": "^4.0.3"
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
+    "@react-navigation/native": "^5.0.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "peerDependencies": {
+    "@react-navigation/native": "^5.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },

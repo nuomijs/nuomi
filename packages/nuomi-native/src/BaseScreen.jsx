@@ -3,11 +3,7 @@ import { RoutePropTypes } from 'nuomi/lib/components/propTypes';
 import { isFunction, isObject } from 'nuomi/lib/utils';
 import { NavigationContext } from '@react-navigation/native';
 
-export default class BaseRoute extends BaseNuomi {
-  static propTypes = RoutePropTypes;
-
-  static contextType = NavigationContext;
-
+export default class BaseScreen extends BaseNuomi {
   componentWillUnmount() {
     super.componentWillUnmount();
     if (this.unListenerChange != null) {
@@ -57,3 +53,7 @@ export default class BaseRoute extends BaseNuomi {
     }
   }
 }
+
+BaseScreen.contextType = NavigationContext;
+
+BaseScreen.propTypes = RoutePropTypes;
