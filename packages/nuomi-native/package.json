@@ -1,0 +1,45 @@
+{
+  "name": "nuomi-native",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "typings": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nuomijs/nuomi.git"
+  },
+  "author": "yinjiazeng <yinjiazeng@163.com>",
+  "files": [
+    "lib",
+    "types"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "dependencies": {
+    "invariant": "^2.2.4",
+    "nuomi": "^0.8.18",
+    "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "@react-navigation/native": "^5.0.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "peerDependencies": {
+    "@react-navigation/native": "^5.0.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "description": "基于nuomi和react-navigation开发的react-native数据流解决方案。",
+  "bugs": {
+    "url": "https://github.com/nuomijs/nuomi/issues"
+  },
+  "homepage": "https://github.com/nuomijs/nuomi#readme",
+  "keywords": [
+    "nuomi",
+    "nuomijs",
+    "nuomi-native",
+    "nuomi-redux",
+    "redux",
+    "native"
+  ]
+}
