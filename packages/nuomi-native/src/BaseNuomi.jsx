@@ -1,9 +1,8 @@
-import BaseNuomi from 'nuomi/lib/components/BaseNuomi';
-import { RoutePropTypes } from 'nuomi/lib/components/propTypes';
+import BaseNuomiSuper from 'nuomi/lib/components/BaseNuomi';
 import { isFunction, isObject } from 'nuomi/lib/utils';
 import { NavigationContext } from '@react-navigation/native';
 
-export default class BaseScreen extends BaseNuomi {
+export default class BaseNuomi extends BaseNuomiSuper {
   componentWillUnmount() {
     super.componentWillUnmount();
     if (this.unListenerChange != null) {
@@ -54,6 +53,4 @@ export default class BaseScreen extends BaseNuomi {
   }
 }
 
-BaseScreen.contextType = NavigationContext;
-
-BaseScreen.propTypes = RoutePropTypes;
+BaseNuomi.contextType = NavigationContext;
