@@ -26,7 +26,7 @@ class ShapeComponent extends React.PureComponent {
       .filter((obj) => !!obj)
       .forEach((obj, i) => {
         if (React.isValidElement(obj)) {
-          conponents.push(React.cloneElement(obj, { key: this.getKey(obj.key, i) }));
+          conponents.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
         } else {
           const {
             key, route, children: childrenRoutes, ...props
