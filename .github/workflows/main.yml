@@ -39,7 +39,7 @@ jobs:
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          SSH: ${{ secrets.DEPLOY_PRIVATE_KEY1 }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           REPOSITORY_NAME: nuomijs/nuomijs.github.io
           BRANCH: master
           FOLDER: docs/.docfree/dist
