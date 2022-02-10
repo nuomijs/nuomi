@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nuomi } from '@nuomi';
 import list from './list';
-import List from './List';
+import List from './List.jsx';
 
 function App() {
   return (

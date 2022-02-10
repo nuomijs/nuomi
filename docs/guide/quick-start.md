@@ -171,7 +171,7 @@ import React from 'react';
 - import logo from './logo.svg';
 - import './App.css';
 + import list from './list';
-+ import List from './List';
++ import List from './List.jsx';
 
 function App() {
   return (
@@ -220,7 +220,7 @@ import React from 'react';
 - import { Nuomi } from 'nuomi';
 + import { Router, Route } from 'nuomi';
 import list from './list';
-import List from './List';
+import List from './List.jsx';
 
 function App() {
   return (
@@ -251,7 +251,7 @@ export default App;
 import React from 'react';
 import { Router, Route } from 'nuomi';
 import list from './list';
-- import List from './List';
+- import List from './List.jsx';
 
 function App() {
   return (
@@ -275,7 +275,7 @@ export default App;
 
 ```diff
 import React from 'react';
-+ import List from './List';
++ import List from './List.jsx';
 
 export default {
   ...
