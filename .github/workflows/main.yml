@@ -37,11 +37,11 @@ jobs:
         run: yarn build && yarn doc:build
         
       - name: Deploy Docs
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          REPOSITORY_NAME: nuomijs/nuomijs.github.io
-          BRANCH: master
-          FOLDER: docs/.docfree/dist
-          CLEAN: false
+          ssh-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          repository-name: nuomijs/nuomijs.github.io
+          branch: master
+          folder: docs/.docfree/dist
+          clean: false
           
