@@ -7,7 +7,7 @@ title: Nuomijs
 
 <Docfree.Home
   title="NuomiJS"
-  description={<sapn>React + Redux + Router<span style={{ 'white-space': 'nowrap' }}>最佳实践</span></sapn>}
+  description={<div>React + Redux + Router<span style={{ whiteSpace: 'nowrap' }}>最佳实践</span></div>}
   buttons={[{
     type: 'primary',
     text: '快速上手 →',
@@ -30,7 +30,7 @@ title: Nuomijs
 
 ## 哪些公司在用？
 
-<div class="logos">
+<div className="logos">
 
 [<img src="/imgs/logos/nuonuo.png" alt="诺诺网" />](https://www.jss.com.cn/)
 [<img src="/imgs/logos/wanke.png" alt="万克能源" />](http://www.wankeauto.com/)

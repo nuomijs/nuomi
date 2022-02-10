@@ -53,21 +53,12 @@
   dependencies:
     "@babel/highlight" "^7.8.3"
 
-"@babel/compat-data@^7.8.6":
-  version "7.8.6"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.8.6.tgz#7eeaa0dfa17e50c7d9c0832515eee09b56f04e35"
-  integrity sha512-CurCIKPTkS25Mb8mz267vU95vy+TyUpnctEX2lV33xWNmHAfjruztgiPBbXZRh3xZZy1CYvGx6XfxyTVS+sk7Q==
+"@babel/compat-data@^7.8.6", "@babel/compat-data@^7.9.0":
+  version "7.10.1"
+  resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.10.1.tgz#b1085ffe72cd17bf2c0ee790fc09f9626011b2db"
+  integrity sha512-CHvCj7So7iCkGKPRFUfryXIkU2gSBw7VSZFYLsqVhrS47269VK2Hfi9S/YcublPMW8k1u2bQBlbDruoQEm4fgw==
   dependencies:
-    browserslist "^4.8.5"
-    invariant "^2.2.4"
-    semver "^5.5.0"
-
-"@babel/compat-data@^7.9.0":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.9.0.tgz#04815556fc90b0c174abd2c0c1bb966faa036a6c"
-  integrity sha512-zeFQrr+284Ekvd9e7KAX954LkapWiOmQtsfHirhxqfdlX6MEC32iRE+pqUGlYIBchdevaCwvzxWGSy/YBNI85g==
-  dependencies:
-    browserslist "^4.9.1"
+    browserslist "^4.12.0"
     invariant "^2.2.4"
     semver "^5.5.0"
 
@@ -3540,6 +3531,17 @@ browserslist@^4.0.0, browserslist@^4.11.1:
     node-releases "^1.1.53"
     pkg-up "^2.0.0"
 
+browserslist@^4.12.0:
+  version "4.19.1"
+  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.19.1.tgz#4ac0435b35ab655896c31d53018b6dd5e9e4c9a3"
+  integrity sha512-u2tbbG5PdKRTUoctO3NBD8FQ5HdPh1ZXPHzp1rwaa5jTc+RV9/+RlWiAIKmjRPQF+xbGM9Kklj5bZQFa2s/38A==
+  dependencies:
+    caniuse-lite "^1.0.30001286"
+    electron-to-chromium "^1.4.17"
+    escalade "^3.1.1"
+    node-releases "^2.0.1"
+    picocolors "^1.0.0"
+
 browserslist@^4.8.3, browserslist@^4.8.5, browserslist@^4.9.1:
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.9.1.tgz#01ffb9ca31a1aef7678128fc6a2253316aa7287c"
@@ -3778,6 +3780,11 @@ caniuse-lite@^1.0.30001030:
   version "1.0.30001035"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001035.tgz#2bb53b8aa4716b2ed08e088d4dc816a5fe089a1e"
   integrity sha512-C1ZxgkuA4/bUEdMbU5WrGY4+UhMFFiXrgNAfxiMIqWgFTWfv/xsZCS2xEHT2LMq7xAZfuAnu6mcqyDl0ZR6wLQ==
+
+caniuse-lite@^1.0.30001286:
+  version "1.0.30001311"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001311.tgz#682ef3f4e617f1a177ad943de59775ed3032e511"
+  integrity sha512-mleTFtFKfykEeW34EyfhGIFjGCqzhh38Y0LhdQ9aWF+HorZTtdgKV/1hEE0NlFkG2ubvisPV6l400tlbPys98A==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5048,55 +5055,55 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docfree-component-loader@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/docfree-component-loader/-/docfree-component-loader-0.5.0.tgz#88bc4944d90f053146b4eb204c26f7a11da2fc99"
-  integrity sha512-BPT5jiSq8nGjXTb8TxWdIK5ENqT/BB9iLj6TCpXANtNT6UHB+MJMHR+ijBnPvkVgqgFvGvesKjad0iK+gBazWg==
+docfree-component-loader@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/docfree-component-loader/-/docfree-component-loader-0.5.9.tgz#5422aed5611cd257965ba4f12dd59c099fe42593"
+  integrity sha512-QE2McBcUj/mH/oJanHBMtYzuEur1Gp8llPDYcAHPuN7QrRI43WsPXBl+aShl0b81BLF5jlqj1CzYpLGneMkIgQ==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-docfree-components@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/docfree-components/-/docfree-components-0.5.1.tgz#a04ad30da8be617dafbec91143b03d889416c86b"
-  integrity sha512-ur3ROloS5otaVC/O0K8KmSlaJGWi6ZjHRrGIdBybXgMgtOqOrSugSp0drb9+rf/WzJUEe5AjjB6OkhIfUAKOxw==
+docfree-components@^0.5.10:
+  version "0.5.10"
+  resolved "https://registry.npmjs.org/docfree-components/-/docfree-components-0.5.10.tgz#e224724f6dd5f36cb09da882d88e3f478da11470"
+  integrity sha512-AFRNolaQZZc++Qn4afmvImOJ4DtFAr3oHQs2PkEDEGTgfRZ8/1PgzOmjfl/FkPEputiRJv8QvojUZXefwM1oFA==
   dependencies:
     date-format "^3.0.0"
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
     prop-types "^15.7.2"
 
-docfree-generate@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/docfree-generate/-/docfree-generate-0.5.2.tgz#bc4d0497f3f6e35e1aabb03b4b8ae3e0003a4b98"
-  integrity sha512-tBDe3kHxwsQnfcrxaJeVjnqELKUhuhnvRtxqm3u3S4YZ4Vx/M3lIgbvBsW6uX+4YNwyIFC3ziBFW2cXmC0jQng==
+docfree-generate@^0.5.13:
+  version "0.5.13"
+  resolved "https://registry.npmjs.org/docfree-generate/-/docfree-generate-0.5.13.tgz#70ab98c5f6681297d00be89705d9aa6d54916175"
+  integrity sha512-BKoAbJf05fXED2COm44cjC28LRF7F6KVAxEqaL2OCweDOXfeDUheTZsU8EmzNjS/ktKBYu7+IEuGtWu2zhSxXA==
   dependencies:
     chokidar "^3.3.1"
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-docfree-loader@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/docfree-loader/-/docfree-loader-0.5.0.tgz#78530bdb58609a6b6430f71fb506aa462ff7bbd2"
-  integrity sha512-U2QjT0CO7nMBWyjJuhFdO3wytvkPYwQQLXDpvnwNkxhMeYSNMxIFALSfdpIBHf81sBnNc25f7NcICK7c0Fe6qw==
+docfree-loader@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.npmjs.org/docfree-loader/-/docfree-loader-0.5.14.tgz#579caf950b1c78cb124905efd994145e1ca863b1"
+  integrity sha512-yr7o/qQB+RsU02N0XHt0WLwJfmMlI1eWmKUm0NakBSp0+tsiNY0DJLBV9y5n1g4yz7azfRgNClkFKli3Lj3pIw==
   dependencies:
     "@mdx-js/mdx" "^1.5.7"
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
     gray-matter "^4.0.2"
     loader-utils "^2.0.0"
     remark "^11.0.2"
-    remark-docfree-heading-link "^0.5.0"
-    remark-docfree-jsx "^0.5.0"
-    remark-docfree-playground "^0.5.0"
-    remark-docfree-props "^0.5.0"
-    remark-docfree-vue "^0.5.0"
+    remark-docfree-heading-link "^0.5.9"
+    remark-docfree-jsx "^0.5.9"
+    remark-docfree-playground "^0.5.9"
+    remark-docfree-props "^0.5.9"
+    remark-docfree-vue "^0.5.9"
     remark-enhance-image "^0.5.0"
     remark-enhance-link "^0.5.0"
     remark-mdx "^1.5.8"
 
-docfree-prop-types@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/docfree-prop-types/-/docfree-prop-types-0.5.0.tgz#ba82b6aaba165daefaddb1ba0b4dc5f44e7fb4c1"
-  integrity sha512-OY8ER4Eue1OXf/3cX5JMl+QvElHt1QfZ5J0aJFxwszcTJJQFsDnAXPFkKkYsAW8pPIYckp0VuX3lN7bqg/YNEw==
+docfree-prop-types@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/docfree-prop-types/-/docfree-prop-types-0.5.9.tgz#893711583b8210e867ff12f78891681ebdd7566f"
+  integrity sha512-QLej/Kc5wQ0UbTSkPsMuSzV+0TmXWy8GR+M6dS9qgBGpm2D2XrLa++Og7jT1QETab1H0EWGqJdcF8VYUrLM3pg==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
     prop-types "^15.7.2"
 
 docfree-template@^0.5.0:
@@ -5104,10 +5111,10 @@ docfree-template@^0.5.0:
   resolved "https://registry.yarnpkg.com/docfree-template/-/docfree-template-0.5.0.tgz#bb00adc841d2abd5146b9720b18b2354861442cc"
   integrity sha512-VOThB+dPvQghA//wSvUbg/HCqzklpoTI6WKO33Gse4551dlW2QQbTi8tgUcC3Ck5aACDupiZT4iHBEn3P0Twmw==
 
-docfree-utils@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/docfree-utils/-/docfree-utils-0.5.0.tgz#a580a06db1ee6d4ec94e238c23ac91ef17c9f8ab"
-  integrity sha512-rA81tYdoilYXFLFoZmOos0/e4PQpKYW5BxFtLxlOh3ZPWpImVBT2eS9VrApA0DR5zBFiBV3OrgRFzt4guzwq5g==
+docfree-utils@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/docfree-utils/-/docfree-utils-0.5.9.tgz#07a7e1dee0295c3f1a1129b3a10248539935db94"
+  integrity sha512-ypxJFUeQjTh9ihB9PeqjATYsTwuW2VFVYDqEkUTMp82RBDwZT3BdJjMkg0Eoojvh9jTfkCiXvboeReRexvBsvg==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/generator" "^7.9.0"
@@ -5126,10 +5133,10 @@ docfree-utils@^0.5.0:
     unist-util-visit "^2.0.2"
     vfile "^4.1.0"
 
-docfree-webpack@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/docfree-webpack/-/docfree-webpack-0.5.1.tgz#c50c2eabd820d998fec0a40711561a854aa453d8"
-  integrity sha512-Jezwz3gR9Sf/7fjCR+S1o9RfHamiYRZYzYsM6oTpHazx/SDcwbTnErSYa4+LoA6tPRcc/cFiLo/UhE0D5CeXDw==
+docfree-webpack@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.npmjs.org/docfree-webpack/-/docfree-webpack-0.5.14.tgz#2b380710f7c095fb43dc5a0eba56568455d0e649"
+  integrity sha512-GIqAM0LmIibk6lEJAYv+jSl8yGhCLvv1/shY1tLJlt+qx7T/UidVkqXC8IP5PsPIKnIKEEtWJOofej1nfO/qNQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     antd "3.x"
@@ -5141,11 +5148,11 @@ docfree-webpack@^0.5.1:
     copy-webpack-plugin "^5.1.1"
     css-loader "^3.4.2"
     date-format "^3.0.0"
-    docfree-component-loader "^0.5.0"
-    docfree-components "^0.5.1"
-    docfree-loader "^0.5.0"
-    docfree-prop-types "^0.5.0"
-    docfree-utils "^0.5.0"
+    docfree-component-loader "^0.5.9"
+    docfree-components "^0.5.10"
+    docfree-loader "^0.5.14"
+    docfree-prop-types "^0.5.9"
+    docfree-utils "^0.5.9"
     file-loader "^6.0.0"
     highlight.js "^9.18.1"
     html-webpack-plugin "^3.2.0"
@@ -5166,16 +5173,16 @@ docfree-webpack@^0.5.1:
     webpack-dev-server "^3.10.3"
     webpack-merge "^4.2.2"
 
-docfree@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/docfree/-/docfree-0.5.2.tgz#17c8bca65b07c83e3c04911e33a823a1f8c10f81"
-  integrity sha512-dLBQQFxoSrWvAH6gv3esjPLr+/YeVBH5J9DewYWgCiOqECYzpoy02QIlOJI9jvjuSQlZwLDYC9R+QAlR5oDY0w==
+docfree@^0.5.15:
+  version "0.5.15"
+  resolved "https://registry.npmjs.org/docfree/-/docfree-0.5.15.tgz#b34d2093e31c0de740f392fd95601467737fbc51"
+  integrity sha512-vJjMLkHCDiGqsCp8j2JbrOgjfNtRGsh5gjV0vCt9qkr5wdNg+hb6CYaXp6fnO2PDDUC75lIZPx7hIeZofOofOA==
   dependencies:
     commander "^4.1.1"
-    docfree-generate "^0.5.2"
+    docfree-generate "^0.5.13"
     docfree-template "^0.5.0"
-    docfree-utils "^0.5.0"
-    docfree-webpack "^0.5.1"
+    docfree-utils "^0.5.9"
+    docfree-webpack "^0.5.14"
 
 doctrine@1.5.0:
   version "1.5.0"
@@ -5349,6 +5356,11 @@ electron-to-chromium@^1.3.390:
   version "1.3.411"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.411.tgz#203a24482ac39b039cca0090f9ec05d79074f76d"
   integrity sha512-TDDfkuSYEbknN0kRPSAD8WzB452pJ6EmIxGbI9yQHkDxUNbD6Educ10DxyA9r/DuLL4z255IO1OZIw+eFK6XUw==
+
+electron-to-chromium@^1.4.17:
+  version "1.4.68"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.68.tgz#d79447b6bd1bec9183f166bb33d4bef0d5e4e568"
+  integrity sha512-cId+QwWrV8R1UawO6b9BR1hnkJ4EJPCPAr4h315vliHUtVUJDk39Sg1PMNnaWKfj5x+93ssjeJ9LKL6r8LaMiA==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -5550,6 +5562,11 @@ es6-weak-map@^2.0.1:
     es5-ext "^0.10.46"
     es6-iterator "^2.0.3"
     es6-symbol "^3.1.1"
+
+escalade@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
+  integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
 
 escape-html@~1.0.3:
   version "1.0.3"
@@ -9260,6 +9277,11 @@ node-releases@^1.1.53:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.53.tgz#2d821bfa499ed7c5dffc5e2f28c88e78a08ee3f4"
   integrity sha512-wp8zyQVwef2hpZ/dJH7SfSrIPD6YoJz6BDQDpGEkcA0s3LpAQoxBIYmfIq6QAhC1DhwsyCgTaTTcONwX8qzCuQ==
 
+node-releases@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.2.tgz#7139fe71e2f4f11b47d4d2986aaf8c48699e0c01"
+  integrity sha512-XxYDdcQ6eKqp/YjI+tb2C5WM2LgjnZrfYg4vgQt49EK268b6gYCHsBLrK2qvJo4FmCtqmKezb0WZFK4fkrZNsg==
+
 nopt@^4.0.1:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-4.0.3.tgz#a375cad9d02fd921278d954c2254d5aa57e15e48"
@@ -10053,6 +10075,11 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
+
+picocolors@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
+  integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
 picomatch@^2.0.4, picomatch@^2.0.5:
   version "2.2.1"
@@ -11533,40 +11560,40 @@ relateurl@0.2.x:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
-remark-docfree-heading-link@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-docfree-heading-link/-/remark-docfree-heading-link-0.5.0.tgz#15e70388e87729cef47eb392a2c592c915eee9b8"
-  integrity sha512-6ejubhn6Xo9hHYDX2TLLiJbh36FBcwcBoAkVzwql4HYO7A8dqhqgzhjd6CaQC1FnAH4BOtC4ag6UjmIc9LggVA==
+remark-docfree-heading-link@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/remark-docfree-heading-link/-/remark-docfree-heading-link-0.5.9.tgz#b9cd9cc3bd019e26bd989464d037415930cbbcb5"
+  integrity sha512-kV0map3Qp3l/jg2PIEdWgsWMwVkmD9Ph3Vq/zsWGY7KOV6REnhWKHtEhlEEguZ4fEJQQAu3S7bnhC8Yfxhfriw==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-remark-docfree-jsx@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-docfree-jsx/-/remark-docfree-jsx-0.5.0.tgz#994b3413003bb499daf04fea7ab416838475b7ce"
-  integrity sha512-AHaoG6noofIV4Sr+cd3+dBbV1ZEAF8+X6Kz6fqieOrF38bAaqI1Unb6Qa4fzmRKDj9FT1XdHup5kfPJ7F1GV4w==
+remark-docfree-jsx@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/remark-docfree-jsx/-/remark-docfree-jsx-0.5.9.tgz#81a727046410bfa9c0d542cfb7df29d515801997"
+  integrity sha512-EzsxCofyga4xBkkoT77AQ4hrOBWU9gyZDct+DexbfQmlHSR+m3c3xDCflJ/ZOwDk4O5krjtvGlMLzNSR2NMMbg==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-remark-docfree-playground@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-docfree-playground/-/remark-docfree-playground-0.5.0.tgz#c0c14ff13bea408d59beb3fe59ba8b85b198d5a1"
-  integrity sha512-P+8omWofPDzdGBkLH+OzicwSJ4IYEaV9/iiQpql+vhndWrS6BBaM3s3XB6aa0sD19y/D9pVDxQJd9oC8pnxvig==
+remark-docfree-playground@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/remark-docfree-playground/-/remark-docfree-playground-0.5.9.tgz#193e3bf274bde986da78076b0cba15e9051509c3"
+  integrity sha512-rJRdzpO+WXUzfVPHOYidPohRf5df6G8woP715azjCghhUyA8Mn75BTfI0xEXOGbhODLMtgI3dGNN2rCm0gBPUA==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-remark-docfree-props@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-docfree-props/-/remark-docfree-props-0.5.0.tgz#4a7beac56a96c9f14d34e158bbcbba1d39b9ddc3"
-  integrity sha512-JGfxXS+MJRnSXWkeTq3o1S56gs/MHx2YgT0/FKPoMCv4SsO+pJxa0Vc6AEEsiY3t7mI8L1btdoAXuK9BUwA2nA==
+remark-docfree-props@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/remark-docfree-props/-/remark-docfree-props-0.5.9.tgz#2aaedd2071b3be25b12025a14543fcb1e23dad35"
+  integrity sha512-I34kee+77/tmQlVupHPDcyPfyeyriILk/2AR/HfFKSpamLq5BITs5O23M03sUBLi5i+lx//1W8aL9lHpKnepmA==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
-remark-docfree-vue@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-docfree-vue/-/remark-docfree-vue-0.5.0.tgz#9f50ae067108c50c3357da5a9a90da4e588ed622"
-  integrity sha512-92K9wqJTEPq1CMaaPnOlL8ea1pbtPFd9ib9uWDBx5LSqhfrIOq3uFK4Sa0rYw6M6j5tazDH7wQ2qArme3YqoAw==
+remark-docfree-vue@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/remark-docfree-vue/-/remark-docfree-vue-0.5.9.tgz#67dbb9f54a12454c26e46d904ebfaf5600bb675b"
+  integrity sha512-kQtljP7vOzwH4B+lqeCNjr35kZIdQgDA2oDXc7eCJzxzbvNeQAmEcZpwqwz1htAxyVTQfl+bWtKoXpsgPWQYfw==
   dependencies:
-    docfree-utils "^0.5.0"
+    docfree-utils "^0.5.9"
 
 remark-enhance-image@^0.5.0:
   version "0.5.0"
