@@ -38,8 +38,10 @@ jobs:
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
+          #token: ${{ secrets.ACCESS_TOKEN }}
           repository-name: nuomijs/nuomijs.github.io
           branch: master
-          folder: docs/.docfree/dist
+          #folder: docs/.docfree/dist
+          folder: docs/.docfree/temp
           clean: false
           
