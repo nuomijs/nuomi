@@ -40,7 +40,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
-          token: 1
+          token: ${{ secrets.ACCESS_TOKEN }}
           repository-name: nuomijs/nuomijs.github.io
           branch: master
           folder: docs/.docfree/dist
