@@ -18,7 +18,7 @@ jobs:
       - name: Use Nodejs
         uses: actions/setup-node@v1
         with:
-          node-version: "16"
+          node-version: 16
           
       - name: Install Dependencies
         run: yarn install
@@ -33,5 +33,5 @@ jobs:
           repository-name: nuomijs/nuomijs.github.io
           branch: master
           folder: docs/.docfree/dist
-          clean: true
+          clean: false
           
