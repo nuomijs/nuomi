@@ -5055,66 +5055,66 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
-docfree-component-loader@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/docfree-component-loader/-/docfree-component-loader-0.5.9.tgz#5422aed5611cd257965ba4f12dd59c099fe42593"
-  integrity sha512-QE2McBcUj/mH/oJanHBMtYzuEur1Gp8llPDYcAHPuN7QrRI43WsPXBl+aShl0b81BLF5jlqj1CzYpLGneMkIgQ==
+docfree-component-loader@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-component-loader/-/docfree-component-loader-0.6.0.tgz#327394b4346cc4e7e20a96bcfecae3f2d26867bf"
+  integrity sha512-nkBWEjecTzJzxofIUzq4Iw5G0WSanMt+ePvCyEnwlzoBNZXUHaLl70emeVitsRexGOQgkAp6rX/D21H89Lj4Fw==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-docfree-components@^0.5.10:
-  version "0.5.10"
-  resolved "https://registry.npmjs.org/docfree-components/-/docfree-components-0.5.10.tgz#e224724f6dd5f36cb09da882d88e3f478da11470"
-  integrity sha512-AFRNolaQZZc++Qn4afmvImOJ4DtFAr3oHQs2PkEDEGTgfRZ8/1PgzOmjfl/FkPEputiRJv8QvojUZXefwM1oFA==
+docfree-components@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/docfree-components/-/docfree-components-0.6.3.tgz#633bfc6657a55a7d3159b0745fea0a0812b3a95e"
+  integrity sha512-qRdwaZ09CEDB904pbjQ+B9Xcvi4hz7wUdmZiBjshcA+ZFHYjkKNmRAkldbFisj9AKzaxsInxolGPwaosp+VxEA==
   dependencies:
     date-format "^3.0.0"
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
     prop-types "^15.7.2"
 
-docfree-generate@^0.5.13:
-  version "0.5.13"
-  resolved "https://registry.npmjs.org/docfree-generate/-/docfree-generate-0.5.13.tgz#70ab98c5f6681297d00be89705d9aa6d54916175"
-  integrity sha512-BKoAbJf05fXED2COm44cjC28LRF7F6KVAxEqaL2OCweDOXfeDUheTZsU8EmzNjS/ktKBYu7+IEuGtWu2zhSxXA==
+docfree-generate@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-generate/-/docfree-generate-0.6.0.tgz#52e607dd67aa32b5bb781c24d7d9747c472cf376"
+  integrity sha512-V9alqrap3Qvz613q8yR5CNCxHCagZh9O4UQ1BcjXmKcEv3/BT4xjAsSOyTIE512EfiYWq64HLLuvBdXvwA5XgA==
   dependencies:
     chokidar "^3.3.1"
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-docfree-loader@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.npmjs.org/docfree-loader/-/docfree-loader-0.5.14.tgz#579caf950b1c78cb124905efd994145e1ca863b1"
-  integrity sha512-yr7o/qQB+RsU02N0XHt0WLwJfmMlI1eWmKUm0NakBSp0+tsiNY0DJLBV9y5n1g4yz7azfRgNClkFKli3Lj3pIw==
+docfree-loader@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-loader/-/docfree-loader-0.6.0.tgz#29fe3b22e051304b994b65024b18510df2592fac"
+  integrity sha512-ZTnGEZIuOM6/W0yQXCFVUOSvv1c1Ro4YOZsI4KJNyNlYsNgGZhPKvoHiPIWezgsPSd0I9vpdw/Fv58wt735HnA==
   dependencies:
     "@mdx-js/mdx" "^1.5.7"
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
     gray-matter "^4.0.2"
     loader-utils "^2.0.0"
     remark "^11.0.2"
-    remark-docfree-heading-link "^0.5.9"
-    remark-docfree-jsx "^0.5.9"
-    remark-docfree-playground "^0.5.9"
-    remark-docfree-props "^0.5.9"
-    remark-docfree-vue "^0.5.9"
-    remark-enhance-image "^0.5.0"
-    remark-enhance-link "^0.5.0"
+    remark-docfree-heading-link "^0.6.0"
+    remark-docfree-jsx "^0.6.0"
+    remark-docfree-playground "^0.6.0"
+    remark-docfree-props "^0.6.0"
+    remark-docfree-vue "^0.6.0"
+    remark-enhance-image "^0.6.0"
+    remark-enhance-link "^0.6.0"
     remark-mdx "^1.5.8"
 
-docfree-prop-types@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/docfree-prop-types/-/docfree-prop-types-0.5.9.tgz#893711583b8210e867ff12f78891681ebdd7566f"
-  integrity sha512-QLej/Kc5wQ0UbTSkPsMuSzV+0TmXWy8GR+M6dS9qgBGpm2D2XrLa++Og7jT1QETab1H0EWGqJdcF8VYUrLM3pg==
+docfree-prop-types@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-prop-types/-/docfree-prop-types-0.6.0.tgz#fbc4de69a2b5cae08aeb678a9c4948bb5a71d42e"
+  integrity sha512-VwpRk2V3i//IbFxfm+FpibZDsZE1FYoKjeveN+lsPpCvR+hqOysXaVHbJO2O9qYCYQBgZEQVvC4ilifB8uJiow==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
     prop-types "^15.7.2"
 
-docfree-template@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/docfree-template/-/docfree-template-0.5.0.tgz#bb00adc841d2abd5146b9720b18b2354861442cc"
-  integrity sha512-VOThB+dPvQghA//wSvUbg/HCqzklpoTI6WKO33Gse4551dlW2QQbTi8tgUcC3Ck5aACDupiZT4iHBEn3P0Twmw==
+docfree-template@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-template/-/docfree-template-0.6.0.tgz#1401f64c07eb1a0a22a248ed77da47aef580afe5"
+  integrity sha512-f1hYGf9eC5qigNET00YPR8wZj5DXs0jBBcBrNJYmRvulYOa4aPhRtwGgikQBJT6lzmBVX1q2kczrzRdrJE30Sg==
 
-docfree-utils@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/docfree-utils/-/docfree-utils-0.5.9.tgz#07a7e1dee0295c3f1a1129b3a10248539935db94"
-  integrity sha512-ypxJFUeQjTh9ihB9PeqjATYsTwuW2VFVYDqEkUTMp82RBDwZT3BdJjMkg0Eoojvh9jTfkCiXvboeReRexvBsvg==
+docfree-utils@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docfree-utils/-/docfree-utils-0.6.0.tgz#5e87aeb42f6af72fd46b5a365cddf63c5fe7de8a"
+  integrity sha512-9TolJIy1zd/qoXQ36Z/7mdPnji4De/o+SsNDF3e8jIhE2BVVlquH61hMPZ/Hr3ouuVOHoUwsyeH3MZCmlMBLJw==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/generator" "^7.9.0"
@@ -5133,10 +5133,10 @@ docfree-utils@^0.5.9:
     unist-util-visit "^2.0.2"
     vfile "^4.1.0"
 
-docfree-webpack@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.npmjs.org/docfree-webpack/-/docfree-webpack-0.5.14.tgz#2b380710f7c095fb43dc5a0eba56568455d0e649"
-  integrity sha512-GIqAM0LmIibk6lEJAYv+jSl8yGhCLvv1/shY1tLJlt+qx7T/UidVkqXC8IP5PsPIKnIKEEtWJOofej1nfO/qNQ==
+docfree-webpack@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/docfree-webpack/-/docfree-webpack-0.6.3.tgz#5cc7431dcbaadcb3f8e059db540b2f284054c5a9"
+  integrity sha512-fBbg8zgSQy1xOlJQEYT0a9M3Kb5/po+js2Yaig5VlEsoCkcShkZJS3Yhq/Oecx47y+2r8fu8u1hbydebMfc0Hg==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     antd "3.x"
@@ -5148,11 +5148,11 @@ docfree-webpack@^0.5.14:
     copy-webpack-plugin "^5.1.1"
     css-loader "^3.4.2"
     date-format "^3.0.0"
-    docfree-component-loader "^0.5.9"
-    docfree-components "^0.5.10"
-    docfree-loader "^0.5.14"
-    docfree-prop-types "^0.5.9"
-    docfree-utils "^0.5.9"
+    docfree-component-loader "^0.6.0"
+    docfree-components "^0.6.3"
+    docfree-loader "^0.6.0"
+    docfree-prop-types "^0.6.0"
+    docfree-utils "^0.6.0"
     file-loader "^6.0.0"
     highlight.js "^9.18.1"
     html-webpack-plugin "^3.2.0"
@@ -5173,16 +5173,16 @@ docfree-webpack@^0.5.14:
     webpack-dev-server "^3.10.3"
     webpack-merge "^4.2.2"
 
-docfree@^0.5.15:
-  version "0.5.15"
-  resolved "https://registry.npmjs.org/docfree/-/docfree-0.5.15.tgz#b34d2093e31c0de740f392fd95601467737fbc51"
-  integrity sha512-vJjMLkHCDiGqsCp8j2JbrOgjfNtRGsh5gjV0vCt9qkr5wdNg+hb6CYaXp6fnO2PDDUC75lIZPx7hIeZofOofOA==
+docfree@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/docfree/-/docfree-0.6.4.tgz#89837f7eddda6f72b1e736e05ccd998a16cb4bf0"
+  integrity sha512-m9o6q+flmsmk9U6ZY+MXfF/bjZwZyc1HUF4AqQ1orCSvDkIhXUQrTZlEL8SFrLrmGzmqNki0nIFf+RQfcUCM8Q==
   dependencies:
     commander "^4.1.1"
-    docfree-generate "^0.5.13"
-    docfree-template "^0.5.0"
-    docfree-utils "^0.5.9"
-    docfree-webpack "^0.5.14"
+    docfree-generate "^0.6.0"
+    docfree-template "^0.6.0"
+    docfree-utils "^0.6.0"
+    docfree-webpack "^0.6.3"
 
 doctrine@1.5.0:
   version "1.5.0"
@@ -11560,52 +11560,52 @@ relateurl@0.2.x:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
-remark-docfree-heading-link@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/remark-docfree-heading-link/-/remark-docfree-heading-link-0.5.9.tgz#b9cd9cc3bd019e26bd989464d037415930cbbcb5"
-  integrity sha512-kV0map3Qp3l/jg2PIEdWgsWMwVkmD9Ph3Vq/zsWGY7KOV6REnhWKHtEhlEEguZ4fEJQQAu3S7bnhC8Yfxhfriw==
+remark-docfree-heading-link@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-docfree-heading-link/-/remark-docfree-heading-link-0.6.0.tgz#3e28d46a5246bf4c838cb2c2b3b8c86172a21cef"
+  integrity sha512-fDsO5YmjK0Sg3PKGq22iBKud/KKeIjnyLvuJZXIjJLpcxbaE6V2DFRMrrD2RfRfy0F4ONLcDvvgZVKTUKSTlYA==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-remark-docfree-jsx@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/remark-docfree-jsx/-/remark-docfree-jsx-0.5.9.tgz#81a727046410bfa9c0d542cfb7df29d515801997"
-  integrity sha512-EzsxCofyga4xBkkoT77AQ4hrOBWU9gyZDct+DexbfQmlHSR+m3c3xDCflJ/ZOwDk4O5krjtvGlMLzNSR2NMMbg==
+remark-docfree-jsx@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-docfree-jsx/-/remark-docfree-jsx-0.6.0.tgz#94bee3096f1d29005c318a3dca9d18e15d5def7a"
+  integrity sha512-LB8u7yw4FNTbe9jl82BeoX9/uOGmaBdJB/OVvNrD866eYMglFAJBdXnX9LrVWjL0BcZJwzxSR5jfbGaybHrbOg==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-remark-docfree-playground@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/remark-docfree-playground/-/remark-docfree-playground-0.5.9.tgz#193e3bf274bde986da78076b0cba15e9051509c3"
-  integrity sha512-rJRdzpO+WXUzfVPHOYidPohRf5df6G8woP715azjCghhUyA8Mn75BTfI0xEXOGbhODLMtgI3dGNN2rCm0gBPUA==
+remark-docfree-playground@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-docfree-playground/-/remark-docfree-playground-0.6.0.tgz#a4fd6f213828968d03d04c20a378842d04f86c2e"
+  integrity sha512-CVqpoWHHTwDs+rhgFC/BxyoxrSh5NmpU9ta1Vygl8dq30xfCwcPyfdwsurspliadYWDIsImu1+435O916ALjzQ==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-remark-docfree-props@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/remark-docfree-props/-/remark-docfree-props-0.5.9.tgz#2aaedd2071b3be25b12025a14543fcb1e23dad35"
-  integrity sha512-I34kee+77/tmQlVupHPDcyPfyeyriILk/2AR/HfFKSpamLq5BITs5O23M03sUBLi5i+lx//1W8aL9lHpKnepmA==
+remark-docfree-props@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-docfree-props/-/remark-docfree-props-0.6.0.tgz#3023741a32b4c023346ab324bc6027afe5224904"
+  integrity sha512-yNWYNqBQW0H11ZBuV0bJ1KzWA2IRnu9Ap0HFLylyP+LmJvYuxu8NZbgXYOY+jWGzazLPJEgtE1Giv6jj2i2rYg==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-remark-docfree-vue@^0.5.9:
-  version "0.5.9"
-  resolved "https://registry.npmjs.org/remark-docfree-vue/-/remark-docfree-vue-0.5.9.tgz#67dbb9f54a12454c26e46d904ebfaf5600bb675b"
-  integrity sha512-kQtljP7vOzwH4B+lqeCNjr35kZIdQgDA2oDXc7eCJzxzbvNeQAmEcZpwqwz1htAxyVTQfl+bWtKoXpsgPWQYfw==
+remark-docfree-vue@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-docfree-vue/-/remark-docfree-vue-0.6.0.tgz#61cddc5b3a79c1612f10e92d2fe835185407b1bf"
+  integrity sha512-SNGCueGNUE0z5izBm5Y12AY9T59mSo7cU3CCsrJbL7O8is6beHZZ5LTjERnQRJHcZaZ8YR1zOUYSt9PRT79OKA==
   dependencies:
-    docfree-utils "^0.5.9"
+    docfree-utils "^0.6.0"
 
-remark-enhance-image@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-enhance-image/-/remark-enhance-image-0.5.0.tgz#f2ada8f4723da4033eec0537f08fe1318383ca3b"
-  integrity sha512-zqJs2HFuQJncwnmVNdPoFH4hUC/UI2NJ9YQg3CpuM3NDdo+4Qe6h8FhXmR2v/sOpEe5OtOoFFNJe6DwAiNZG8A==
+remark-enhance-image@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-enhance-image/-/remark-enhance-image-0.6.0.tgz#8c9ea7de30bfe9ea9d13ef5fc9b0415aed431340"
+  integrity sha512-Si0wxqyl1hkMSJgUsAGV/8enPvr02PrTqmjxqugEeQd98qeTXGQz/gx03Fx2LpNLZvgla0ZCIRNAMeDyPVApSg==
   dependencies:
     unist-util-visit "^2.0.2"
 
-remark-enhance-link@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/remark-enhance-link/-/remark-enhance-link-0.5.0.tgz#57dc321ac832c95e161d1f898336830c0118f7f6"
-  integrity sha512-BhlO38Z24AkiqNunE5p/gzlWCOpxbznW2dcPlHFO306rtEXUjMIA9AWywUXo8pmDwHpXp/9wRnzaq3UgrTcIxA==
+remark-enhance-link@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/remark-enhance-link/-/remark-enhance-link-0.6.0.tgz#cb2fab295cce2dae30e120b949f0990412df9d30"
+  integrity sha512-lu3bJ1XAdOv9JyAhvYeFtMjEulVpA8Fr9dfVSRxhpZO1V1I3/x7Hv5nS3cZ6GCDBWemq0q8TNkGJYfXDJfbZBw==
   dependencies:
     unist-util-visit "^2.0.2"
 
