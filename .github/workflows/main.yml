@@ -1,0 +1,37 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build Docs
+        run: yarn build && yarn doc:build
+        
+      - name: Deploy Docs
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repository-name: nuomijs/nuomijs.github.io
+          branch: master
+          folder: docs/.docfree/dist
+          clean: false
+          
