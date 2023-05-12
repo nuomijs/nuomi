@@ -30,7 +30,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          repository-name: 0.x.nuomijs/nuomijs.github.io
+          repository-name: nuomijs/0.x.nuomijs.github.io
           branch: master
           folder: docs/.docfree/dist
           clean: false
