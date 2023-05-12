@@ -2,9 +2,9 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 0.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ 0.x ]
 
   workflow_dispatch:
 
@@ -30,7 +30,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          repository-name: nuomijs/nuomijs.github.io
+          repository-name: 0.x.nuomijs/nuomijs.github.io
           branch: master
           folder: docs/.docfree/dist
           clean: false
