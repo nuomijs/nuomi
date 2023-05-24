@@ -43,9 +43,9 @@ export default class Route extends React.PureComponent {
 
           // 同一个context只匹配一次
           const allowMatch = !context.matched || context.matched === this;
-          const matchLocation = allowMatch && router.matchPath(context.location, path);
+          const matchRoute = allowMatch && router.matchPath(context.route, path);
 
-          if (!matchLocation) {
+          if (!matchRoute) {
             // 设置了cache没有匹配路由，不销毁，只隐藏
             if (cache === true && this.routeComponent !== null) {
               return this.routeComponent;
@@ -62,14 +62,14 @@ export default class Route extends React.PureComponent {
             routeTempData: this.routeTempData,
           };
 
-          if (matchLocation) {
+          if (matchRoute) {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>
                 <RouteCore
                   {...this.props}
                   cache={cache}
-                  location={matchLocation}
+                  route={matchRoute}
                   store={this.store}
                 />
               </RouterContext.Provider>

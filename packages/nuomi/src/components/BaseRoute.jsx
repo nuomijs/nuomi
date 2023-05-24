@@ -19,15 +19,13 @@ export default class BaseRoute extends BaseNuomi {
     const { props } = this;
     const { store } = props;
     const isReload = store.id && props.reload === true;
-    const isChange = prevProps.location !== props.location;
+    const isChange = prevProps.route !== props.route;
     if (isReload) {
       this.replaceState();
-    }
-    if (isChange) {
       this.routerChange();
-    }
-    if (isReload) {
       this.nuomiInit();
+    } else if (isChange) {
+      this.routerChange();
     }
   }
 
@@ -58,25 +56,11 @@ export default class BaseRoute extends BaseNuomi {
     });
   }
 
-  routerChange(isReload) {
+  routerChange() {
     const { props } = this;
-    const { location, onChange } = props;
-    if (isFunction(location.data)) {
-      location.data(props);
-    }
+    const { onChange, store } = props;
     if (isFunction(onChange)) {
-      onChange.call(props);
-    } else if (isObject(onChange)) {
-      Object.keys(onChange).forEach((key) => {
-        const callback = onChange[key];
-        if (isFunction(callback)) {
-          // 首次加载和刷新时不执行带有$前缀的回调
-          if (isReload && key.indexOf('$') === 0) {
-            return;
-          }
-          callback.call(props);
-        }
-      });
+      onChange.call({ store });
     }
   }
 }

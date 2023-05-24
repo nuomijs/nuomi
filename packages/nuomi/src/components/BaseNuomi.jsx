@@ -9,7 +9,7 @@ import globalStore, {
 } from '../core/redux/store';
 import { isObject, isFunction } from '../utils';
 import nuomi from '../core/nuomi';
-import EffectsProxy, { getClassEffects } from '../utils/effectsProxy';
+import Proxy from '../utils/Proxy';
 import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
 import { NuomiPropTypes } from './propTypes';
@@ -53,23 +53,6 @@ export default class BaseNuomi extends React.PureComponent {
     this.nuomiInit();
   }
 
-  getEffects() {
-    const { props } = this;
-    const { effects, store } = props;
-    let newEffects = {};
-    if (isObject(effects)) {
-      newEffects = {
-        ...effects,
-        getNuomiProps: () => this.props,
-        getState: store.getState,
-        dispatch: store.dispatch,
-      };
-    } else if (isFunction(effects)) {
-      newEffects = props.effects() || {};
-    }
-    return newEffects.constructor === Object ? newEffects : getClassEffects(newEffects);
-  }
-
   createStore() {
     const { props } = this;
     const { store, reducers } = props;
@@ -83,11 +66,7 @@ export default class BaseNuomi extends React.PureComponent {
         return action;
       }
 
-      if (!this.effects) {
-        this.effects = this.getEffects();
-      }
-
-      const { effects } = this;
+      const { effects } = props;
 
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = type.indexOf('/');
@@ -98,36 +77,39 @@ export default class BaseNuomi extends React.PureComponent {
           const loadingType = `${store.id}/_updateLoading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
-            const effectsProxy = new EffectsProxy(effects, {
+            const proxy = new Proxy(effects, {
               // name是当前调用的方法或者属性名
               get: (target, name) => {
                 const effect = effects[name];
-                // $开头的方法进行loading特殊处理
-                if (isFunction(effect) && name.indexOf('$') === 0) {
-                  // 获取上一次调用的方法
-                  const prevEffect = loadingQueue.slice(-1)[0];
-                  // 开启loading
-                  const loadingPayload = { [name]: true };
-                  // 当前方法调用，说明上一个方法肯定调用结束了，因此关闭上一个loading
-                  // 需排除最外层调用方法，该方法在finally中处理
-                  if (prevEffect !== type && prevEffect) {
-                    loadingPayload[prevEffect] = false;
-                    // 从队列中移除执行完的loading方法名
-                    loadingQueue.pop();
+                if (isFunction(effect)) {
+                  // $开头的方法进行loading特殊处理
+                  if (name.indexOf('$') === 0) {
+                    // 获取上一次调用的方法
+                    const prevEffect = loadingQueue.slice(-1)[0];
+                    // 开启loading
+                    const loadingPayload = { [name]: true };
+                    // 当前方法调用，说明上一个方法肯定调用结束了，因此关闭上一个loading
+                    // 需排除最外层调用方法，该方法在finally中处理
+                    if (prevEffect !== type && prevEffect) {
+                      loadingPayload[prevEffect] = false;
+                      // 从队列中移除执行完的loading方法名
+                      loadingQueue.pop();
+                    }
+                    // 更新loading状态
+                    globalStore.dispatch({
+                      type: loadingType,
+                      payload: loadingPayload,
+                    });
+                    // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
+                    loadingQueue.push(name);
                   }
-                  // 更新loading状态
-                  globalStore.dispatch({
-                    type: loadingType,
-                    payload: loadingPayload,
-                  });
-                  // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
-                  loadingQueue.push(name);
+                  return (payload) => target[name]({ state: store.getState(), dispatch: store.dispatch }, payload);
                 }
                 // 返回当前调用对象
                 return effect;
               },
             });
-            return await effectsProxy[type](payload);
+            return await proxy[type](payload);
           } catch (e) {
             if (e && e.constructor !== Object) {
               throw e;
@@ -191,7 +173,7 @@ export default class BaseNuomi extends React.PureComponent {
       if (type.indexOf(typePrefix) === 0) {
         const key = type.replace(typePrefix, '');
         if (reducers[key]) {
-          return reducers[key](state, action);
+          return reducers[key](state, action.payload);
         }
         warning(
           false,
@@ -212,9 +194,10 @@ export default class BaseNuomi extends React.PureComponent {
 
   nuomiInit() {
     const { props } = this;
+    const { onInit, store } = props;
     this.removeListener();
-    if (props.onInit) {
-      this.unListener = props.onInit();
+    if (isFunction(onInit)) {
+      onInit({ store });
     }
   }
 

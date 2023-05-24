@@ -64,7 +64,7 @@ export default class RouteCore extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     const { wrappers } = this.context;
-    const { location, cache } = this.props;
+    const { route, cache } = this.props;
     const { current } = this.wrapperRef;
 
     // 清理wrapper
@@ -75,7 +75,7 @@ export default class RouteCore extends React.PureComponent {
       this.wrapper = current;
       wrappers.push(current);
     }
-    if (location !== prevProps.location) {
+    if (route !== prevProps.route) {
       // 切换当前路由后，隐藏所有wrapper
       this.hideWrapper();
       if (cache === true) {
@@ -95,54 +95,54 @@ export default class RouteCore extends React.PureComponent {
   }
 
   // 设置data临时数据，保存设置前的数据
-  setTempData(locationData) {
-    const { nuomiProps } = this.state;
-    const { data } = nuomiProps;
-    const { routeTempData } = this.context;
-    const keys = Object.keys(locationData);
+  // setTempData(route) {
+  //   const { nuomiProps } = this.state;
+  //   const { data } = nuomiProps;
+  //   const { routeTempData } = this.context;
+  //   const keys = Object.keys(route);
 
-    if (keys.length) {
-      const dataKeys = Object.keys(data);
-      // 存储临时数据
-      routeTempData.temp = locationData;
-      // 存储之前的data数据，为了临时数据使用完后还原
-      routeTempData.prev = {};
-      keys.forEach((key) => {
-        if (dataKeys.includes(key)) {
-          routeTempData.prev[key] = data[key];
-        }
-        data[key] = locationData[key];
-      });
-    }
-  }
+  //   if (keys.length) {
+  //     const dataKeys = Object.keys(data);
+  //     // 存储临时数据
+  //     routeTempData.temp = route;
+  //     // 存储之前的data数据，为了临时数据使用完后还原
+  //     routeTempData.prev = {};
+  //     keys.forEach((key) => {
+  //       if (dataKeys.includes(key)) {
+  //         routeTempData.prev[key] = data[key];
+  //       }
+  //       data[key] = route[key];
+  //     });
+  //   }
+  // }
 
-  restoreData() {
-    const { nuomiProps } = this.state;
-    const { data } = nuomiProps;
-    const { routeTempData } = this.context;
+  // restoreData() {
+  //   const { nuomiProps } = this.state;
+  //   const { data } = nuomiProps;
+  //   const { routeTempData } = this.context;
 
-    // 删除临时数据
-    if (routeTempData.temp) {
-      const tempDataKeys = Object.keys(routeTempData.temp);
-      if (tempDataKeys.length) {
-        tempDataKeys.forEach((key) => {
-          delete data[key];
-        });
-        routeTempData.temp = null;
-      }
-    }
+  //   // 删除临时数据
+  //   if (routeTempData.temp) {
+  //     const tempDataKeys = Object.keys(routeTempData.temp);
+  //     if (tempDataKeys.length) {
+  //       tempDataKeys.forEach((key) => {
+  //         delete data[key];
+  //       });
+  //       routeTempData.temp = null;
+  //     }
+  //   }
 
-    // 还原旧数据
-    if (routeTempData.prev) {
-      const prevDataKeys = Object.keys(routeTempData.prev);
-      if (prevDataKeys.length) {
-        prevDataKeys.forEach((key) => {
-          data[key] = routeTempData.prev[key];
-        });
-        routeTempData.prev = null;
-      }
-    }
-  }
+  //   // 还原旧数据
+  //   if (routeTempData.prev) {
+  //     const prevDataKeys = Object.keys(routeTempData.prev);
+  //     if (prevDataKeys.length) {
+  //       prevDataKeys.forEach((key) => {
+  //         data[key] = routeTempData.prev[key];
+  //       });
+  //       routeTempData.prev = null;
+  //     }
+  //   }
+  // }
 
   // 异步加载props，可以使用require.ensure或import
   loadProps(cb) {
@@ -194,10 +194,10 @@ export default class RouteCore extends React.PureComponent {
   }
 
   showWrapper(nuomiProps) {
-    const { url } = this.props.location;
+    const { url } = this.props.route;
     if (isFunction(nuomiProps.onLeave)) {
-      blockData.callback = (leave, restore, toLocation) => {
-        const isLeave = nuomiProps.onLeave(leave, toLocation) !== false;
+      blockData.callback = (leave, restore, toRoute) => {
+        const isLeave = nuomiProps.onLeave(leave, toRoute) !== false;
         if (isLeave) {
           leave(isLeave);
         } else {
@@ -228,8 +228,8 @@ export default class RouteCore extends React.PureComponent {
 
   getNextProps() {
     const { props } = this;
-    const { location } = props;
-    const nextProps = { location };
+    const { route } = props;
+    const nextProps = { route };
     const { nuomiProps } = this.state;
 
     ['path', 'cache', 'reload', 'children'].forEach((value) => {
@@ -237,9 +237,9 @@ export default class RouteCore extends React.PureComponent {
       nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
     });
 
-    if (nextProps.reload !== null && location.reload !== undefined) {
-      // 优先使用location.reload
-      nextProps.reload = location.reload;
+    if (nextProps.reload !== null && route.reload !== undefined) {
+      // 优先使用route.reload
+      nextProps.reload = route.reload;
     }
 
     return nextProps;
@@ -247,13 +247,13 @@ export default class RouteCore extends React.PureComponent {
 
   render() {
     const props = this.getNextProps();
-    const { cache, location } = props;
+    const { cache, route } = props;
     const { nuomiProps, visible, loaded } = this.state;
 
-    this.restoreData();
-    if (isObject(location.data)) {
-      this.setTempData(location.data);
-    }
+    // this.restoreData();
+    // if (isObject(route.data)) {
+    //   this.setTempData(route.data);
+    // }
 
     if (cache === true || (loaded && visible)) {
       const baseRoute = <BaseRoute {...nuomiProps} {...props} />;

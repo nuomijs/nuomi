@@ -19,23 +19,23 @@ class NavLink extends Link {
     reload: false,
   };
 
-  isActive(location) {
+  isActive(route) {
     const { props } = this;
     const { isActive, to, path } = props;
     const { pathname } = parser(restorePath(to));
-    const match = router.matchPath(location, path || pathname);
+    const match = router.matchPath(route, path || pathname);
     if (isFunction(isActive)) {
-      return isActive(match, location, props) !== false;
+      return isActive(match, route, props) !== false;
     }
     return match;
   }
 
-  getActiveProps(location) {
+  getActiveProps(route) {
     const {
       className, style, activeClassName, activeStyle,
     } = this.props;
     const props = { className, style };
-    if (this.isActive(location)) {
+    if (this.isActive(route)) {
       props.className = [className, activeClassName].filter((name) => !!name).join(' ');
       props.style = { ...activeStyle, ...style };
     }
@@ -59,12 +59,12 @@ class NavLink extends Link {
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NavLink>');
-          const { location } = context;
+          const { route } = context;
           return (
             <a
               href={combinePath(to)}
               {...rest}
-              {...this.getActiveProps(location)}
+              {...this.getActiveProps(route)}
               onClick={this.onClick}
               ref={forwardRef}
             />

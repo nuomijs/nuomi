@@ -19,16 +19,16 @@ export default class Router extends React.PureComponent {
     super(...args);
     this.mounted = false;
     this.state = {};
-    this.location = null;
+    this.route = null;
     this.wrappers = [];
     const { staticLocation } = this.context || {};
-    this.clearRouter = createRouter(this.props, staticLocation, (location) => {
+    this.clearRouter = createRouter(this.props, staticLocation, (route) => {
       if (this.mounted) {
-        this.setState({ location });
+        this.setState({ route });
       } else {
-        this.location = location;
-        if (!this.state.location) {
-          this.state.location = location;
+        this.route = route;
+        if (!this.state.route) {
+          this.state.route = route;
         }
       }
     });
@@ -40,8 +40,8 @@ export default class Router extends React.PureComponent {
   componentDidMount() {
     this.mounted = true;
     // createRouter回调可能在Router组件未被渲染结束调用多次，因此渲染完成后更新一次state
-    if (this.state.location !== this.location) {
-      this.setState({ location: this.location });
+    if (this.state.route !== this.route) {
+      this.setState({ route: this.route });
     }
   }
 
@@ -49,17 +49,17 @@ export default class Router extends React.PureComponent {
     if (this.clearRouter) {
       this.clearRouter();
       this.mounted = false;
-      this.location = null;
+      this.route = null;
       clearStore();
     }
   }
 
   render() {
     const { children, basename, type } = this.props;
-    const { location } = this.state;
+    const { route } = this.state;
     const { staticContext } = this.context || {};
     const contextValue = {
-      location,
+      route,
       staticContext,
       matched: null,
       wrappers: this.wrappers,

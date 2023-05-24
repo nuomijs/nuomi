@@ -9,11 +9,11 @@ import { NuomiRoutePropTypes } from './propTypes';
 export default class NuomiRoute extends React.PureComponent {
   static propTypes = NuomiRoutePropTypes;
 
-  matchPath(location) {
-    const { pathname } = location;
+  matchPath(route) {
+    const { pathname } = route;
     const { pathPrefix, path } = this.props;
     if (path) {
-      return match(location, path);
+      return match(route, path);
     }
     if (pathPrefix instanceof RegExp) {
       return pathPrefix.test(pathname);
@@ -33,7 +33,7 @@ export default class NuomiRoute extends React.PureComponent {
           // 同一个context只匹配一次
           const allowMatch = !context.matched || context.matched === this;
 
-          if (allowMatch && this.matchPath(context.location)) {
+          if (allowMatch && this.matchPath(context.route)) {
             context.matched = this;
             return (
               <RouterContext.Provider value={{ ...context, matched: null }}>
