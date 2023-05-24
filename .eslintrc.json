@@ -9,6 +9,7 @@
     "consistent-return": "off",
     "no-param-reassign": "off",
     "no-plusplus": "off",
+    "linebreak-style": "off",
     "react/static-property-placement": "off",
     "react/sort-comp": "off",
     "react/destructuring-assignment": "off",
