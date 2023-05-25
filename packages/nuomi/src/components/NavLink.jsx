@@ -14,7 +14,6 @@ class NavLink extends Link {
     to: '',
     path: '',
     activeClassName: 'active',
-    data: null,
     replace: false,
     reload: false,
   };
@@ -47,7 +46,6 @@ class NavLink extends Link {
       to,
       path,
       reload,
-      data,
       replace,
       activeClassName,
       activeStyle,

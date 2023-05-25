@@ -13,7 +13,6 @@ export default class Route extends React.PureComponent {
   static defaultProps = {
     path: '',
     state: {},
-    data: {},
     reducers: {},
   };
 
@@ -66,12 +65,7 @@ export default class Route extends React.PureComponent {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>
-                <RouteCore
-                  {...this.props}
-                  cache={cache}
-                  route={matchRoute}
-                  store={this.store}
-                />
+                <RouteCore {...this.props} cache={cache} route={matchRoute} store={this.store} />
               </RouterContext.Provider>
             );
           }

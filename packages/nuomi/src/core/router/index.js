@@ -53,7 +53,9 @@ function getOriginPath() {
 
 function getRoute() {
   const originPath = getOriginPath();
-  return Object.assign(parser(originPath.replace(new RegExp(`^${options.basename}`), '')), { state: extraData.state || {} });
+  return Object.assign(parser(originPath.replace(new RegExp(`^${options.basename}`), '')), {
+    state: extraData.state || {},
+  });
 }
 
 function getMergeRoute() {
@@ -162,6 +164,10 @@ function routeHandle(...args) {
       extraData.reload = isReload;
     }
 
+    if (isObject(path) && isObject(path.state)) {
+      extraData.state = path.state;
+    }
+
     let url = combinePath(path);
     const originPath = getOriginPath();
 
@@ -244,8 +250,8 @@ function createRouter(routerOptions, staticLocation, callback) {
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    listener((route) => {
-      callback((currentRoute = route));
+    listener((toRoute) => {
+      callback((currentRoute = toRoute));
     });
     globalWindow.addEventListener(eventType, routerEventListener);
     return (clear = () => {
@@ -266,8 +272,8 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function match(route, path, returns) {
-  const { pathname } = route;
+function match(routeData, path, returns) {
+  const { pathname } = routeData;
   const normalPath = normalizePath(path);
   let pathRegexp = pathRegexps[normalPath];
 

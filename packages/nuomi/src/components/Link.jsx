@@ -8,7 +8,6 @@ export class Link extends React.PureComponent {
 
   static defaultProps = {
     to: '',
-    data: null,
     replace: false,
     reload: false,
   };
@@ -16,17 +15,17 @@ export class Link extends React.PureComponent {
   onClick = (e) => {
     e.preventDefault();
     const {
-      to, reload, data, replace, onClick,
+      to, reload, replace, onClick,
     } = this.props;
     if (isFunction(onClick) && onClick(e) === false) {
       return;
     }
-    router[replace ? 'replace' : 'push'](to, data, reload);
+    router[replace ? 'replace' : 'push'](to, reload);
   };
 
   render() {
     const {
-      to, reload, data, replace, forwardRef, ...rest
+      to, reload, replace, forwardRef, ...rest
     } = this.props;
     return <a href={combinePath(to)} {...rest} onClick={this.onClick} ref={forwardRef} />;
   }

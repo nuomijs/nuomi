@@ -9,7 +9,6 @@ export default class Nuomi extends React.PureComponent {
 
   static defaultProps = {
     state: {},
-    data: {},
     reducers: {},
   };
 

@@ -1,91 +1,44 @@
-import React from 'react';
-import {
-  Router,
-  StaticRouter,
-  Route,
-  NuomiRoute,
-  Redirect,
-  Link,
-  NavLink,
-  ShapeRoute,
-  router,
-} from 'nuomi';
-import home from './home';
-import login from './login';
-import './public/config';
-import routes from './home/public/routes';
+import React, { Component }  from 'react';
+import { Nuomi, useConnect } from 'nuomi';
 
-// console.log(router.mergePath('/', '/home', '/list'))
+// export class App extends Component {
+//   render() {
+//     <ShapeRoute routes={[{
+//       path: '/',
+//       async: () => import('')
+//     }]} />
+//   }
+// }
 
-// const loadHome = () => import('./home');
+const Container = () => {
+  const [{ show }, dispatch] = useConnect();
+  return <div onClick={() => {
+    dispatch({
+      type: 'update',
+      payload: {
+        show: !show
+      }
+    })
+  }}>
+    { show ? 1 : 2 }
+  </div>
+};
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      routes: [
-        {
-          path: '/',
-          ...login,
-          children: '账号密码：nuomi',
+export default () => {
+  return (
+    <Nuomi
+      state={{ show: false }}
+      effects={{
+        update({ dispatch, state }) {
+          dispatch({
+            type: '_updateState',
+            payload: {
+              show: !state.show
+            }
+          });
         },
-        {
-          path: '/哈',
-          children: [
-            {
-              path: '/b',
-              children: '11',
-            },
-          ],
-        },
-        {
-          path: '/home',
-          ...home,
-          children: [...routes, { path: '*', children: '404' }],
-        },
-        {
-          to: '/',
-        },
-      ],
-    };
-  }
-
-  componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({
-    //     routes: [
-    //       {
-    //         path: '/',
-    //         ...login,
-    //         children: '账号密码：nuomi',
-    //       },
-    //       {
-    //         path: '/home',
-    //         ...home,
-    //         children: [...routes, { path: '*', children: '404' }],
-    //       },
-    //       {
-    //         to: '/',
-    //       },
-    //     ],
-    //   });
-    // }, 1000);
-  }
-
-  render() {
-    return <ShapeRoute routes={this.state.routes} />;
-  }
+      }}
+      render={() => <Container />}
+    />
+  )
 }
-
-{
-  /* <Route path="/" {...login} />
-        <NuomiRoute path="/home/*" {...home} /> */
-}
-{
-  /* <Route path="/home/*" {...home} /> */
-}
-{
-  /* <Redirect to="/" /> */
-}
-
-export default App;

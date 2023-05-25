@@ -9,6 +9,9 @@ export interface Location {
   params?: {
     [key: string]: any;
   };
+  state?: {
+    [key: string]: any;
+  }
 }
 
 export interface RouterAPI {

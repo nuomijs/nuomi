@@ -21,12 +21,12 @@ class ShapeComponent extends React.PureComponent {
   static defaultProps = { routes: [] };
 
   getComponents(routes, parentPath) {
-    const conponents = [];
+    const components = [];
     routes
       .filter((obj) => !!obj)
       .forEach((obj, i) => {
         if (React.isValidElement(obj)) {
-          conponents.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
+          components.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
         } else {
           const {
             key, route, children: childrenRoutes, ...props
@@ -45,14 +45,14 @@ class ShapeComponent extends React.PureComponent {
           const children = isRoutes
             ? this.getComponents(childrenRoutes, newProps.path)
             : childrenRoutes;
-          conponents.push(
+          components.push(
             <Component key={getKey(key, i)} {...newProps}>
               {children}
             </Component>,
           );
         }
       });
-    return conponents;
+    return components;
   }
 
   render() {

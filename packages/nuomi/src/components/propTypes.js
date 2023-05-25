@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 export const NuomiPropTypes = {
   id: PropTypes.string,
   state: PropTypes.object,
-  data: PropTypes.object,
   store: PropTypes.object,
   reducers: PropTypes.objectOf(PropTypes.func),
   effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
@@ -45,7 +44,6 @@ export const StaticRouterPropTypes = {
 
 export const LinkPropTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  data: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   reload: PropTypes.bool,
   replace: PropTypes.bool,
 };

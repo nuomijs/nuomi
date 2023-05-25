@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
-import { isFunction, isObject } from '../utils';
+import { isFunction } from '../utils';
 import nuomi, { getDefaultProps } from '../core/nuomi';
 import { blockData } from '../core/router';
 import { RoutePropTypes } from './propTypes';
@@ -94,56 +94,6 @@ export default class RouteCore extends React.PureComponent {
     this.removeWrapper();
   }
 
-  // 设置data临时数据，保存设置前的数据
-  // setTempData(route) {
-  //   const { nuomiProps } = this.state;
-  //   const { data } = nuomiProps;
-  //   const { routeTempData } = this.context;
-  //   const keys = Object.keys(route);
-
-  //   if (keys.length) {
-  //     const dataKeys = Object.keys(data);
-  //     // 存储临时数据
-  //     routeTempData.temp = route;
-  //     // 存储之前的data数据，为了临时数据使用完后还原
-  //     routeTempData.prev = {};
-  //     keys.forEach((key) => {
-  //       if (dataKeys.includes(key)) {
-  //         routeTempData.prev[key] = data[key];
-  //       }
-  //       data[key] = route[key];
-  //     });
-  //   }
-  // }
-
-  // restoreData() {
-  //   const { nuomiProps } = this.state;
-  //   const { data } = nuomiProps;
-  //   const { routeTempData } = this.context;
-
-  //   // 删除临时数据
-  //   if (routeTempData.temp) {
-  //     const tempDataKeys = Object.keys(routeTempData.temp);
-  //     if (tempDataKeys.length) {
-  //       tempDataKeys.forEach((key) => {
-  //         delete data[key];
-  //       });
-  //       routeTempData.temp = null;
-  //     }
-  //   }
-
-  //   // 还原旧数据
-  //   if (routeTempData.prev) {
-  //     const prevDataKeys = Object.keys(routeTempData.prev);
-  //     if (prevDataKeys.length) {
-  //       prevDataKeys.forEach((key) => {
-  //         data[key] = routeTempData.prev[key];
-  //       });
-  //       routeTempData.prev = null;
-  //     }
-  //   }
-  // }
-
   // 异步加载props，可以使用require.ensure或import
   loadProps(cb) {
     const { async } = this.props;
@@ -226,37 +176,13 @@ export default class RouteCore extends React.PureComponent {
     });
   }
 
-  getNextProps() {
-    const { props } = this;
-    const { route } = props;
-    const nextProps = { route };
-    const { nuomiProps } = this.state;
-
-    ['path', 'cache', 'reload', 'children'].forEach((value) => {
-      // 优先使用props
-      nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
-    });
-
-    if (nextProps.reload !== null && route.reload !== undefined) {
-      // 优先使用route.reload
-      nextProps.reload = route.reload;
-    }
-
-    return nextProps;
-  }
-
   render() {
-    const props = this.getNextProps();
-    const { cache, route } = props;
+    const { cache } = this.props;
     const { nuomiProps, visible, loaded } = this.state;
-
-    // this.restoreData();
-    // if (isObject(route.data)) {
-    //   this.setTempData(route.data);
-    // }
+    const reload = nuomiProps.route.reload != null ? nuomiProps.route.reload : nuomiProps.reload;
 
     if (cache === true || (loaded && visible)) {
-      const baseRoute = <BaseRoute {...nuomiProps} {...props} />;
+      const baseRoute = <BaseRoute {...nuomiProps} reload={reload} />;
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">

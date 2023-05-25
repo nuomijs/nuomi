@@ -26,7 +26,6 @@ export interface RedirectProps {
 
 export interface LinkProps {
   to?: string | Location;
-  data?: object | Function;
   replace?: boolean;
   reload?: boolean;
 }

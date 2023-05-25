@@ -103,7 +103,13 @@ export default class BaseNuomi extends React.PureComponent {
                     // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
                     loadingQueue.push(name);
                   }
-                  return (payload) => target[name]({ state: store.getState(), dispatch: store.dispatch }, payload);
+                  return (e) => target[name](
+                    {
+                      state: store.getState(),
+                      dispatch: store.dispatch,
+                    },
+                    e,
+                  );
                 }
                 // 返回当前调用对象
                 return effect;
@@ -194,10 +200,9 @@ export default class BaseNuomi extends React.PureComponent {
 
   nuomiInit() {
     const { props } = this;
-    const { onInit, store } = props;
     this.removeListener();
-    if (isFunction(onInit)) {
-      onInit({ store });
+    if (isFunction(props.onInit)) {
+      props.onInit();
     }
   }
 

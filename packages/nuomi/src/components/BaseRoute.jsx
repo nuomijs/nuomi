@@ -1,5 +1,5 @@
 import BaseNuomi from './BaseNuomi';
-import { isFunction, isObject } from '../utils';
+import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
 
@@ -22,8 +22,8 @@ export default class BaseRoute extends BaseNuomi {
     const isChange = prevProps.route !== props.route;
     if (isReload) {
       this.replaceState();
-      this.routerChange();
       this.nuomiInit();
+      this.routerChange();
     } else if (isChange) {
       this.routerChange();
     }
@@ -35,13 +35,13 @@ export default class BaseRoute extends BaseNuomi {
     if (!store.id) {
       this.createStore();
       this.createReducer();
-      this.routerChange(true);
       this.nuomiInit();
+      this.routerChange();
       // 路由刷新
     } else if (reload === true) {
       this.replaceState();
-      this.routerChange(true);
       this.nuomiInit();
+      this.routerChange();
       // 路由切换
     } else {
       this.routerChange();
@@ -58,9 +58,8 @@ export default class BaseRoute extends BaseNuomi {
 
   routerChange() {
     const { props } = this;
-    const { onChange, store } = props;
-    if (isFunction(onChange)) {
-      onChange.call({ store });
+    if (isFunction(props.onShow)) {
+      props.onShow();
     }
   }
 }
