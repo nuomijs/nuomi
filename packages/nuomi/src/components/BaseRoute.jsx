@@ -22,44 +22,35 @@ export default class BaseRoute extends BaseNuomi {
     const isChange = prevProps.route !== props.route;
     if (isReload) {
       this.replaceState();
-      this.nuomiInit();
+      this.execInit();
       this.routerChange();
     } else if (isChange) {
-      this.routerChange();
+      this.routerChange(true);
     }
   }
 
   initialize() {
-    const { store, reload } = this.props;
-    // 初始化
-    if (!store.id) {
-      this.createStore();
-      this.createReducer();
-      this.nuomiInit();
-      this.routerChange();
-      // 路由刷新
-    } else if (reload === true) {
-      this.replaceState();
-      this.nuomiInit();
-      this.routerChange();
-      // 路由切换
-    } else {
-      this.routerChange();
-    }
+    this.createStore();
+    this.createReducer();
+    this.execInit();
+    this.routerChange();
   }
 
   replaceState() {
     const { props } = this;
     props.store.dispatch({
-      type: '_replaceState',
+      type: '@replaceState',
       payload: { ...props.state },
     });
   }
 
-  routerChange() {
+  routerChange(activate) {
     const { props } = this;
     if (isFunction(props.onShow)) {
       props.onShow(props);
+    }
+    if (activate && isFunction(props.onActivate)) {
+      props.onActivate(props);
     }
   }
 }

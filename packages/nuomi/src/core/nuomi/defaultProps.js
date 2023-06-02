@@ -1,13 +1,13 @@
 export default {
   state: {
-    loadings: {},
+    loading: {},
   },
   reducers: {
-    _replaceState: (state, payload) => payload,
-    _updateState: (state, payload) => ({ ...state, ...payload }),
-    _updateLoading: (state, payload) => ({
+    '@replaceState': (state, payload) => payload,
+    '@updateState': (state, payload) => ({ ...state, ...payload }),
+    '@updateLoading': (state, payload) => ({
       ...state,
-      loadings: { ...state.loadings, ...payload },
+      loading: { ...state.loading, ...payload },
     }),
   },
   effects: {},

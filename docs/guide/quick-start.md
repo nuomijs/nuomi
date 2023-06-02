@@ -126,7 +126,7 @@ import { Table, Button } from 'antd';
 import { useConnect } from 'nuomi';
 
 const List = () => {
-  const [{ dataSource, loadings }, dispatch] = useConnect();
+  const [{ dataSource, loading }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
     dispatch({
@@ -147,7 +147,7 @@ const List = () => {
 
   return (
     <Table
-      loading={!!loadings.$getList}
+      loading={!!loading.$getList}
       rowKey="name"
       dataSource={dataSource}
       columns={columns}

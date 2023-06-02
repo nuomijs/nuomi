@@ -14,7 +14,7 @@ export default class BaseNuomi extends BaseNuomiSuper {
   initialize() {
     this.createStore();
     this.createReducer();
-    this.nuomiInit();
+    this.execInit();
     this.routerChange();
   }
 

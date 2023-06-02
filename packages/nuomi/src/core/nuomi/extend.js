@@ -9,9 +9,9 @@ export default (object = {}, newObject = {}) => {
     state: {
       ...state,
       ...s,
-      loadings: {
-        ...state.loadings,
-        ...s.loadings,
+      loading: {
+        ...state.loading,
+        ...s.loading,
       },
     },
     reducers: {

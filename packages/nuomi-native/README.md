@@ -26,7 +26,7 @@ function HomeLayout() {
 
   const onPress = () => {
     dispatch({
-      type: '_updateState',
+      type: '@updateState',
       payload: {
         count: count + 1,
       },

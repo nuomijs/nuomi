@@ -96,7 +96,7 @@ import { store } from 'nuomi';
 store.getState();
 
 store.dispatch({
-  type: 'global/_updateState',
+  type: 'global/@updateState',
   payload,
 });
 
@@ -120,7 +120,7 @@ store.dispatch({
   async getData({ id }) {
     const { data } =  await services.getData({ id });
     this.dispatch({
-      type: '_updateState',
+      type: '@updateState',
       payload: { data }
     });
   }
@@ -156,7 +156,7 @@ store.dispatch({
 {
   updateState(payload) {
     this.dispatch({
-      type: '_updateState',
+      type: '@updateState',
       payload,
     });
   },
@@ -171,7 +171,7 @@ store.dispatch({
 }
 ```
 
-给方法名添加 `$` 前缀可以自动创建 `loading` ，无需手动开关，在组件中通过 `loadings.$方法名` 获取状态。
+给方法名添加 `$` 前缀可以自动创建 `loading` ，无需手动开关，在组件中通过 `loading.$方法名` 获取状态。
 
 ```js
 {
@@ -182,11 +182,11 @@ store.dispatch({
 ```
 ```js
 const Login = () => {
-  const [{ loadings }] = useConnect();
+  const [{ loading }] = useConnect();
   return (
     <Form>
       ...
-      <Button>{loadings.$login ? '正在登录...' : '登录'}</Button>
+      <Button>{loading.$login ? '正在登录...' : '登录'}</Button>
     </Form>
   );
 };
@@ -197,7 +197,7 @@ const Login = () => {
 ```js
 {
   state: {
-    loadings: {
+    loading: {
       $login: false
     }
   }

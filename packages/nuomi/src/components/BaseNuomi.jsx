@@ -50,7 +50,7 @@ export default class BaseNuomi extends React.PureComponent {
   initialize() {
     this.createStore();
     this.createReducer();
-    this.nuomiInit();
+    this.execInit();
   }
 
   createStore() {
@@ -74,7 +74,7 @@ export default class BaseNuomi extends React.PureComponent {
         if (isObject(effects) && isFunction(effects[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
-          const loadingType = `${store.id}/_updateLoading`;
+          const loadingType = `${store.id}/@updateLoading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const proxy = new Proxy(effects, {
@@ -198,11 +198,11 @@ export default class BaseNuomi extends React.PureComponent {
     }
   }
 
-  nuomiInit() {
+  execInit() {
     const { props } = this;
     this.removeListener();
     if (isFunction(props.onInit)) {
-      props.onInit(props);
+      this.unListener = props.onInit(props);
     }
   }
 
