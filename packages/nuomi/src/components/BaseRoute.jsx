@@ -59,7 +59,7 @@ export default class BaseRoute extends BaseNuomi {
   routerChange() {
     const { props } = this;
     if (isFunction(props.onShow)) {
-      props.onShow();
+      props.onShow(props);
     }
   }
 }

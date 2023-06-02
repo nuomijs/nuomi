@@ -326,6 +326,7 @@ export default {
   listener,
   route,
   reload,
+  push,
   replace,
   back,
   forward,
