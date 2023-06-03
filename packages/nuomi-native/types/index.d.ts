@@ -41,7 +41,7 @@ export interface NuomiNativeProps {
   effects?: NuomiEffects;
   render?: () => any;
   onInit?: () => any;
-  onChange?: object | Function;
+  onShow?: Function;
   [key: string]: any;
 }
 

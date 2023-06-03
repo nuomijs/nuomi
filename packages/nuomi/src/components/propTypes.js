@@ -5,7 +5,7 @@ export const NuomiPropTypes = {
   state: PropTypes.object,
   store: PropTypes.object,
   reducers: PropTypes.objectOf(PropTypes.func),
-  effects: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  effects: PropTypes.objectOf(PropTypes.func),
   render: PropTypes.func,
   onInit: PropTypes.func,
   async: PropTypes.func,
@@ -27,7 +27,8 @@ export const RoutePropTypes = {
   cache: PropTypes.oneOf(['state', true, false]),
   reload: PropTypes.bool,
   onEnter: PropTypes.func,
-  onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  onShow: PropTypes.func,
+  onActivte: PropTypes.func,
   onLeave: PropTypes.func,
 };
 
@@ -38,7 +39,7 @@ export const RouterPropTypes = {
 
 export const StaticRouterPropTypes = {
   basename: PropTypes.string,
-  location: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  route: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   context: PropTypes.object,
 };
 

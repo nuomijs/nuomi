@@ -1,14 +1,25 @@
+import { defineNuomi } from 'nuomi';
 import Container from './components/Container';
 
-export default {
+export default defineNuomi({
   state: {
 
   },
-  effests: {
-
+  effects: {
+    a({ getState, dispatch }) {
+      dispatch({
+        type: '',
+        payload: ''
+      })
+    },
+    b() {
+      this.a(aaa);
+    }
   },
   render() {
     return <Container />
   },
-  onInit() {},
-}
+  onInit() {
+
+  },
+});

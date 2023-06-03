@@ -1,6 +1,8 @@
 import defaultProps from './defaultProps';
 import extend from './extend';
 
+export { default as defineNuomi } from './define';
+
 let newProps = defaultProps;
 
 const config = (props) => {

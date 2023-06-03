@@ -103,13 +103,7 @@ export default class BaseNuomi extends React.PureComponent {
                     // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
                     loadingQueue.push(name);
                   }
-                  return (e) => target[name](
-                    {
-                      state: store.getState(),
-                      dispatch: store.dispatch,
-                    },
-                    e,
-                  );
+                  return (e) => target[name](store, e);
                 }
                 // 返回当前调用对象
                 return effect;

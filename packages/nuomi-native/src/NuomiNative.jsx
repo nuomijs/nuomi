@@ -25,8 +25,8 @@ export default class NuomiNative extends React.PureComponent {
 NuomiNative.propTypes = {
   id: PropTypes.string,
   state: PropTypes.object,
-  reducers: PropTypes.object,
-  effects: PropTypes.object,
+  reducers: PropTypes.objectOf(PropTypes.func),
+  effects: PropTypes.objectOf(PropTypes.func),
   render: PropTypes.func,
   onInit: PropTypes.func,
   onShow: PropTypes.func,

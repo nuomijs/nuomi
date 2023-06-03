@@ -11,7 +11,7 @@ export default class StaticRouter extends React.Component {
 
   static defaultProps = {
     basename: '/',
-    location: {},
+    route: {},
     context: {},
   };
 
@@ -21,10 +21,10 @@ export default class StaticRouter extends React.Component {
   }
 
   getStaticLocation() {
-    const { location } = this.props;
-    let staticLocation = location;
-    if (isString(location)) {
-      staticLocation = parser(location);
+    const { route } = this.props;
+    let staticLocation = route;
+    if (isString(route)) {
+      staticLocation = parser(route);
     }
     const { search = '', hash = '', pathname = '' } = staticLocation;
     return {
@@ -36,7 +36,7 @@ export default class StaticRouter extends React.Component {
   }
 
   render() {
-    const { location, context, ...rest } = this.props;
+    const { route, context, ...rest } = this.props;
     const staticLocation = this.getStaticLocation();
     return (
       <RouterContext.Provider value={{ staticLocation, staticContext: context }}>

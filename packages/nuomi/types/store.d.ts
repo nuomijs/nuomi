@@ -5,18 +5,20 @@ export interface DispatchAction {
   payload?: any;
 }
 
-export type NuomiStoreDispatch = (action: DispatchAction) => any;
+export type NuomiStoreDispatch = (action: DispatchAction) => Promise<any>;
 
 export interface NuomiStore {
   id: string;
   dispatch: NuomiStoreDispatch;
-  getState(): object;
+  getState(): {
+    [key: string]: any;
+  };
 }
 
 export interface StoreAPI extends Store {
   applyMiddleware(...middlewares: Middleware[]): void;
   createState(state: object): void;
-  getStore(id: string): NuomiStore;
+  getStore<S>(id: string): NuomiStore;
 }
 
 export const store: StoreAPI;

@@ -1,41 +1,6 @@
 import { PureComponent, ComponentType } from 'react';
-import { Props, RouteProps, NuomiRouteProps } from './props';
-import { Location } from './router';
+import { Props, RouteProps, NuomiRouteProps, ShapeRouteProps, RouterProps, StaticRouterProps, RedirectProps, LinkProps, NavLinkProps } from './props';
 import { ConnectGetState, ConnectGetDispatch } from './connect';
-
-export interface ShapeRouteProps {
-  routes: object[];
-}
-
-export interface RouterProps {
-  basename?: string;
-  type?: 'hash' | 'browser';
-}
-
-export interface StaticRouterProps {
-  basename?: string;
-  location?: string | Location;
-  context?: object;
-}
-
-export interface RedirectProps {
-  from?: string;
-  to?: string | Location;
-  reload?: boolean;
-}
-
-export interface LinkProps {
-  to?: string | Location;
-  replace?: boolean;
-  reload?: boolean;
-}
-
-export interface NavLinkProps extends LinkProps {
-  path? :string;
-  activeClassName?: string,
-  activeStyle?: object,
-  isActice?: (match: boolean | Location, location: Location, props: NavLinkProps) => boolean,
-}
 
 export interface Connect {
   (getState?: ConnectGetState, getDispatch?: ConnectGetDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
