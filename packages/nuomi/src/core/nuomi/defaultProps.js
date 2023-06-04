@@ -3,9 +3,9 @@ export default {
     loading: {},
   },
   reducers: {
-    '@replaceState': (state, payload) => payload,
-    '@updateState': (state, payload) => ({ ...state, ...payload }),
-    '@updateLoading': (state, payload) => ({
+    '@replace': (state, payload) => payload,
+    '@update': (state, payload) => ({ ...state, ...payload }),
+    '@loading': (state, payload) => ({
       ...state,
       loading: { ...state.loading, ...payload },
     }),

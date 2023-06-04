@@ -1,24 +1,32 @@
 import { Store, Middleware } from 'redux';
-
 export interface DispatchAction {
   type: string;
   payload?: any;
 }
 
+export type State = {
+  [key: string]: any;
+};
+
+export type Loading = {
+  [key: string]: boolean | string;
+}
+
 export type NuomiStoreDispatch = (action: DispatchAction) => Promise<any>;
 
-export interface NuomiStore {
+export type NuomiStoreCommit<S = any> = (type: string, payload?: any) => S;
+
+export interface NuomiStore<S = any> {
   id: string;
   dispatch: NuomiStoreDispatch;
-  getState(): {
-    [key: string]: any;
-  };
+  getState(): S;
+  commit: NuomiStoreCommit;
 }
 
 export interface StoreAPI extends Store {
   applyMiddleware(...middlewares: Middleware[]): void;
-  createState(state: object): void;
-  getStore<S>(id: string): NuomiStore;
+  createState(state: State): void;
+  getStore<S = any>(id: string): NuomiStore<S>;
 }
 
 export const store: StoreAPI;

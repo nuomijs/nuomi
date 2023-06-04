@@ -61,11 +61,6 @@ export default class BaseNuomi extends React.PureComponent {
 
     store.dispatch = async (action) => {
       const { type, payload } = action;
-
-      if (!store.id) {
-        return action;
-      }
-
       const { effects } = props;
 
       // type中包含斜杠视为调用其他模块方法
@@ -74,7 +69,7 @@ export default class BaseNuomi extends React.PureComponent {
         if (isObject(effects) && isFunction(effects[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
-          const loadingType = `${store.id}/@updateLoading`;
+          const loadingType = `${store.id}/@loading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const proxy = new Proxy(effects, {
@@ -155,6 +150,26 @@ export default class BaseNuomi extends React.PureComponent {
     };
 
     store.getState = () => globalStore.getState()[store.id] || props.state;
+
+    store.commit = (type, payload) => {
+      const splitIndex = type.indexOf('/');
+      if (splitIndex === -1) {
+        if (reducers[type] && store.id) {
+          globalStore.dispatch({
+            type: `${store.id}/${type}`,
+            payload,
+          });
+        }
+      } else {
+        const id = type.substr(0, splitIndex);
+        const reducer = type.substr(splitIndex + 1);
+        const $store = getStore(id);
+        if ($store) {
+          return $store.commit(reducer, payload);
+        }
+      }
+      return store.getState();
+    };
 
     setStore(store.id, store);
   }

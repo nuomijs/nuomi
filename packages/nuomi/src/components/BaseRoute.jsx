@@ -39,7 +39,7 @@ export default class BaseRoute extends BaseNuomi {
   replaceState() {
     const { props } = this;
     props.store.dispatch({
-      type: '@replaceState',
+      type: '@replace',
       payload: { ...props.state },
     });
   }

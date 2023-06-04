@@ -31,7 +31,7 @@ export default () => {
       effects={{
         update({ dispatch, state }) {
           dispatch({
-            type: '@updateState',
+            type: '@update',
             payload: {
               show: !state.show
             }

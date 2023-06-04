@@ -34,15 +34,19 @@ export {
   connect
 }
 
-export interface NuomiNativeProps {
+export interface NuomiNativeProps<S = any> {
   id?: string;
   state?: object;
-  reducers?: NuomiReducers;
-  effects?: NuomiEffects;
-  render?: () => any;
-  onInit?: () => any;
-  onShow?: Function;
+  reducers?: NuomiReducers<S>;
+  effects?: NuomiEffects<S>;
+  render?: (props: Props<S>) => any;
+  onInit?: (props: Props<S>) => any;
+  onShow?: (props: Props<S>) => any;
   [key: string]: any;
+}
+
+export type Props<S = any> = NuomiProps<S> & {
+  store?: NuomiStore<S>;
 }
 
 export class NuomiNative<P extends NuomiNativeProps> extends PureComponent<P, any> {}

@@ -1,12 +1,12 @@
 import { RouteObject } from './router';
 import { NuomiStore } from './store';
 
-export interface NuomiReducers {
-  [key: string]: (state: any, payload: any) => any;
+export interface NuomiReducers<S = any> {
+  [key: string]: (state: S, payload?: any) => any;
 }
 
-export interface NuomiEffects {
-  [key: string]: (store: NuomiStore, payload: any) => any;
+export interface NuomiEffects<S = any> {
+  [key: string]: (store: NuomiStore<S>, payload?: any) => any;
 }
 
 export type RoutePropValue = {
@@ -25,35 +25,35 @@ export type RoutePropValue = {
   }
 }
 
-export interface NuomiProps {
+export interface NuomiProps<S = any> {
   id?: string;
-  state?: object;
-  reducers?: NuomiReducers;
-  effects?: NuomiEffects;
+  state?: S;
+  reducers?: NuomiReducers<S>;
+  effects?: NuomiEffects<S>;
   async?: (cb?: (props: any) => void) => any;
-  render?: (props: Props) => any;
-  onInit?: (props: Props) => any;
+  render?: (props: Props<S>) => any;
+  onInit?: (props: Props<S>) => any;
   children?: any;
   [key: string]: any;
 }
 
-export interface RouteProps extends NuomiProps {
+export interface RouteProps<S = any> extends NuomiProps<S> {
   path?: string;
   cache?: boolean | 'state';
   reload?: boolean | null;
   onEnter?: (enter: () => void) => boolean;
-  onShow?: (props: Props) => any;
-  onActivte?: (props: Props) => any;
+  onShow?: (props: Props<S>) => any;
+  onActivte?: (props: Props<S>) => any;
   onLeave?: (leave: () => void, to: RouteObject) => boolean;
 }
 
-export interface NuomiRouteProps extends NuomiProps {
+export interface NuomiRouteProps<S = any> extends NuomiProps<S> {
   pathPrefix?: string | RegExp;
   path?: string;
 }
 
-export type Props = RouteProps & NuomiRouteProps & {
-  store?: NuomiStore;
+export type Props<S = any> = RouteProps<S> & NuomiRouteProps<S> & {
+  store?: NuomiStore<S>;
   route?: RouteObject;
 }
 

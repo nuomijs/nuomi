@@ -1,12 +1,13 @@
 import { PureComponent, ComponentType } from 'react';
-import { Props, RouteProps, NuomiRouteProps, ShapeRouteProps, RouterProps, StaticRouterProps, RedirectProps, LinkProps, NavLinkProps } from './props';
-import { ConnectGetState, ConnectGetDispatch } from './connect';
+import { NuomiProps, RouteProps, NuomiRouteProps, ShapeRouteProps, RouterProps, StaticRouterProps, RedirectProps, LinkProps, NavLinkProps } from './props';
+import { ConnectGetState } from './connect';
+import { NuomiStoreDispatch } from './store';
 
-export interface Connect {
-  (getState?: ConnectGetState, getDispatch?: ConnectGetDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
+export interface Connect<S = any> {
+  (getState?: ConnectGetState<S>, getDispatch?: NuomiStoreDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
 }
 
-export class Nuomi<P extends Props> extends PureComponent<P, any> {}
+export class Nuomi<P extends NuomiProps> extends PureComponent<P, any> {}
 
 export class Route<P extends RouteProps> extends PureComponent<P, any> {}
 

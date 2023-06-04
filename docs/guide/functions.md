@@ -96,7 +96,7 @@ import { store } from 'nuomi';
 store.getState();
 
 store.dispatch({
-  type: 'global/@updateState',
+  type: 'global/@update',
   payload,
 });
 
@@ -120,7 +120,7 @@ store.dispatch({
   async getData({ id }) {
     const { data } =  await services.getData({ id });
     this.dispatch({
-      type: '@updateState',
+      type: '@update',
       payload: { data }
     });
   }
@@ -156,7 +156,7 @@ store.dispatch({
 {
   updateState(payload) {
     this.dispatch({
-      type: '@updateState',
+      type: '@update',
       payload,
     });
   },

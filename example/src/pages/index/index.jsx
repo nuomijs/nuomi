@@ -6,7 +6,7 @@ export default defineNuomi({
 
   },
   effects: {
-    a({ getState, dispatch }) {
+    a({ getState, commit }) {
       dispatch({
         type: '',
         payload: ''

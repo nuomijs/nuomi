@@ -11,7 +11,7 @@ title: API
 | state  | {} | 初始状态 |
 | data  | {} | 临时数据 |
 | store  | { dispatch, getState } | 派发和获取当前模块状态，内部创建，不可修改，也无需传递，dispatch可以调用effects中的方法，也可以调用其他模块的effects |
-| reducers  | { @updateState } | 更新状态 |
+| reducers  | { @update } | 更新状态 |
 | effects  | {} | 异步或者同步更新状态，异步处理使用async await，用于业务处理，支持对象和函数，函数必须返回对象，内部需dispatch调用reducers中的方法，方法名有$前缀时会被设置为loading状态，通过connect可以在loading中获取到，不需要开发时手动控制loading状态 |
 | render  | function | 渲染组件 |
 | onInit  | function | 状态被创建后回调，可以通过this.store更新状态 |
@@ -212,9 +212,9 @@ router.location({ pathname: '/path', query: { a: 1 } }) // /path?a=1
   },
   data: {},
   reducers: {
-    '@replaceState': (state, { payload }) => payload,
-    '@updateState': (state, { payload }) => ({ ...state, ...payload }),
-    '@updateLoading': (state, { payload }) => ({
+    '@replace': (state, { payload }) => payload,
+    '@update': (state, { payload }) => ({ ...state, ...payload }),
+    '@loading': (state, { payload }) => ({
       ...state,
       loading: { ...state.loading, ...payload },
     }),

@@ -1,7 +1,7 @@
 import { Props } from './props';
-import { ConnectGetState, NuomiState } from './connect';
+import { ConnectGetState } from './connect';
 import { NuomiStoreDispatch } from './store';
 
-export function useConnect(getState?: ConnectGetState): [NuomiState, NuomiStoreDispatch];
+export function useConnect<S = any>(getState?: ConnectGetState): [S, NuomiStoreDispatch];
 
-export function useNuomi(): { nuomiProps: Props };
+export function useNuomi<S = any>(): { nuomiProps: Props<S> };

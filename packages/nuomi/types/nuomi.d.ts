@@ -1,15 +1,10 @@
 import { Props } from './props';
 
-type State = {
-  [key: string]: any;
-};
+export type DefineNuomi = <S = any>(props: Props<S>) => Props<S>;
 
-export interface DefineNuomi {
-  (props: Props): Props;
-}
 export interface NuomiAPI {
-  config(opts: Props): void;
-  getDefaultProps(): object;
+  config(opts: Props): any;
+  getDefaultProps(): any;
   extend(...props: Props[]): Props;
 }
 
