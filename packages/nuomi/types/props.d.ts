@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { RouteObject } from './router';
 import { NuomiStore } from './store';
 
@@ -40,7 +41,7 @@ export interface NuomiProps<S = any> {
 export interface RouteProps<S = any> extends NuomiProps<S> {
   path?: string;
   cache?: boolean | 'state';
-  reload?: boolean | null;
+  reload?: boolean;
   onEnter?: (enter: () => void) => boolean;
   onShow?: (props: Props<S>) => any;
   onActivte?: (props: Props<S>) => any;
@@ -57,8 +58,12 @@ export type Props<S = any> = RouteProps<S> & NuomiRouteProps<S> & {
   route?: RouteObject;
 }
 
+export interface ShapeRouteObject extends RouteProps {
+  children?: ShapeRouteObject[];
+}
+
 export interface ShapeRouteProps {
-  routes: object[];
+  routes: ShapeRouteObject[];
 }
 
 export interface RouterProps {
@@ -82,6 +87,8 @@ export interface LinkProps {
   to?: string | RoutePropValue;
   replace?: boolean;
   reload?: boolean;
+  className?: string;
+  style?: CSSProperties;
 }
 
 export interface NavLinkProps extends LinkProps {

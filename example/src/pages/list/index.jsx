@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { defineNuomi } from 'nuomi';
 import Container from './components/Container';
 
 export default defineNuomi({
   state: {
-    value: 1,
+    value: 3,
     loading: {
       $initData: false,
     },

@@ -297,11 +297,11 @@ function match(routeData, path, returns) {
         }
       });
       return {
-        ...route,
+        ...routeData,
         params,
       };
     }
-    return route;
+    return routeData;
   }
 
   return isMatch;

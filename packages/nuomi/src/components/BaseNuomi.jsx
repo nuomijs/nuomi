@@ -42,7 +42,7 @@ export default class BaseNuomi extends React.PureComponent {
       return `@@nuomi_${++BaseNuomi.nuomiId}`;
     }
     if (getStore(id)) {
-      throw new Error(`storeId：${id} 已被定义，请重新命名！`);
+      throw new Error(`id为 ${id} 的store已被定义，请重新命名！`);
     }
     return id;
   }
@@ -64,7 +64,7 @@ export default class BaseNuomi extends React.PureComponent {
       const { effects } = props;
 
       // type中包含斜杠视为调用其他模块方法
-      const splitIndex = type.indexOf('/');
+      const splitIndex = String(type).indexOf('/');
       if (splitIndex === -1) {
         if (isObject(effects) && isFunction(effects[type])) {
           // 带有loading功能的方法队列
@@ -132,6 +132,7 @@ export default class BaseNuomi extends React.PureComponent {
             payload,
           });
         } else {
+          warning(false, `effects和reducers中不存在 ${type}`);
           return action;
         }
         // dispatch其他模块方法
@@ -146,26 +147,34 @@ export default class BaseNuomi extends React.PureComponent {
           });
           return dispatchReturn;
         }
+        warning(false, `未创建id为 ${id} 的store`);
       }
     };
 
     store.getState = () => globalStore.getState()[store.id] || props.state;
 
-    store.commit = (type, payload) => {
-      const splitIndex = type.indexOf('/');
-      if (splitIndex === -1) {
-        if (reducers[type] && store.id) {
-          globalStore.dispatch({
-            type: `${store.id}/${type}`,
-            payload,
-          });
+    store.setState = (...args) => {
+      let [type, payload] = args;
+      if (args.length) {
+        if (args.length === 1) {
+          type = '@update';
+          payload = args[0];
         }
-      } else {
-        const id = type.substr(0, splitIndex);
-        const reducer = type.substr(splitIndex + 1);
-        const $store = getStore(id);
-        if ($store) {
-          return $store.commit(reducer, payload);
+        const splitIndex = String(type).indexOf('/');
+        if (splitIndex === -1) {
+          if (reducers[type] && store.id) {
+            globalStore.dispatch({
+              type: `${store.id}/${type}`,
+              payload,
+            });
+          }
+        } else {
+          const id = type.substr(0, splitIndex);
+          const reducer = type.substr(splitIndex + 1);
+          const $store = getStore(id);
+          if ($store) {
+            return $store.setState(reducer, payload);
+          }
         }
       }
       return store.getState();
@@ -192,7 +201,7 @@ export default class BaseNuomi extends React.PureComponent {
         }
         warning(
           false,
-          `未定义actionType为 ${type} 的 reducer，如果你想调用 effects 中的方法，请使用
+          `未定义actionType为 ${type} 的reducer，如果你想调用effects中的方法，请使用
           \nstore.getStore('${store.id}').dispatch({\n  type: '${key}',\n  payload,\n})`,
         );
       }

@@ -23,10 +23,6 @@
 
 [快速上手](https://nuomijs.github.io/guide/quick-start.html)
 
-## 问题交流
-
-<a target="_blank" href="https://shang.qq.com/wpa/qunwpa?idkey=8be25ef578d99f158ac775b8354afd76fe82385ec58678f11b5b6ec002e5372e"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" alt="nuomi交流群" title="nuomi交流群"></a>
-
 ## 许可证
 
 MIT

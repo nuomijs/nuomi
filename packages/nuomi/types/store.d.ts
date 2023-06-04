@@ -20,7 +20,8 @@ export interface NuomiStore<S = any> {
   id: string;
   dispatch: NuomiStoreDispatch;
   getState(): S;
-  commit: NuomiStoreCommit;
+  setState(type: string, payload: any): S;
+  setState(payload: any): S;
 }
 
 export interface StoreAPI extends Store {

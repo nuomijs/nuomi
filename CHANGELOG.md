@@ -1,5 +1,11 @@
 # 更新日志：
 
+## 1.0.0 (2023-06-04)
+* 移除onChange，新增onShow和onActivte
+* 移除router.location，新增router.push和router.route
+* 移除nuomiProps中的location属性，新增route属性
+* 移除默认reducers中的_updatState/_updateLoading/_replaceState，新增@update/@replace/@loading
+
 ## 0.8.19 (2020-07-04)
 * 修复ShapeRoute组件报错问题
 
