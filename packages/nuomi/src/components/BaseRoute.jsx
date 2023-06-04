@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import BaseNuomi from './BaseNuomi';
 import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
@@ -7,10 +7,6 @@ import { NuomiContext } from './Context';
 
 export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
-
-  state = {
-    key: 0,
-  };
 
   componentWillUnmount() {
     const { store, cache } = this.props;
@@ -31,9 +27,6 @@ export default class BaseRoute extends BaseNuomi {
       const isReload = props.reload === true;
       const isChange = prevProps.route !== props.route;
       if (isReload) {
-        // this.setState({
-        //   key: state.key + 1,
-        // });
         this.replaceState();
         this.execInit();
         this.routerChange();
@@ -69,12 +62,10 @@ export default class BaseRoute extends BaseNuomi {
   }
 
   render() {
-    const { props, state } = this;
+    const { props } = this;
     const children = props.render ? props.render(props) : props.children;
     return children ? (
-      <NuomiContext.Provider value={{ nuomiProps: this.props }}>
-        <Fragment key={state.key}>{children}</Fragment>
-      </NuomiContext.Provider>
+      <NuomiContext.Provider value={{ nuomiProps: this.props }}>{children}</NuomiContext.Provider>
     ) : null;
   }
 }

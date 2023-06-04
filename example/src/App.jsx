@@ -1,5 +1,5 @@
-import React, { Component }  from 'react';
-import { Router, ShapeRoute } from 'nuomi';
+import React  from 'react';
+import { ShapeRoute } from 'nuomi';
 
 export default () => {
   return (
@@ -7,10 +7,10 @@ export default () => {
       {
         path: '/',
         async: () => import('./layout'),
-        reload: true,
         children: [
           {
             path: '/',
+            cache: true,
             reload: true,
             async: () => import('./pages/index')
           },

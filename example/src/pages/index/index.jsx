@@ -25,4 +25,9 @@ export default defineNuomi({
   render() {
     return <Container />
   },
+  onInit() {
+    this.store.dispatch({
+      type: '$initData'
+    })
+  }
 });

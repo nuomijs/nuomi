@@ -9,5 +9,5 @@ export default defineNuomi({
   },
   render({ children }) {
     return <Container>{ children }</Container>
-  }
+  },
 });

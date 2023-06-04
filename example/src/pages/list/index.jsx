@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineNuomi } from 'nuomi';
 import Container from './components/Container';
 
@@ -25,4 +25,9 @@ export default defineNuomi({
   render() {
     return <Container />
   },
+  onInit() {
+    this.store.dispatch({
+      type: '$initData'
+    })
+  }
 });
