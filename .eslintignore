@@ -1,5 +1,5 @@
 **/node_modules
 **/lib
 **/proxyPolyfill.js
-/example
-/docs
+**/example
+**/docs
