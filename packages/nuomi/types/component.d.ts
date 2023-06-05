@@ -1,5 +1,5 @@
-import { PureComponent, ComponentType, ReactNode } from 'react';
-import { NuomiProps, RouteProps, NuomiRouteProps, ShapeRouteProps, RouterProps, StaticRouterProps, RedirectProps, LinkProps, NavLinkProps } from './props';
+import { PureComponent, ComponentType } from 'react';
+import { Props, NuomiProps, RouteProps, ShapeRouteProps, RouterProps, StaticRouterProps, RedirectProps, LinkProps, NavLinkProps } from './props';
 import { ConnectGetState } from './connect';
 import { NuomiStoreDispatch } from './store';
 
@@ -12,10 +12,6 @@ export class Nuomi<P extends NuomiProps> extends PureComponent<P, any> {
 }
 
 export class Route<P extends RouteProps> extends PureComponent<P, any> {
-  render(): any;
-}
-
-export class NuomiRoute<P extends NuomiRouteProps> extends PureComponent<P, any> {
   render(): any;
 }
 
@@ -45,4 +41,4 @@ export class NavLink<P extends NavLinkProps> extends PureComponent<P, any> {
 
 export const connect: Connect;
 
-export function withNuomi<P>(Component: ComponentType<P>): ComponentType<P>;
+export function withNuomi<P extends { nuomi: Props }>(Component: ComponentType<P>): ComponentType<P>;

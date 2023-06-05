@@ -22,11 +22,8 @@ const connect = (...args) => {
       constructor(...arg) {
         super(...arg);
         this.mounted = false;
-        const { nuomiProps } = this.context;
-        invariant(
-          !!nuomiProps,
-          `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${Connect.displayName}`,
-        );
+        const { nuomi } = this.context;
+        invariant(!!nuomi, `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${Connect.displayName}`);
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
         }
@@ -35,7 +32,7 @@ const connect = (...args) => {
           this.state = this.getState();
           // 订阅更新状态
           this.unSubcribe = globalStore.subscribe(() => {
-            if (this.mounted && getStore(nuomiProps.store.id)) {
+            if (this.mounted && getStore(nuomi.store.id)) {
               this.setState(this.getState());
             }
           });
@@ -55,7 +52,7 @@ const connect = (...args) => {
       }
 
       getState() {
-        const { store } = this.context.nuomiProps;
+        const { store } = this.context.nuomi;
         const state = mapStateToProps(store.getState(), globalStore.getState());
         return isObject(state) ? state : {};
       }
@@ -68,12 +65,12 @@ const connect = (...args) => {
       }
 
       getProps() {
-        const { store } = this.context.nuomiProps;
+        const { store } = this.context.nuomi;
         return mergeProps(this.props, this.state, mapDispatchToProps(store.dispatch)) || this.props;
       }
 
       render() {
-        const { store } = this.context.nuomiProps;
+        const { store } = this.context.nuomi;
         const props = {
           ...this.getProps(),
           ref: this.ref,

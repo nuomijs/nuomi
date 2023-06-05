@@ -6,10 +6,10 @@ import { isFunction, shallowEqual } from '../utils';
 import useEffect from './useEffect';
 
 const useConnect = (callback) => {
-  const { nuomiProps } = useContext(NuomiContext);
-  invariant(nuomiProps, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useConnect');
+  const { nuomi } = useContext(NuomiContext);
+  invariant(nuomi, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useConnect');
   // 获取最近的Nuomi组件store
-  const { store } = nuomiProps;
+  const { store } = nuomi;
   // 用于强制更新
   const [, forceRender] = useReducer((s) => s + 1, 0);
   // 用于记忆旧状态

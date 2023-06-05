@@ -9,16 +9,13 @@ const withNuomi = (WrapperComponent) => class WithNuomi extends React.PureCompon
 
     constructor(...args) {
       super(...args);
-      const { nuomiProps } = this.context;
-      invariant(
-        !!nuomiProps,
-        `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${WithNuomi.displayName}`,
-      );
+      const { nuomi } = this.context;
+      invariant(!!nuomi, `不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 ${WithNuomi.displayName}`);
     }
 
     render() {
-      const { nuomiProps } = this.context;
-      return <WrapperComponent {...this.props} nuomiProps={nuomiProps} />;
+      const { nuomi } = this.context;
+      return <WrapperComponent {...this.props} nuomi={nuomi} />;
     }
 };
 

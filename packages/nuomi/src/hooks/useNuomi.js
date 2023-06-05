@@ -3,9 +3,9 @@ import { useContext } from 'react';
 import { NuomiContext } from '../components/Context';
 
 const useNuomi = () => {
-  const { nuomiProps } = useContext(NuomiContext);
-  invariant(nuomiProps, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useNuomi');
-  return [nuomiProps];
+  const { nuomi } = useContext(NuomiContext);
+  invariant(nuomi, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useNuomi');
+  return [nuomi];
 };
 
 export default useNuomi;

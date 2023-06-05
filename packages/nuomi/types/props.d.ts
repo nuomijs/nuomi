@@ -48,12 +48,7 @@ export interface RouteProps<S = any> extends NuomiProps<S> {
   onLeave?: (leave: () => void, to: RouteObject) => boolean;
 }
 
-export interface NuomiRouteProps<S = any> extends NuomiProps<S> {
-  pathPrefix?: string | RegExp;
-  path?: string;
-}
-
-export type Props<S = any> = RouteProps<S> & NuomiRouteProps<S> & {
+export type Props<S = any> = RouteProps<S> & {
   store?: NuomiStore<S>;
   route?: RouteObject;
 }
@@ -74,7 +69,7 @@ export interface RouterProps {
 export interface StaticRouterProps {
   basename?: string;
   route?: string | RoutePropValue;
-  context?: object;
+  context?: any;
 }
 
 export interface RedirectProps {
@@ -94,6 +89,6 @@ export interface LinkProps {
 export interface NavLinkProps extends LinkProps {
   path? :string;
   activeClassName?: string,
-  activeStyle?: object,
+  activeStyle?: CSSProperties,
   isActive?: (match: boolean | RouteObject, route: RouteObject, props: NavLinkProps) => boolean,
 }

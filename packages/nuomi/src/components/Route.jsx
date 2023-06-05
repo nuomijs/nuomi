@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
 import router from '../core/router';
-import { getDefaultProps } from '../core/nuomi';
+import { getDefaultNuomi } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
 
@@ -20,7 +20,6 @@ export default class Route extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.store = {};
-    this.routeTempData = {};
     this.routeComponent = null;
     this.wrappers = [];
   }
@@ -33,7 +32,7 @@ export default class Route extends React.PureComponent {
   }
 
   render() {
-    const defaultProps = getDefaultProps();
+    const defaultProps = getDefaultNuomi();
     const { path, cache = defaultProps.cache } = this.props;
     return (
       <RouterContext.Consumer>
@@ -41,8 +40,7 @@ export default class Route extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
           this.context = context;
 
-          // 同一个context只匹配一次
-          const allowMatch = !context.matched || context.matched === this;
+          const allowMatch = !context.matched || context.matched === this || context.route.reload === true;
           const matchRoute = allowMatch && router.matchPath(context.route, path);
 
           if (!matchRoute) {
@@ -59,7 +57,6 @@ export default class Route extends React.PureComponent {
             matched: null,
             wrappers: context.childrenWrappers || context.wrappers,
             childrenWrappers: this.wrappers,
-            routeTempData: this.routeTempData,
           };
 
           if (matchRoute) {

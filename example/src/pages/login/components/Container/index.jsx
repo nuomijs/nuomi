@@ -5,10 +5,10 @@ export default () => {
   const [{ value, loading }, dispatch] = useConnect();
 
   return <div onClick={() => {
-    dispatch({
-      type: '@update',
-      payload: {
-        value: value + 1
+    router.push({
+      pathname: '/',
+      state: {
+        a: 1
       }
     })
   }}>

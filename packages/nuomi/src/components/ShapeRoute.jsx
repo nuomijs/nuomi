@@ -5,7 +5,6 @@ import router from '../core/router';
 import { ShapeRoutePropTypes } from './propTypes';
 import { RouterContext } from './Context';
 import Route from './Route';
-import NuomiRoute from './NuomiRoute';
 import Redirect from './Redirect';
 
 const getKey = (key, i) => {
@@ -36,15 +35,11 @@ class ShapeComponent extends React.PureComponent {
           let Component = Route;
           if (props.to) {
             Component = Redirect;
-          } else if (props.path && route === false) {
-            Component = NuomiRoute;
           }
           if (newProps.path) {
             newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');
           }
-          const children = isRoutes
-            ? this.getComponents(childrenRoutes, newProps.path)
-            : childrenRoutes;
+          const children = isRoutes ? this.getComponents(childrenRoutes, newProps.path) : childrenRoutes;
           components.push(
             <Component key={getKey(key, i)} {...newProps}>
               {children}

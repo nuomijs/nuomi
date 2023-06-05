@@ -1,6 +1,6 @@
 import React from 'react';
 import BaseNuomi from './BaseNuomi';
-import nuomi, { getDefaultProps } from '../core/nuomi';
+import { getDefaultNuomi, extendNuomi } from '../core/nuomi';
 import { isFunction } from '../utils';
 import { NuomiPropTypes } from './propTypes';
 
@@ -21,7 +21,7 @@ export default class Nuomi extends React.PureComponent {
     const isAsync = isFunction(async);
     this.state = {
       loaded: !isAsync,
-      nuomiProps: nuomi.extend(getDefaultProps(), rest),
+      nuomiProps: extendNuomi(getDefaultNuomi(), rest),
     };
   }
 
@@ -39,7 +39,7 @@ export default class Nuomi extends React.PureComponent {
     if (this.mounted === true) {
       this.setState({
         loaded: true,
-        nuomiProps: nuomi.extend(nuomiProps, props),
+        nuomiProps: extendNuomi(nuomiProps, props),
       });
     }
   }

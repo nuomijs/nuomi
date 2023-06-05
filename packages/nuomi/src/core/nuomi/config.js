@@ -1,4 +1,6 @@
-export default {
+import extend from './extend';
+
+const defaultNuomiProps = {
   state: {
     loading: {},
   },
@@ -12,3 +14,12 @@ export default {
   },
   effects: {},
 };
+
+let nuomiProps = extend({}, defaultNuomiProps);
+
+export const configureNuomi = (props) => {
+  nuomiProps = extend(nuomiProps, props);
+  return nuomiProps;
+};
+
+export const getDefaultNuomi = () => defaultNuomiProps;

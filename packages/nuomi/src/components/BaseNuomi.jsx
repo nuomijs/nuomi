@@ -2,13 +2,10 @@ import React from 'react';
 import warning from 'warning';
 import { createReducer, removeReducer } from '../core/redux/reducer';
 import globalStore, {
-  getStore,
-  setStore,
-  initialiseState,
-  INITIALISE_STATE,
+  getStore, setStore, initialiseState, INITIALISE_STATE,
 } from '../core/redux/store';
 import { isObject, isFunction } from '../utils';
-import nuomi from '../core/nuomi';
+import { extendNuomi } from '../core/nuomi';
 import Proxy from '../utils/Proxy';
 import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
@@ -187,7 +184,7 @@ export default class BaseNuomi extends React.PureComponent {
     const { store, state: stateData, reducers } = this.props;
     let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
-      defaultState = nuomi.extend({ state: stateData }, { state: defaultState }).state;
+      defaultState = extendNuomi({ state: stateData }, { state: defaultState }).state;
     } else {
       defaultState = stateData;
     }
@@ -227,8 +224,6 @@ export default class BaseNuomi extends React.PureComponent {
   render() {
     const { props } = this;
     const children = props.render ? props.render(props) : props.children;
-    return children ? (
-      <NuomiContext.Provider value={{ nuomiProps: this.props }}>{children}</NuomiContext.Provider>
-    ) : null;
+    return children ? <NuomiContext.Provider value={{ nuomi: this.props }}>{children}</NuomiContext.Provider> : null;
   }
 }

@@ -1,8 +1,24 @@
-import React from "react"
-import { NavLink, router, useConnect } from "nuomi"
+import React, { Component } from "react"
+import { NavLink, connect, useConnect, useNuomi, withNuomi } from "nuomi"
+
+const Demo = connect((state) => {
+  return state
+})(
+  class extends Component {
+    constructor(props) {
+      super(props)
+    }
+    render() {
+      const { count, dispatch } = this.props;
+      return <>{count}</>
+    }
+  }
+)
 
 export default ({ children }) => {
   const [{ count }, dispatch] = useConnect();
+  const [{ route, store }] = useNuomi();
+
   return (
     <div>
       <NavLink to="/">首页</NavLink>
@@ -15,6 +31,7 @@ export default ({ children }) => {
           }
         })
       }}>{ count }</a>
+      <Demo />
       {children}
     </div>
   )
