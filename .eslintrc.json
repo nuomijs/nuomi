@@ -10,6 +10,7 @@
     "no-param-reassign": "off",
     "no-plusplus": "off",
     "linebreak-style": "off",
+    "max-len": ["error", {"code": 120}],
     "prefer-destructuring": "off",
     "react/static-property-placement": "off",
     "react/sort-comp": "off",
