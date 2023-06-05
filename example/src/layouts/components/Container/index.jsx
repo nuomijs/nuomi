@@ -1,20 +1,6 @@
 import React, { Component } from "react"
 import { NavLink, connect, useConnect, useNuomi, withNuomi } from "nuomi"
 
-const Demo = connect((state) => {
-  return state
-})(
-  class extends Component {
-    constructor(props) {
-      super(props)
-    }
-    render() {
-      const { count, dispatch } = this.props;
-      return <>{count}</>
-    }
-  }
-)
-
 export default ({ children }) => {
   const [{ count }, dispatch] = useConnect();
   const [{ route, store }] = useNuomi();
@@ -31,7 +17,6 @@ export default ({ children }) => {
           }
         })
       }}>{ count }</a>
-      <Demo />
       {children}
     </div>
   )

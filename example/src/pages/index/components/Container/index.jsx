@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useConnect, router } from 'nuomi';
 
 export default () => {
-  const [{ value, loading }] = useConnect();
+  const [{ value, loading }, dispatch] = useConnect();
+  console.log(1)
+  useEffect(() => {
+    dispatch({
+      type: '$initData'
+    })
+  }, [])
 
   return <div onClick={() => {
-    router.reload();
+    dispatch({
+      type: '@update',
+      payload: {
+        value: value + 1
+      }
+    })
   }}>
     <div>{loading.$initData ? 'loading': ''}</div>
     <div>{value}</div>
