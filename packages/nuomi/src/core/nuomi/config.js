@@ -18,8 +18,8 @@ const defaultNuomiProps = {
 let nuomiProps = extend({}, defaultNuomiProps);
 
 export const configureNuomi = (props) => {
-  nuomiProps = extend(nuomiProps, props);
+  if (props) {
+    nuomiProps = extend(nuomiProps, props);
+  }
   return nuomiProps;
 };
-
-export const getDefaultNuomi = () => defaultNuomiProps;

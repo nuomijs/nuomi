@@ -12,6 +12,7 @@
     "linebreak-style": "off",
     "max-len": ["error", {"code": 120}],
     "prefer-destructuring": "off",
+    "import/prefer-default-export": "off",
     "react/static-property-placement": "off",
     "react/sort-comp": "off",
     "react/destructuring-assignment": "off",

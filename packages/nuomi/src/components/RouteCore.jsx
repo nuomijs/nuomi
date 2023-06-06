@@ -2,7 +2,7 @@ import React from 'react';
 import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction } from '../utils';
-import { getDefaultNuomi, extendNuomi } from '../core/nuomi';
+import { configureNuomi, extendNuomi } from '../core/nuomi';
 import { blockData } from '../core/router';
 import { RoutePropTypes } from './propTypes';
 
@@ -18,7 +18,7 @@ export default class RouteCore extends React.PureComponent {
     this.wrapper = null;
     const { async, ...rest } = this.props;
     const loaded = !isFunction(async);
-    const nuomiProps = extendNuomi(getDefaultNuomi(), rest);
+    const nuomiProps = extendNuomi(configureNuomi(), rest);
     this.state = {
       // 是否异步加载完，async为函数时为false
       loaded,

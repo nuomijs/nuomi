@@ -7,9 +7,12 @@ export interface DefaultNuomiProps {
 }
 export type DefineNuomi = <S = any>(props: Props<S>) => Props<S>;
 export type ExtendNuomi = <S = any>(...props: Props<S>[]) => Props<S>;
+export interface ConfigureNuomi {
+  (): Props;
+  (props: Props): Props;
+}
 
-export const configureNuomi: () => Props;
-export const getDefaultNuomi: () => DefaultNuomiProps;
+export const configureNuomi: ConfigureNuomi;
 export const extendNuomi: ExtendNuomi;
 export const defineNuomi: DefineNuomi;
 

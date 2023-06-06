@@ -8,7 +8,7 @@
 * 移除NuomiRoute组件
 * useNuomi返回数组
 * withNuomi获取的nuomiProps改为nuomi
-* 移除导出的nuomi对象，新增defineNuomi、extendNuomi、configureNuomi、getDefaultNuomi
+* 移除导出的nuomi对象，新增defineNuomi、extendNuomi、configureNuomi
 
 ## 0.8.19 (2020-07-04)
 * 修复ShapeRoute组件报错问题

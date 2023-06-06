@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getDefaultNuomi, extendNuomi } from 'nuomi/lib/core/nuomi';
+import { configureNuomi, extendNuomi } from 'nuomi/lib/core/nuomi';
 import { removeReducer } from 'nuomi/lib/core/redux/reducer';
 import BaseNuomi from './BaseNuomi';
 
@@ -17,7 +17,7 @@ export default class NuomiNative extends React.PureComponent {
   }
 
   render() {
-    const nuomiProps = extendNuomi(getDefaultNuomi(), this.props);
+    const nuomiProps = extendNuomi(configureNuomi(), this.props);
     return <BaseNuomi {...nuomiProps} store={this.store} />;
   }
 }
