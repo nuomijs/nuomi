@@ -7,7 +7,7 @@ export default defineNuomi({
   state: {
     count: 0,
   },
-  render({ children, store }) {
+  render() {
     return <Container>
       <ShapeRoute routes={[{
         path: '/',

@@ -17,7 +17,7 @@ const defaultNuomiProps = {
 
 let nuomiProps = extend({}, defaultNuomiProps);
 
-export const configureNuomi = (props) => {
+export default (props) => {
   if (props) {
     nuomiProps = extend(nuomiProps, props);
   }

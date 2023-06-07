@@ -40,7 +40,8 @@ export interface NuomiProps<S = any> {
 
 export interface RouteProps<S = any> extends NuomiProps<S> {
   path?: string;
-  cache?: boolean | 'state' | 'component';
+  name?: string;
+  cache?: boolean | 'state';
   reload?: boolean;
   onEnter?: (enter: () => void) => boolean;
   onShow?: (props: Props<S>) => any;
@@ -48,9 +49,16 @@ export interface RouteProps<S = any> extends NuomiProps<S> {
   onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
-export type Props<S = any> = RouteProps<S> & {
+export interface DefineNuomiProps<S = any> extends RouteProps<S> {
   store?: NuomiStore<S>;
   location?: Location;
+}
+
+export type Props<S = any> = {
+  state: S,
+  store: NuomiStore<S>;
+  location: Location;
+  children: any,
 }
 
 export interface ShapeRouteObject extends RouteProps {

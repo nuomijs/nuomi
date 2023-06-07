@@ -1,6 +1,5 @@
 import BaseNuomiSuper from 'nuomi/lib/components/BaseNuomi';
 import { isFunction } from 'nuomi/lib/utils';
-// eslint-disable-next-line import/no-unresolved
 import { NavigationContext } from '@react-navigation/native';
 
 export default class BaseNuomi extends BaseNuomiSuper {

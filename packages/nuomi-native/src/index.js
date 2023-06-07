@@ -2,7 +2,7 @@ import connect from 'nuomi/lib/components/connect';
 import withNuomi from 'nuomi/lib/components/withNuomi';
 import { useConnect, useNuomi } from 'nuomi/lib/hooks';
 import store from 'nuomi/lib/core/redux/store';
-import NuomiNative from './NuomiNative';
+import NuomiNative from './components/NuomiNative';
 
 export * from 'nuomi/lib/core/nuomi';
 
