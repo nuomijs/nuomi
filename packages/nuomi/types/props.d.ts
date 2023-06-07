@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { RouteObject } from './router';
+import { Location } from './router';
 import { NuomiStore } from './store';
 
 export interface NuomiReducers<S = any> {
@@ -40,17 +40,17 @@ export interface NuomiProps<S = any> {
 
 export interface RouteProps<S = any> extends NuomiProps<S> {
   path?: string;
-  cache?: boolean | 'state';
+  cache?: boolean | 'state' | 'component';
   reload?: boolean;
   onEnter?: (enter: () => void) => boolean;
   onShow?: (props: Props<S>) => any;
   onActivte?: (props: Props<S>) => any;
-  onLeave?: (leave: () => void, to: RouteObject) => boolean;
+  onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
 export type Props<S = any> = RouteProps<S> & {
   store?: NuomiStore<S>;
-  route?: RouteObject;
+  location?: Location;
 }
 
 export interface ShapeRouteObject extends RouteProps {
@@ -68,7 +68,7 @@ export interface RouterProps {
 
 export interface StaticRouterProps {
   basename?: string;
-  route?: string | RoutePropValue;
+  location?: string | RoutePropValue;
   context?: any;
 }
 
@@ -90,5 +90,5 @@ export interface NavLinkProps extends LinkProps {
   path? :string;
   activeClassName?: string,
   activeStyle?: CSSProperties,
-  isActive?: (match: boolean | RouteObject, route: RouteObject, props: NavLinkProps) => boolean,
+  isActive?: (match: boolean | Location, location: Location, props: NavLinkProps) => boolean,
 }

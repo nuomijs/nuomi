@@ -27,9 +27,7 @@ class ShapeComponent extends React.PureComponent {
         if (React.isValidElement(obj)) {
           components.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
         } else {
-          const {
-            key, route, children: childrenRoutes, ...props
-          } = obj;
+          const { key, children: childrenRoutes, ...props } = obj;
           const newProps = { ...props };
           const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
           let Component = Route;

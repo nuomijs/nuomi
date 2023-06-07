@@ -1,4 +1,4 @@
-export type RouteObject = {
+export type Location = {
   pathname: string;
   url: string;
   search: string;
@@ -15,16 +15,16 @@ export type RouteObject = {
 }
 
 export type RouterAPI = {
-  route(): RouteObject;
-  push(path?: string | RouteObject, reload?: boolean): void;
-  replace(path?: string | RouteObject, reload?: boolean): void;
-  listener(callback: (route: RouteObject, isInit?: boolean) => void): Function;
+  location(): Location;
+  push(path?: string | Location, reload?: boolean): void;
+  replace(path?: string | Location, reload?: boolean): void;
+  listener(callback: (location: Location, isInit?: boolean) => void): Function;
   reload(): void;
   back(step?: number): void;
   forward(step?: number): void;
-  matchPath(route: RouteObject, path: string): RouteObject | boolean;
+  matchPath(location: Location, path: string): Location | boolean;
   mergePath(...path: string[]): string;
-  block(callback: (from: RouteObject, to: RouteObject, enter: () => void) => any): void;
+  block(callback: (from: Location, to: Location, enter: () => void) => any): void;
 }
 
 export const router: RouterAPI;

@@ -3,7 +3,7 @@ import { NavLink, connect, useConnect, useNuomi, withNuomi } from "nuomi"
 
 export default ({ children }) => {
   const [{ count }, dispatch] = useConnect();
-  const [{ route, store }] = useNuomi();
+  const [{ location, store }] = useNuomi();
 
   return (
     <div>

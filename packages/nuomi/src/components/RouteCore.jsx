@@ -64,7 +64,7 @@ export default class RouteCore extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     const { wrappers } = this.context;
-    const { route, cache } = this.props;
+    const { location, cache } = this.props;
     const { current } = this.wrapperRef;
 
     // 清理wrapper
@@ -75,7 +75,7 @@ export default class RouteCore extends React.PureComponent {
       this.wrapper = current;
       wrappers.push(current);
     }
-    if (route !== prevProps.route) {
+    if (location !== prevProps.location) {
       // 切换当前路由后，隐藏所有wrapper
       this.hideWrapper();
       if (cache === true) {
@@ -144,7 +144,7 @@ export default class RouteCore extends React.PureComponent {
   }
 
   showWrapper(nuomiProps) {
-    const { url } = this.props.route;
+    const { url } = this.props.location;
     if (isFunction(nuomiProps.onLeave)) {
       blockData.callback = (leave, restore, toRoute) => {
         const isLeave = nuomiProps.onLeave(leave, toRoute) !== false;
@@ -178,8 +178,8 @@ export default class RouteCore extends React.PureComponent {
 
   getNextProps() {
     const { props } = this;
-    const { route } = props;
-    const nextProps = { route };
+    const { location } = props;
+    const nextProps = { location };
     const { nuomiProps } = this.state;
 
     ['path', 'cache', 'reload', 'children'].forEach((value) => {
@@ -187,9 +187,9 @@ export default class RouteCore extends React.PureComponent {
       nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
     });
 
-    if (nextProps.reload === true && typeof route.reload === 'boolean') {
-      // 优先使用route.reload
-      nextProps.reload = route.reload;
+    if (nextProps.reload === true && typeof location.reload === 'boolean') {
+      // 优先使用location.reload
+      nextProps.reload = location.reload;
     }
 
     return nextProps;

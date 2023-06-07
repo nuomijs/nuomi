@@ -29,7 +29,7 @@ export default class BaseRoute extends BaseNuomi {
     const { store } = props;
     if (store.id) {
       const isReload = props.reload === true;
-      const isChange = prevProps.route !== props.route;
+      const isChange = prevProps.location !== props.location;
       if (isReload) {
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({

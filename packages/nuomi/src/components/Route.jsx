@@ -40,10 +40,10 @@ export default class Route extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
           this.context = context;
 
-          const allowMatch = !context.matched || context.matched === this || context.route.reload === true;
-          const matchRoute = allowMatch && router.matchPath(context.route, path);
+          const allowMatch = !context.matched || context.matched === this || context.location.reload === true;
+          const match = allowMatch && router.matchPath(context.location, path);
 
-          if (!matchRoute) {
+          if (!match) {
             // 设置了cache没有匹配路由，不销毁，只隐藏
             if (cache === true && this.routeComponent !== null) {
               return this.routeComponent;
@@ -59,11 +59,11 @@ export default class Route extends React.PureComponent {
             childrenWrappers: this.wrappers,
           };
 
-          if (matchRoute) {
+          if (match) {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>
-                <RouteCore {...this.props} cache={cache} route={matchRoute} store={this.store} />
+                <RouteCore {...this.props} cache={cache} location={match} store={this.store} />
               </RouterContext.Provider>
             );
           }

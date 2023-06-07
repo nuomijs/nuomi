@@ -7,7 +7,7 @@ let globalLocation = globalWindow.location;
 const globalHistory = globalWindow.history;
 // 监听列表
 let listeners = [];
-// route额外的数据
+// location额外的数据
 let extraData = {};
 // 是否允许清除额外数据
 let clearExtraData = true;
@@ -30,8 +30,8 @@ const defaultOptions = {
 let options = defaultOptions;
 // 清理路由数据
 let clear = null;
-// 当前route
-let currentRoute = null;
+// 当前location
+let currentLocation = null;
 // 阻塞路由控制
 // eslint-disable-next-line import/no-mutable-exports
 let blockData = {};
@@ -51,26 +51,26 @@ function getOriginPath() {
   return decodeURI(originPath);
 }
 
-function getRoute() {
+function getLocation() {
   const originPath = getOriginPath();
   return Object.assign(parser(originPath.replace(new RegExp(`^${options.basename}`), '')), {
     state: extraData.state || {},
   });
 }
 
-function getMergeRoute() {
-  return Object.assign(getRoute(), extraData);
+function getMergeLocation() {
+  return Object.assign(getLocation(), extraData);
 }
 
 function block(callback) {
   if (!blockCallback) {
     if (isFunction(callback)) {
-      blockCallback = (enter, restore, toRoute) => {
-        const isEnter = callback(currentRoute, toRoute, enter) !== false;
+      blockCallback = (enter, restore, to) => {
+        const isEnter = callback(currentLocation, to, enter) !== false;
         if (isEnter) {
           enter(isEnter);
         } else {
-          restore(currentRoute.url);
+          restore(currentLocation.url);
         }
       };
     }
@@ -80,11 +80,11 @@ function block(callback) {
 }
 
 function callListener() {
-  // 一次change可能有多个listeners，只创建一次route
+  // 一次change可能有多个listeners，只创建一次location
   let current = null;
   listeners.forEach((callback) => {
     if (!current) {
-      current = getMergeRoute();
+      current = getMergeLocation();
     }
     callback(current);
   });
@@ -100,10 +100,10 @@ function routerEventListener() {
     // 检测路由是否冻结
     if (isFunction(blockData.callback) || isFunction(blockCallback)) {
       // 记录待跳转的数据
-      if (!blockData.toRoute) {
-        blockData.toRoute = getMergeRoute();
+      if (!blockData.to) {
+        blockData.to = getMergeLocation();
       }
-      const { reload: isReload, ...rest } = blockData.toRoute;
+      const { reload: isReload, ...rest } = blockData.to;
       const callback = blockData.callback || blockCallback;
       callback(
         (isLeave) => {
@@ -112,7 +112,6 @@ function routerEventListener() {
           if (isLeave) {
             callListener();
           } else {
-            // eslint-disable-next-line no-use-before-define
             push(rest, isReload);
           }
         },
@@ -120,11 +119,11 @@ function routerEventListener() {
           clearExtraData = true;
           extraData = {};
           allowCallListener = false;
-          blockData.toRoute = null;
+          blockData.to = null;
           // eslint-disable-next-line no-use-before-define
           replace(path);
         },
-        blockData.toRoute,
+        blockData.to,
       );
     } else {
       callListener();
@@ -152,7 +151,7 @@ function combinePath(path = '') {
   return normalizePath(`${options.basename}/${pathname}`) + rest;
 }
 
-function routeHandle(...args) {
+function routerHandle(...args) {
   const type = args[0];
   const path = args[1];
   const isReload = args[2];
@@ -192,20 +191,20 @@ function routeHandle(...args) {
   }
 }
 
-function route() {
-  return getRoute();
+function location() {
+  return getLocation();
 }
 
 function push(...args) {
-  routeHandle('push', ...args);
+  routerHandle('push', ...args);
 }
 
 function replace(...args) {
-  routeHandle('replace', ...args);
+  routerHandle('replace', ...args);
 }
 
 function reload() {
-  const { url } = getRoute();
+  const { url } = getLocation();
   replace(url, true);
 }
 
@@ -230,7 +229,7 @@ function listener(callback) {
   if (isFunction(callback)) {
     listeners.push(callback);
     // 执行一次
-    callback(getRoute(), true);
+    callback(getLocation(), true);
     return () => {
       removeListener(callback);
     };
@@ -250,8 +249,8 @@ function createRouter(routerOptions, staticLocation, callback) {
     options = { ...options, ...routerOptions };
     isHash = options.type !== 'browser';
     const eventType = isHash ? 'hashchange' : 'popstate';
-    listener((toRoute) => {
-      callback((currentRoute = toRoute));
+    listener((to) => {
+      callback((currentLocation = to));
     });
     globalWindow.addEventListener(eventType, routerEventListener);
     return (clear = () => {
@@ -263,7 +262,7 @@ function createRouter(routerOptions, staticLocation, callback) {
       isHash = true;
       globalLocation = globalWindow.location;
       clear = null;
-      currentRoute = null;
+      currentLocation = null;
       blockCallback = null;
       blockData = {};
       clearExtraData = true;
@@ -272,8 +271,8 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function match(routeData, path, returns) {
-  const { pathname } = routeData;
+function match(locationObj, path, returns) {
+  const { pathname } = locationObj;
   const normalPath = normalizePath(path);
   let pathRegexp = pathRegexps[normalPath];
 
@@ -297,11 +296,11 @@ function match(routeData, path, returns) {
         }
       });
       return {
-        ...routeData,
+        ...locationObj,
         params,
       };
     }
-    return routeData;
+    return locationObj;
   }
 
   return isMatch;
@@ -324,7 +323,7 @@ export {
 
 export default {
   listener,
-  route,
+  location,
   reload,
   push,
   replace,
