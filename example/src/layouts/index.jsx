@@ -7,6 +7,11 @@ export default defineNuomi({
   state: {
     count: 0,
   },
+  effects: {
+    aaa() {
+      
+    }
+  },
   render() {
     return <Container>
       <ShapeRoute routes={[{

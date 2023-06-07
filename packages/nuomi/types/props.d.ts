@@ -7,7 +7,7 @@ export interface NuomiReducers<S = any> {
 }
 
 export interface NuomiEffects<S = any> {
-  [key: string]: (store: NuomiStore<S>, payload?: any) => any;
+  [key: string]: (store: Props<S>, payload?: any) => any;
 }
 
 export type RoutePropValue = {
@@ -31,8 +31,10 @@ export interface NuomiProps<S = any> {
   state?: S;
   reducers?: NuomiReducers<S>;
   effects?: NuomiEffects<S>;
+  extends?: NuomiProps<S>[];
+  mixins?: NuomiProps<S>[];
   async?: (cb?: (props: any) => void) => any;
-  render?: (props: Props<S>) => any;
+  render?: (props: Props<S> & { children: any }) => any;
   onInit?: (props: Props<S>) => any;
   children?: any;
   [key: string]: any;
@@ -43,6 +45,8 @@ export interface RouteProps<S = any> extends NuomiProps<S> {
   name?: string;
   cache?: boolean | 'state';
   reload?: boolean;
+  extends?: RouteProps<S>[];
+  mixins?: RouteProps<S>[];
   onEnter?: (enter: () => void) => boolean;
   onShow?: (props: Props<S>) => any;
   onActivte?: (props: Props<S>) => any;
@@ -50,15 +54,17 @@ export interface RouteProps<S = any> extends NuomiProps<S> {
 }
 
 export interface DefineNuomiProps<S = any> extends RouteProps<S> {
+  extends?: DefineNuomiProps<S>[];
+  mixins?: DefineNuomiProps<S>[];
   store?: NuomiStore<S>;
   location?: Location;
+  parent?: Props;
 }
 
 export type Props<S = any> = {
-  state: S,
   store: NuomiStore<S>;
   location: Location;
-  children: any,
+  parent?: Props;
 }
 
 export interface ShapeRouteObject extends RouteProps {

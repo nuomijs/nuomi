@@ -19,11 +19,12 @@ export default class BaseNuomi extends BaseNuomiSuper {
 
   routerChange() {
     const { props } = this;
+    const nuomiProps = this.getNuomiProps();
     if (isFunction(props.onShow)) {
       this.unListenerChange = this.context.addListener('focus', () => {
-        props.onShow(props);
+        props.onShow(nuomiProps);
       });
-      props.onShow(props);
+      props.onShow(nuomiProps);
     }
   }
 }

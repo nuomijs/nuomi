@@ -14,6 +14,8 @@ import { NuomiPropTypes } from './propTypes';
 export default class BaseNuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
 
+  static contextType = NuomiContext;
+
   static nuomiId = 0;
 
   constructor(...args) {
@@ -148,6 +150,14 @@ export default class BaseNuomi extends React.PureComponent {
       }
     };
 
+    store.restoreState = () => {
+      globalStore.dispatch({
+        type: `${store.id}/@replace`,
+        payload: props.state,
+      });
+      return store.getState();
+    };
+
     store.getState = () => globalStore.getState()[store.id] || props.state;
 
     store.setState = (...args) => {
@@ -213,17 +223,30 @@ export default class BaseNuomi extends React.PureComponent {
     }
   }
 
+  getNuomiProps() {
+    const { store, location } = this.props;
+    const nuomiProps = {
+      store,
+      location,
+    };
+    if (this.context) {
+      nuomiProps.parent = this.context.nuomi;
+    }
+    return nuomiProps;
+  }
+
   execInit() {
     const { props } = this;
     this.removeListener();
     if (isFunction(props.onInit)) {
-      this.unListener = props.onInit(props);
+      this.unListener = props.onInit(this.getNuomiProps());
     }
   }
 
   render() {
     const { props } = this;
-    const children = props.render ? props.render(props) : props.children;
-    return children ? <NuomiContext.Provider value={{ nuomi: this.props }}>{children}</NuomiContext.Provider> : null;
+    const nuomiProps = this.getNuomiProps();
+    const children = props.render ? props.render({ ...nuomiProps, children: props.children }) : props.children;
+    return children ? <NuomiContext.Provider value={{ nuomi: nuomiProps }}>{children}</NuomiContext.Provider> : null;
   }
 }

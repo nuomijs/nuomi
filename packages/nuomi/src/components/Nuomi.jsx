@@ -17,11 +17,11 @@ export default class Nuomi extends React.PureComponent {
     super(...args);
     this.mounted = false;
     this.store = {};
-    const { async, ...rest } = this.props;
+    const { async } = this.props;
     const isAsync = isFunction(async);
     this.state = {
       loaded: !isAsync,
-      nuomiProps: extendNuomi(configureNuomi(), rest),
+      nuomiProps: extendNuomi(configureNuomi(), this.props),
     };
   }
 

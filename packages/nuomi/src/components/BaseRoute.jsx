@@ -53,27 +53,25 @@ export default class BaseRoute extends BaseNuomi {
 
   replaceState() {
     const { props } = this;
-    props.store.dispatch({
-      type: '@replace',
-      payload: { ...props.state },
-    });
+    props.store.restoreState();
   }
 
   routerChange(activate) {
     const { props } = this;
     if (isFunction(props.onShow)) {
-      props.onShow(props);
+      props.onShow(this.getNuomiProps());
     }
     if (activate && isFunction(props.onActivate)) {
-      props.onActivate(props);
+      props.onActivate(this.getNuomiProps());
     }
   }
 
   render() {
     const { props, state } = this;
-    const children = props.render ? props.render(props) : props.children;
+    const nuomiProps = this.getNuomiProps();
+    const children = props.render ? props.render({ ...nuomiProps, children: props.children }) : props.children;
     return children ? (
-      <NuomiContext.Provider key={state.key} value={{ nuomi: this.props }}>
+      <NuomiContext.Provider key={state.key} value={{ nuomi: nuomiProps }}>
         {children}
       </NuomiContext.Provider>
     ) : null;

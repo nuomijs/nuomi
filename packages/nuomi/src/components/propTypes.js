@@ -6,13 +6,11 @@ export const NuomiPropTypes = {
   store: PropTypes.object,
   reducers: PropTypes.objectOf(PropTypes.func),
   effects: PropTypes.objectOf(PropTypes.func),
+  extends: PropTypes.arrayOf(PropTypes.object),
+  mixins: PropTypes.arrayOf(PropTypes.object),
   render: PropTypes.func,
   onInit: PropTypes.func,
   async: PropTypes.func,
-};
-
-export const ShapeRoutePropTypes = {
-  routes: PropTypes.arrayOf(PropTypes.object),
 };
 
 export const RoutePropTypes = {
@@ -25,6 +23,10 @@ export const RoutePropTypes = {
   onShow: PropTypes.func,
   onActivte: PropTypes.func,
   onLeave: PropTypes.func,
+};
+
+export const ShapeRoutePropTypes = {
+  routes: PropTypes.arrayOf(PropTypes.object),
 };
 
 export const RouterPropTypes = {

@@ -16,9 +16,9 @@ export default class RouteCore extends React.PureComponent {
     this.wrapperRef = React.createRef();
     this.mounted = false;
     this.wrapper = null;
-    const { async, ...rest } = this.props;
+    const { async } = this.props;
     const loaded = !isFunction(async);
-    const nuomiProps = extendNuomi(configureNuomi(), rest);
+    const nuomiProps = extendNuomi(configureNuomi(), this.props);
     this.state = {
       // 是否异步加载完，async为函数时为false
       loaded,

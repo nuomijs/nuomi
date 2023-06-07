@@ -22,6 +22,7 @@ export interface NuomiStore<S = any> {
   getState(): S;
   setState(type: string, payload: any): S;
   setState(payload: any): S;
+  restoreState(): S;
 }
 
 export interface StoreAPI extends Store {
