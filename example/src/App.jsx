@@ -1,5 +1,9 @@
 import React, { Fragment }  from 'react';
-import { ShapeRoute } from 'nuomi';
+import { ShapeRoute, configure } from 'nuomi';
+
+configure({
+  reload: true,
+})
 
 export default () => {
   return (

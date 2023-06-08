@@ -1,4 +1,5 @@
 export { default as Nuomi } from './Nuomi';
+export { default as NuomiRoute } from './NuomiRoute';
 export { default as ShapeRoute } from './ShapeRoute';
 export { default as Router } from './Router';
 export { default as StaticRouter } from './StaticRouter';

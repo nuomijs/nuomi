@@ -77,7 +77,7 @@ export default class BaseNuomi extends React.PureComponent {
                 const effect = effects[name];
                 if (isFunction(effect)) {
                   // $开头的方法进行loading特殊处理
-                  if (name.indexOf('$') === 0) {
+                  if (name.startsWith('$')) {
                     // 获取上一次调用的方法
                     const prevEffect = loadingQueue.slice(-1)[0];
                     // 开启loading
@@ -191,7 +191,19 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   createReducer() {
-    const { store, state: stateData, reducers } = this.props;
+    const {
+      store, state: stateData, reducers, effects,
+    } = this.props;
+    const loading = {};
+    Object.keys(effects).forEach((key) => {
+      if (key && key.startsWith('$')) {
+        loading[key] = false;
+      }
+    });
+    stateData.loading = {
+      ...loading,
+      ...stateData.loading,
+    };
     let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
       defaultState = extend({ state: stateData }, { state: defaultState }).state;

@@ -6,6 +6,7 @@ import { ShapeRoutePropTypes } from './propTypes';
 import { RouterContext } from './Context';
 import Route from './Route';
 import Redirect from './Redirect';
+import NuomiRoute from './NuomiRoute';
 
 const getKey = (key, i) => {
   if (key) {
@@ -27,12 +28,16 @@ class ShapeComponent extends React.PureComponent {
         if (React.isValidElement(obj)) {
           components.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
         } else {
-          const { key, children: childrenRoutes, ...props } = obj;
+          const {
+            key, route, children: childrenRoutes, ...props
+          } = obj;
           const newProps = { ...props };
           const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
           let Component = Route;
           if (props.to) {
             Component = Redirect;
+          } else if (props.path && route === false) {
+            Component = NuomiRoute;
           }
           if (newProps.path) {
             newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');

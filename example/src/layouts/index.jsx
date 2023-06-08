@@ -7,6 +7,11 @@ export default define({
   state: {
     count: 0,
   },
+  effects: {
+    $a() {
+
+    },
+  },
   extends: [{
     state: {
       value: 1
@@ -18,11 +23,10 @@ export default define({
     }]
   }],
   render() {
+    console.log(this.state)
     return <Container>
       <ShapeRoute routes={[{
         path: '/',
-        reload: true,
-        cache: true,
         async: () => import('../pages/index')
       }, {
         path: '/list',

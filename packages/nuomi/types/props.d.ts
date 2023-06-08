@@ -39,6 +39,11 @@ export interface NuomiProps<S = any> {
   [key: string]: any;
 }
 
+export interface NuomiRouteProps<S = any> extends NuomiProps<S> {
+  pathPrefix?: string | RegExp;
+  path?: string;
+}
+
 export interface RouteProps<S = any> extends NuomiProps<S> {
   path?: string;
   name?: string;
@@ -65,6 +70,7 @@ export type Props<S = any> = {
 }
 
 export interface ShapeRouteObject extends RouteProps {
+  route?: boolean;
   children?: ShapeRouteObject[];
 }
 

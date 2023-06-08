@@ -12,6 +12,12 @@ export const NuomiPropTypes = {
   async: PropTypes.func,
 };
 
+export const NuomiRoutePropTypes = {
+  ...NuomiPropTypes,
+  pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  path: PropTypes.string,
+};
+
 export const RoutePropTypes = {
   ...NuomiPropTypes,
   path: PropTypes.string,
