@@ -4,8 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>nuomi测试</title>
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.publicPath %>nprogress.css">
 </head>
 <body>
   <div id="root"></div>
+  <script src="<%= htmlWebpackPlugin.options.publicPath %>nprogress.js"></script>
+  <script>
+    NProgress.start();
+  </script>
 </body>
 </html>

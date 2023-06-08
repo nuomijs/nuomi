@@ -1,8 +1,14 @@
 import React, { Fragment }  from 'react';
-import { ShapeRoute, configure } from 'nuomi';
+import { ShapeRoute, configure, router } from 'nuomi';
 
 configure({
   reload: true,
+})
+
+router.listener(() => {
+  NProgress.start();
+}, () => {
+  NProgress.done();
 })
 
 export default () => {
@@ -15,6 +21,7 @@ export default () => {
       {
         path: '/*',
         async: () => import('./layouts'),
+        reload: false,
       },
     ]} />
   )

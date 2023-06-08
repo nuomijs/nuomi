@@ -6,7 +6,7 @@ import globalWindow from '../../utils/globalWindow';
 let globalLocation = globalWindow.location;
 const globalHistory = globalWindow.history;
 // 监听列表
-let listeners = [[], []];
+let listeners = [];
 // location额外的数据
 let extraData = {};
 // 是否允许清除额外数据
@@ -79,20 +79,29 @@ function block(callback) {
   }
 }
 
-function callListener() {
+function callListeners() {
   // 一次change可能有多个listeners，只创建一次location
   let current = null;
-  listeners[0].forEach((callback) => {
+  const [beforeListeners = [], afterListeners = []] = listeners;
+  beforeListeners.forEach((callback) => {
     if (!current) {
       current = getMergeLocation();
     }
     callback(currentLocation, current);
   });
+  afterListeners.forEach((callback) => {
+    delete callback.execed;
+  });
 }
 
-function callEnterListener() {
-  listeners[1].forEach((callback) => {
-    callback(currentLocation);
+function callAfterListeners() {
+  const [, afterListeners = []] = listeners;
+  afterListeners.forEach((callback) => {
+    // 防止多次执行
+    if (!callback.execed) {
+      callback.execed = true;
+      callback(currentLocation);
+    }
   });
 }
 
@@ -116,7 +125,7 @@ function routerEventListener() {
           blockData = {};
           allowCallListener = true;
           if (isLeave) {
-            callListener();
+            callListeners();
           } else {
             push(rest, isReload);
           }
@@ -131,7 +140,7 @@ function routerEventListener() {
         blockData.to,
       );
     } else {
-      callListener();
+      callListeners();
     }
   } else {
     allowCallListener = true;
@@ -224,29 +233,33 @@ function forward(step) {
 function removeListener(...args) {
   // 移除所有
   if (!args.length) {
-    listeners = [[], []];
+    listeners = [];
   } else {
+    const [beforeListeners = [], afterListeners = []] = listeners;
     if (args[0]) {
-      listeners[0] = listeners[0].filter((cb) => cb !== args[0]);
+      listeners[0] = beforeListeners.filter((cb) => cb !== args[0]);
     }
     if (args[1]) {
-      listeners[1] = listeners[1].filter((cb) => cb !== args[1]);
+      listeners[1] = afterListeners.filter((cb) => cb !== args[1]);
     }
   }
 }
 
-function listener(before, after) {
-  if (isFunction(before) || isFunction(after)) {
-    if (before) {
-      listeners[0].push(before);
+function listener(beforeListener, afterListener) {
+  if (isFunction(beforeListener) || isFunction(afterListener)) {
+    const [beforeListeners = [], afterListeners = []] = listeners;
+    if (beforeListener) {
+      beforeListeners.push(beforeListener);
+      listeners[0] = beforeListeners;
       // 执行一次
-      before(currentLocation, getMergeLocation(), true);
+      beforeListener(currentLocation, getMergeLocation(), true);
     }
-    if (after) {
-      listeners[1].push(before);
+    if (afterListener) {
+      afterListeners.push(afterListener);
+      listeners[1] = afterListeners;
     }
     return () => {
-      removeListener(before, after);
+      removeListener(beforeListener, afterListener);
     };
   }
   return () => {};
@@ -333,7 +346,7 @@ function mergePath(...args) {
 }
 
 export {
-  createRouter, blockData, combinePath, match, callEnterListener,
+  createRouter, blockData, combinePath, match, callAfterListeners,
 };
 
 export default {

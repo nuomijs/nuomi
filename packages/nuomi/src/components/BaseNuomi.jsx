@@ -249,9 +249,8 @@ export default class BaseNuomi extends React.PureComponent {
 
   execInit() {
     const { props } = this;
-    this.removeListener();
     if (isFunction(props.onInit)) {
-      this.unListener = props.onInit(this.getNuomiProps());
+      props.onInit(this.getNuomiProps());
     }
   }
 

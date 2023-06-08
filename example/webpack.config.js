@@ -1,4 +1,5 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -18,6 +19,9 @@ module.exports = {
       template: 'index.html',
       chunks: ['index', 'common'],
     }),
+    new CopyWebpackPlugin([
+      'public'
+    ])
   ],
   mode: process.env.NODE_ENV,
   devtool: 'source-map',

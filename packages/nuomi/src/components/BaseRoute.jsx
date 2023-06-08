@@ -4,6 +4,7 @@ import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
 import { NuomiContext } from './Context';
+import { callAfterListeners } from '../core/router';
 
 export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
@@ -26,11 +27,9 @@ export default class BaseRoute extends BaseNuomi {
     if (props === prevProps) {
       return;
     }
-    const { store } = props;
-    if (store.id) {
-      const isReload = props.reload === true;
-      const isChange = prevProps.location !== props.location;
-      if (isReload) {
+    const isChange = prevProps.location !== props.location;
+    if (isChange) {
+      if (props.reload === true && props.location.reload === true) {
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
           key: state.key + 1,
@@ -38,7 +37,7 @@ export default class BaseRoute extends BaseNuomi {
         this.replaceState();
         this.execInit();
         this.routerChange();
-      } else if (isChange) {
+      } else {
         this.routerChange(true);
       }
     }
@@ -49,6 +48,7 @@ export default class BaseRoute extends BaseNuomi {
     this.createReducer();
     this.execInit();
     this.routerChange();
+    callAfterListeners();
   }
 
   replaceState() {

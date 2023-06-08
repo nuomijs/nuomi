@@ -3,13 +3,6 @@ import { isFunction } from 'nuomi/lib/utils';
 import { NavigationContext } from '@react-navigation/native';
 
 export default class BaseNuomi extends BaseNuomiSuper {
-  componentWillUnmount() {
-    super.componentWillUnmount();
-    if (this.unListenerChange != null) {
-      this.unListenerChange();
-    }
-  }
-
   initialize() {
     this.createStore();
     this.createReducer();
@@ -21,7 +14,7 @@ export default class BaseNuomi extends BaseNuomiSuper {
     const { props } = this;
     const nuomiProps = this.getNuomiProps();
     if (isFunction(props.onShow)) {
-      this.unListenerChange = this.context.addListener('focus', () => {
+      this.unListener = this.context.addListener('focus', () => {
         props.onShow(nuomiProps);
       });
       props.onShow(nuomiProps);

@@ -183,15 +183,10 @@ export default class RouteCore extends React.PureComponent {
     const nextProps = { location };
     const { nuomiProps } = this.state;
 
-    ['path', 'cache', 'reload', 'children'].forEach((value) => {
+    ['cache', 'reload', 'children'].forEach((value) => {
       // 优先使用props
       nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
     });
-
-    if (nextProps.reload === true && typeof location.reload === 'boolean') {
-      // 优先使用location.reload
-      nextProps.reload = location.reload;
-    }
 
     return nextProps;
   }
