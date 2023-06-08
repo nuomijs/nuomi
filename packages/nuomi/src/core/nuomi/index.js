@@ -1,3 +1,2 @@
-export { default as extendNuomi } from './extend';
-export { default as defineNuomi } from './define';
-export { default as configureNuomi } from './config';
+export { default as define } from './define';
+export { default as configure } from './config';

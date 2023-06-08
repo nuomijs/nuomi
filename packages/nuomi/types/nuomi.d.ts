@@ -1,15 +1,13 @@
-import { DefineNuomiProps } from './props';
+import { DefineProps } from './props';
 
-export type DefineNuomi = <S = any>(props: DefineNuomiProps<S>) => DefineNuomiProps<S>;
-export type ExtendNuomi = <S = any>(...props: DefineNuomiProps<S>[]) => DefineNuomiProps<S>;
-export interface ConfigureNuomi {
-  (): DefineNuomiProps;
-  (props: DefineNuomiProps): DefineNuomiProps;
+export type DefineFunc = <S = any>(props: DefineProps<S>) => DefineProps<S>;
+export interface ConfigureFunc {
+  (): DefineProps;
+  (props: DefineProps): DefineProps;
 }
 
-export const configureNuomi: ConfigureNuomi;
-export const extendNuomi: ExtendNuomi;
-export const defineNuomi: DefineNuomi;
+export const configure: ConfigureFunc;
+export const define: DefineFunc;
 
 
 

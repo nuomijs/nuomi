@@ -1,12 +1,11 @@
 import React, { memo } from 'react';
-import { defineNuomi, useConnect } from 'nuomi';
+import { define, useConnect } from 'nuomi';
 import Container from './components/Container';
 
 const Demo = () => {
   const [count, dispatch] = useConnect(({ count }) => {
     return count;
   });
-  console.log(22)
   return <div onClick={() => {
     dispatch({
       type: '@update',
@@ -17,7 +16,7 @@ const Demo = () => {
   }}>{count}</div>
 }
 
-export default defineNuomi({
+export default define({
   state: {
     count: 0,
     value: 1,

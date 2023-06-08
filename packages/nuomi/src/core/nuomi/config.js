@@ -1,4 +1,4 @@
-import extend from './extend';
+import { extend, extendArray } from '../../utils/extend';
 
 const defaultNuomiProps = {
   state: {
@@ -12,14 +12,13 @@ const defaultNuomiProps = {
       loading: { ...state.loading, ...payload },
     }),
   },
-  effects: {},
 };
 
 let nuomiProps = extend({}, defaultNuomiProps);
 
 export default (props) => {
   if (props) {
-    nuomiProps = extend(nuomiProps, props);
+    nuomiProps = extendArray(nuomiProps, [props]);
   }
   return nuomiProps;
 };

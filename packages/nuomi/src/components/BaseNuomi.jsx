@@ -5,7 +5,7 @@ import globalStore, {
   getStore, setStore, initialiseState, INITIALISE_STATE,
 } from '../core/redux/store';
 import { isObject, isFunction } from '../utils';
-import { extendNuomi } from '../core/nuomi';
+import { extend } from '../utils/extend';
 import Proxy from '../utils/Proxy';
 import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
@@ -194,7 +194,7 @@ export default class BaseNuomi extends React.PureComponent {
     const { store, state: stateData, reducers } = this.props;
     let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
-      defaultState = extendNuomi({ state: stateData }, { state: defaultState }).state;
+      defaultState = extend({ state: stateData }, { state: defaultState }).state;
     } else {
       defaultState = stateData;
     }

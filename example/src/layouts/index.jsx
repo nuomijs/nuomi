@@ -1,17 +1,22 @@
 import React from "react"
-import { defineNuomi, ShapeRoute } from "nuomi";
+import { define, ShapeRoute } from "nuomi";
 import Container from "./components/Container";
 
-export default defineNuomi({
+export default define({
   id: 'global',
   state: {
     count: 0,
   },
-  effects: {
-    aaa() {
-      
-    }
-  },
+  extends: [{
+    state: {
+      value: 1
+    },
+    extends: [{
+      state: {
+        value: 2
+      },
+    }]
+  }],
   render() {
     return <Container>
       <ShapeRoute routes={[{

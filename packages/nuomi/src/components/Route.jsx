@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
 import router from '../core/router';
-import { configureNuomi } from '../core/nuomi';
+import { configure } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
 
@@ -32,7 +32,7 @@ export default class Route extends React.PureComponent {
   }
 
   render() {
-    const defaultProps = configureNuomi();
+    const defaultProps = configure();
     const { path, cache = defaultProps.cache } = this.props;
     return (
       <RouterContext.Consumer>

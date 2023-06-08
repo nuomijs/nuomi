@@ -6,20 +6,22 @@ export interface NuomiNativeProps<S = any> {
   state?: S;
   reducers?: NuomiReducers<S>;
   effects?: NuomiEffects<S>;
-  render?: (props: Props<S>) => any;
+  extends?: NuomiNativeProps<S>[];
+  render?: (props: Props<S> & { children: any }) => any;
   onInit?: (props: Props<S>) => any;
   onShow?: (props: Props<S>) => any;
   [key: string]: any;
 }
 
-export interface DefineNuomiProps<S = any> extends NuomiNativeProps<S> {
+export interface DefineProps<S = any> extends NuomiNativeProps<S> {
   store?: NuomiStore<S>;
+  extends?: DefineProps<S>[];
   location?: any;
+  parent?: Props;
 }
 
 export type Props<S = any> = {
-  state: S,
   store: NuomiStore<S>;
   location: any;
-  children: any,
+  parent?: Props;
 }

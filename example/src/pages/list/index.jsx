@@ -1,8 +1,8 @@
 import React from 'react';
-import { defineNuomi } from 'nuomi';
+import { define } from 'nuomi';
 import Container from './components/Container';
 
-export default defineNuomi({
+export default define({
   state: {
     value: 3,
     loading: {
@@ -10,13 +10,18 @@ export default defineNuomi({
     },
   },
   effects: {
-    async $initData({ getState, setState }) {
+    async initData(a, b) {
+      console.log(a, b)
+    },
+    async $initData(store) {
+      const { getState, setState } = store;
       const state = getState();
       const value = await new Promise((res) => {
         setTimeout(() => {
           res(state.value + 1);
         }, 1000)
       });
+      this.initData(store, 1);
       setState({
         value,
       });

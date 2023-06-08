@@ -1,8 +1,8 @@
 import React from 'react';
-import { defineNuomi } from 'nuomi';
+import { define } from 'nuomi';
 import Container from './components/Container';
 
-export default defineNuomi({
+export default define({
   state: {
     value: 3,
     loading: {

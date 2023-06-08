@@ -2,7 +2,8 @@ import React from 'react';
 import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction } from '../utils';
-import { configureNuomi, extendNuomi } from '../core/nuomi';
+import { configure } from '../core/nuomi';
+import { extendArray } from '../utils/extend';
 import { blockData } from '../core/router';
 import { RoutePropTypes } from './propTypes';
 
@@ -18,7 +19,7 @@ export default class RouteCore extends React.PureComponent {
     this.wrapper = null;
     const { async } = this.props;
     const loaded = !isFunction(async);
-    const nuomiProps = extendNuomi(configureNuomi(), this.props);
+    const nuomiProps = extendArray(configure(), [this.props]);
     this.state = {
       // 是否异步加载完，async为函数时为false
       loaded,
@@ -106,13 +107,13 @@ export default class RouteCore extends React.PureComponent {
      * })
      */
     const loadResult = async((props) => {
-      cb(extendNuomi(nuomiProps, props));
+      cb(extendArray(nuomiProps, [props]));
     });
     /**
      * async: () => import(path);
      */
     if (loadResult && loadResult instanceof Promise) {
-      loadResult.then((module) => cb(extendNuomi(nuomiProps, module.default)));
+      loadResult.then((module) => cb(extendArray(nuomiProps, [module.default])));
     }
   }
 

@@ -1,10 +1,8 @@
 import React from 'react';
-import { useConnect, router, useNuomi } from 'nuomi';
+import { useConnect } from 'nuomi';
 
 export default () => {
   const [{ value, loading }, dispatch] = useConnect();
-  const [a] = useNuomi();
-  console.log(a)
   return <div onClick={() => {
     dispatch({
       type: '@update',

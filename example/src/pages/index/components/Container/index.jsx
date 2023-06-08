@@ -3,7 +3,7 @@ import { useConnect, router } from 'nuomi';
 
 export default () => {
   const [{ value, loading }, dispatch] = useConnect();
-  console.log(1)
+
   useEffect(() => {
     dispatch({
       type: '$initData'

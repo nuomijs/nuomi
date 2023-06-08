@@ -1,7 +1,7 @@
 import React from 'react';
-import { defineNuomi } from "nuomi";
+import { define } from "nuomi";
 
-export default defineNuomi({
+export default define({
   render() {
     return <div>404</div>
   }

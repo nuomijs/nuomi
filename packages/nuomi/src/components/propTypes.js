@@ -7,7 +7,6 @@ export const NuomiPropTypes = {
   reducers: PropTypes.objectOf(PropTypes.func),
   effects: PropTypes.objectOf(PropTypes.func),
   extends: PropTypes.arrayOf(PropTypes.object),
-  mixins: PropTypes.arrayOf(PropTypes.object),
   render: PropTypes.func,
   onInit: PropTypes.func,
   async: PropTypes.func,
