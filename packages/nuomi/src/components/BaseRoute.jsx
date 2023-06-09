@@ -4,7 +4,7 @@ import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
 import { NuomiContext } from './Context';
-import { callAfterListeners } from '../core/router';
+import { callShowedListener, addReloadListener } from '../core/router';
 
 export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
@@ -13,33 +13,17 @@ export default class BaseRoute extends BaseNuomi {
     key: 0,
   };
 
-  componentWillUnmount() {
-    const { store, cache } = this.props;
-    if (cache !== 'state' && cache !== true) {
-      removeReducer(store.id);
-      store.id = null;
-    }
-    this.removeListener();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { props, state } = this;
-    if (props === prevProps) {
-      return;
-    }
-    const isChange = prevProps.location !== props.location;
-    if (isChange) {
-      if (props.reload === true && props.location.reload === true) {
-        // eslint-disable-next-line react/no-did-update-set-state
-        this.setState({
-          key: state.key + 1,
-        });
-        this.replaceState();
-        this.execInit();
-        this.routerChange();
-      } else {
-        this.routerChange(true);
-      }
+  reloadRoute() {
+    const { props } = this;
+    // 子路由重新装载，render会优先于componentWillUnmount执行，导致无法渲染子路由，需前置清理数据
+    if (props.store.id) {
+      props.getRouterContext().matched = null;
+      this.setState(({ key }) => ({
+        key: key + 1,
+      }));
+      this.replaceState();
+      this.execInit();
+      this.routerChange();
     }
   }
 
@@ -48,7 +32,7 @@ export default class BaseRoute extends BaseNuomi {
     this.createReducer();
     this.execInit();
     this.routerChange();
-    callAfterListeners();
+    callShowedListener();
   }
 
   replaceState() {
@@ -66,14 +50,47 @@ export default class BaseRoute extends BaseNuomi {
     }
   }
 
+  componentWillUnmount() {
+    const { store, cache } = this.props;
+    if (cache !== 'state' && cache !== true) {
+      removeReducer(store.id);
+      store.id = null;
+    }
+    this.removeListener();
+  }
+
+  componentDidMount() {
+    this.unListener = addReloadListener((currentLocation) => {
+      const { reload, location } = this.props;
+      if (reload && location === currentLocation) {
+        this.reloadRoute();
+      }
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { props } = this;
+    if (props === prevProps) {
+      return;
+    }
+    const isChange = prevProps.location !== props.location;
+    if (isChange) {
+      this.routerChange(true);
+      callShowedListener();
+    }
+  }
+
   render() {
     const { props, state } = this;
     const nuomiProps = this.getNuomiProps();
     const children = props.render ? props.render({ ...nuomiProps, children: props.children }) : props.children;
-    return children ? (
-      <NuomiContext.Provider key={state.key} value={{ nuomi: nuomiProps }}>
-        {children}
-      </NuomiContext.Provider>
-    ) : null;
+    if (children != null) {
+      return (
+        <NuomiContext.Provider key={state.key} value={{ nuomi: nuomiProps }}>
+          {children}
+        </NuomiContext.Provider>
+      );
+    }
+    return null;
   }
 }

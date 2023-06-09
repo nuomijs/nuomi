@@ -40,7 +40,7 @@ export default class Route extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <Route>');
           this.context = context;
 
-          const allowMatch = !context.matched || context.matched === this || context.location.reload === true;
+          const allowMatch = !context.matched || context.matched === this;
           const match = allowMatch && router.matchPath(context.location, path);
 
           if (!match) {
@@ -60,6 +60,9 @@ export default class Route extends React.PureComponent {
           };
 
           if (match) {
+            if (context.matched) {
+              context.matched = null;
+            }
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>

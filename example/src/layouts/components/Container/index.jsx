@@ -1,31 +1,41 @@
 import React, { Component } from "react"
-import { NavLink, connect, useConnect, useNuomi, withNuomi, router } from "nuomi"
+import { NavLink, connect, useConnect, useNuomi, withNuomi, router, ShapeRoute } from "nuomi"
 
 export default ({ children }) => {
-  const [{ count, value }, dispatch] = useConnect();
-
+  const [{ routes, count }, dispatch] = useConnect();
   return (
     <div>
       <NavLink to="/">首页</NavLink>
       <NavLink to="/list" style={{ marginLeft: 10 }}>列表</NavLink>
+
+      <div onClick={() => {
+        dispatch({
+          type: '@update',
+          payload: {
+            routes: routes.filter(({ path }) => path !== '/list')
+          }
+        })
+      }}>
+        销毁list
+      </div>
       <div onClick={() => {
         router.reload();
       }}>
         刷新
       </div>
-      <div>
-      <a onClick={() => {
-        
+      <div onClick={() => {
         dispatch({
           type: '@update',
           payload: {
             count: count + 1
           }
         })
-      }}>{ count }</a>
+      }}>
+        点击{count}
       </div>
-      
-      {children}
+      <div>
+        <ShapeRoute routes={routes} />
+      </div>
     </div>
   )
 }

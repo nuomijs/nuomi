@@ -10,9 +10,6 @@ export default define({
     },
   },
   effects: {
-    async initData(a, b) {
-      console.log(a, b)
-    },
     async $initData(store) {
       const { getState, setState } = store;
       const state = getState();
@@ -21,7 +18,6 @@ export default define({
           res(state.value + 1);
         }, 1000)
       });
-      this.initData(store, 1);
       setState({
         value,
       });

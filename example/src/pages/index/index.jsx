@@ -2,19 +2,19 @@ import React, { memo } from 'react';
 import { define, useConnect } from 'nuomi';
 import Container from './components/Container';
 
-const Demo = () => {
-  const [count, dispatch] = useConnect(({ count }) => {
-    return count;
-  });
-  return <div onClick={() => {
-    dispatch({
-      type: '@update',
-      payload: {
-        count: count + 1
-      }
-    })
-  }}>{count}</div>
-}
+// const Demo = () => {
+//   const [count, dispatch] = useConnect(({ count }) => {
+//     return count;
+//   });
+//   return <div onClick={() => {
+//     dispatch({
+//       type: '@update',
+//       payload: {
+//         count: count + 1
+//       }
+//     })
+//   }}>{count}</div>
+// }
 
 export default define({
   state: {
@@ -39,7 +39,7 @@ export default define({
   },
   render() {
     return <>
-      <Demo></Demo>
+      {/* <Demo></Demo> */}
       <Container />
     </>
   },

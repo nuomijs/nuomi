@@ -79,33 +79,7 @@ function block(callback) {
   }
 }
 
-function callListeners() {
-  // 一次change可能有多个listeners，只创建一次location
-  let current = null;
-  const [beforeListeners = [], afterListeners = []] = listeners;
-  beforeListeners.forEach((callback) => {
-    if (!current) {
-      current = getMergeLocation();
-    }
-    callback(currentLocation, current);
-  });
-  afterListeners.forEach((callback) => {
-    delete callback.execed;
-  });
-}
-
-function callAfterListeners() {
-  const [, afterListeners = []] = listeners;
-  afterListeners.forEach((callback) => {
-    // 防止多次执行
-    if (!callback.execed) {
-      callback.execed = true;
-      callback(currentLocation);
-    }
-  });
-}
-
-function routerEventListener() {
+function routerListener() {
   if (allowCallListener) {
     if (clearExtraData) {
       extraData = {};
@@ -125,7 +99,7 @@ function routerEventListener() {
           blockData = {};
           allowCallListener = true;
           if (isLeave) {
-            callListeners();
+            callListener();
           } else {
             push(rest, isReload);
           }
@@ -140,7 +114,7 @@ function routerEventListener() {
         blockData.to,
       );
     } else {
-      callListeners();
+      callListener();
     }
   } else {
     allowCallListener = true;
@@ -197,10 +171,10 @@ function routerHandle(...args) {
           url = `#${url}`;
         }
         globalHistory[type === 'push' ? 'pushState' : 'replaceState']({ url }, null, url);
-        routerEventListener();
+        routerListener();
       }
     } else if (isReload === true) {
-      routerEventListener();
+      routerListener();
     }
   }
 }
@@ -218,8 +192,7 @@ function replace(...args) {
 }
 
 function reload() {
-  const { url } = getLocation();
-  replace(url, true);
+  callReloadListener();
 }
 
 function back(step) {
@@ -230,36 +203,84 @@ function forward(step) {
   globalHistory.forward(step);
 }
 
+function callListener() {
+  // 一次change可能有多个listeners，只创建一次location
+  let current = null;
+  const [beforeListeners = [], afterListeners = []] = listeners;
+  beforeListeners.forEach((callback) => {
+    if (!current) {
+      current = getMergeLocation();
+    }
+    callback(currentLocation, current);
+  });
+  afterListeners.forEach((callback) => {
+    delete callback.execed;
+  });
+}
+
+function callShowedListener() {
+  const [, afterListeners = []] = listeners;
+  afterListeners.forEach((callback) => {
+    // 防止多次执行
+    if (!callback.execed) {
+      callback.execed = true;
+      callback(currentLocation);
+    }
+  });
+}
+
+function callReloadListener() {
+  const [, , reloadListeners = []] = listeners;
+  reloadListeners.forEach((callback) => {
+    callback(currentLocation);
+  });
+}
+
 function removeListener(...args) {
   // 移除所有
   if (!args.length) {
     listeners = [];
   } else {
-    const [beforeListeners = [], afterListeners = []] = listeners;
+    const [beforeListeners = [], afterListeners = [], reloadListeners = []] = listeners;
     if (args[0]) {
       listeners[0] = beforeListeners.filter((cb) => cb !== args[0]);
     }
     if (args[1]) {
       listeners[1] = afterListeners.filter((cb) => cb !== args[1]);
     }
+    if (args[2]) {
+      listeners[2] = reloadListeners.filter((cb) => cb !== args[1]);
+    }
   }
 }
 
-function listener(beforeListener, afterListener) {
-  if (isFunction(beforeListener) || isFunction(afterListener)) {
+function listener(beforeCallback, afterCallback) {
+  if (isFunction(beforeCallback) || isFunction(afterCallback)) {
     const [beforeListeners = [], afterListeners = []] = listeners;
-    if (beforeListener) {
-      beforeListeners.push(beforeListener);
+    if (beforeCallback) {
+      beforeListeners.push(beforeCallback);
       listeners[0] = beforeListeners;
       // 执行一次
-      beforeListener(currentLocation, getMergeLocation(), true);
+      beforeCallback(currentLocation, getMergeLocation(), true);
     }
-    if (afterListener) {
-      afterListeners.push(afterListener);
+    if (afterCallback) {
+      afterListeners.push(afterCallback);
       listeners[1] = afterListeners;
     }
     return () => {
-      removeListener(beforeListener, afterListener);
+      removeListener(beforeCallback, afterCallback);
+    };
+  }
+  return () => {};
+}
+
+function addReloadListener(reloadCallback) {
+  if (isFunction(reloadCallback)) {
+    const [, , reloadListeners = []] = listeners;
+    reloadListeners.push(reloadCallback);
+    listeners[2] = reloadListeners;
+    return () => {
+      removeListener(null, null, reloadCallback);
     };
   }
   return () => {};
@@ -280,10 +301,10 @@ function createRouter(routerOptions, staticLocation, callback) {
     listener((from, to) => {
       callback((currentLocation = to));
     });
-    globalWindow.addEventListener(eventType, routerEventListener);
+    globalWindow.addEventListener(eventType, routerListener);
     return (clear = () => {
       created = false;
-      globalWindow.removeEventListener(eventType, routerEventListener);
+      globalWindow.removeEventListener(eventType, routerListener);
       removeListener();
       pathRegexps = {};
       options = defaultOptions;
@@ -346,7 +367,7 @@ function mergePath(...args) {
 }
 
 export {
-  createRouter, blockData, combinePath, match, callAfterListeners,
+  createRouter, blockData, combinePath, match, callShowedListener, addReloadListener,
 };
 
 export default {

@@ -31,7 +31,7 @@ export default class NuomiRoute extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <NuomiRoute>');
 
           // 同一个context只匹配一次
-          const allowMatch = !context.matched || context.matched === this || context.location.reload === true;
+          const allowMatch = !context.matched || context.matched === this;
 
           if (allowMatch && this.matchPath(context.location)) {
             context.matched = this;
