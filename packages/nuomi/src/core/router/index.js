@@ -174,13 +174,13 @@ function routerHandle(...args) {
         routerListener();
       }
     } else if (isReload === true) {
-      routerListener();
+      reload();
     }
   }
 }
 
 function location() {
-  return getLocation();
+  return getMergeLocation();
 }
 
 function push(...args) {
@@ -320,6 +320,11 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
+function removeMatchPath(path) {
+  const normalPath = normalizePath(path);
+  delete pathRegexps[normalPath];
+}
+
 function match(locationObj, path, returns) {
   const { pathname } = locationObj;
   const normalPath = normalizePath(path);
@@ -367,7 +372,7 @@ function mergePath(...args) {
 }
 
 export {
-  createRouter, blockData, combinePath, match, callShowedListener, addReloadListener,
+  createRouter, blockData, combinePath, match, callShowedListener, addReloadListener, removeMatchPath,
 };
 
 export default {

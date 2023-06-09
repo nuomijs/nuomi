@@ -2,7 +2,7 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import RouteCore from './RouteCore';
-import router from '../core/router';
+import router, { removeMatchPath } from '../core/router';
 import { configure } from '../core/nuomi';
 import { RoutePropTypes } from './propTypes';
 import { removeReducer } from '../core/redux/reducer';
@@ -26,6 +26,9 @@ export default class Route extends React.PureComponent {
 
   componentWillUnmount() {
     removeReducer(this.store.id);
+    if (this.props.path) {
+      removeMatchPath(this.props.path);
+    }
     if (this.context.matched === this) {
       this.context.matched = null;
     }
