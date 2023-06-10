@@ -1,12 +1,24 @@
 # 更新日志：
 
-## 1.0.0 (2023-06-04)
-* 移除onChange，新增onShow和onActivte
-* 移除nuomiProps中的location属性，新增route属性
-* 移除默认reducers中的_updatState/_updateLoading/_replaceState，新增@update/@replace/@loading
-* useNuomi返回数组
-* withNuomi获取的nuomiProps改为nuomi
-* 移除导出的nuomi对象，新增define、configure
+## 1.0.0 (2023-06-10)
+* Nuomi组件
+  - 移除async，新增load
+  - 移除默认reducers中的_updatState/_updateLoading/_replaceState，新增@update/@replace/@loading
+  - effects中移除getNuomiProps方法，定义的方法接受2个参数，第一个是store，第二个是payload
+  - 新增extends属性，类型为数组，可以拓展多个，取代0.x的nuomi.extend
+  - store对象新增setState和restoreState方法
+  - 移除默认state中的loadings对象，替换为loading对象
+* Route组件
+  - 移除onChange，新增onShow和onActivte
+  - 新增name属性
+  - 移除data属性
+* router对象
+  - 新增push方法，替代location方法
+  - location方法取消参数配置，获取到路由数据，新增state对象（替代Route组件移除的data对象）
+  - 路由监听器增加第二个回调参数，路由渲染完成执行
+* 移除nuomi对象，新增define、configure方法，configure取代0.x的nuomi.config和nuomi.getDefaultProps，define用来定义nuomiProps，包含代码提示，增强了开发体验
+* withNuomi获取的nuomiProps属性改为nuomi，useNuomi返回的nuomiProps改为数组包裹
+* withNuomi和useNuomi获取到nuomiProps，由之前的所有props改为仅能获取store/location/parent，其中parent可以获取到父组件定义的nuomiProps
 
 ## 0.8.19 (2020-07-04)
 * 修复ShapeRoute组件报错问题
