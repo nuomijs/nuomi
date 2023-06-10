@@ -5,8 +5,8 @@ export default ({ children }) => {
   const [{ routes, count }, dispatch] = useConnect();
   return (
     <div>
-      <NavLink to="/">首页</NavLink>
-      <NavLink to="/list" style={{ marginLeft: 10 }}>列表</NavLink>
+      <NavLink to={{ name: 'home' }}>首页</NavLink>
+      <NavLink to={{ name: 'list' }} style={{ marginLeft: 10 }}>列表</NavLink>
 
       <div onClick={() => {
         dispatch({

@@ -18,8 +18,8 @@ export default class Nuomi extends React.PureComponent {
     super(...args);
     this.mounted = false;
     this.store = {};
-    const { async } = this.props;
-    const isAsync = isFunction(async);
+    const { load } = this.props;
+    const isAsync = isFunction(load);
     this.state = {
       loaded: !isAsync,
       nuomiProps: extendArray(configure(), [this.props]),
@@ -46,10 +46,10 @@ export default class Nuomi extends React.PureComponent {
   }
 
   loadProps() {
-    const { async } = this.props;
+    const { load } = this.props;
     const { loaded } = this.state;
     if (!loaded) {
-      const loadResult = async((props) => {
+      const loadResult = load((props) => {
         this.loaded(props);
       });
       if (loadResult && loadResult instanceof Promise) {

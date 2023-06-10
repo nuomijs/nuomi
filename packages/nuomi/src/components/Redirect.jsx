@@ -1,8 +1,7 @@
 import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
-import router, { match } from '../core/router';
-import { restorePath } from '../utils/parser';
+import router, { match, restorePath } from '../core/router';
 import { isObject } from '../utils';
 import { RedirectPropTypes } from './propTypes';
 
@@ -31,7 +30,7 @@ export default class Redirect extends React.PureComponent {
           const { matched, location, staticContext } = context;
 
           if (to && !context.redirecting && !this.redirected) {
-            if ((from && match(location, from)) || (!matched && !from)) {
+            if ((from && match(location, { path: from }), false, false) || (!matched && !from)) {
               this.redirected = true;
               // 防止同时执行多个Redirect
               context.redirecting = true;

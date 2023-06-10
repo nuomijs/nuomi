@@ -9,7 +9,7 @@ export const NuomiPropTypes = {
   extends: PropTypes.arrayOf(PropTypes.object),
   render: PropTypes.func,
   onInit: PropTypes.func,
-  async: PropTypes.func,
+  load: PropTypes.func,
 };
 
 export const NuomiRoutePropTypes = {
@@ -53,7 +53,6 @@ export const LinkPropTypes = {
 
 export const NavLinkPropTypes = {
   ...LinkPropTypes,
-  path: PropTypes.string,
   activeClassName: PropTypes.string,
   activeStyle: PropTypes.object,
   isActice: PropTypes.func,

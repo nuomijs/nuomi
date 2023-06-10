@@ -15,6 +15,8 @@ export type RoutePropValue = {
   url?: string;
   search?: string;
   hash?: string;
+  path?: string;
+  name?: string;
   query?: {
     [key: string]: any;
   };
@@ -32,7 +34,7 @@ export interface NuomiProps<S = any> {
   reducers?: NuomiReducers<S>;
   effects?: NuomiEffects<S>;
   extends?: NuomiProps<S>[];
-  async?: (cb?: (props: any) => void) => any;
+  load?: (cb?: (props: any) => void) => any;
   render?: (props: Props<S> & { children: any }) => any;
   onInit?: (props: Props<S>) => any;
   children?: any;
@@ -104,7 +106,6 @@ export interface LinkProps {
 }
 
 export interface NavLinkProps extends LinkProps {
-  path? :string;
   activeClassName?: string,
   activeStyle?: CSSProperties,
   isActive?: (match: boolean | Location, location: Location, props: NavLinkProps) => boolean,

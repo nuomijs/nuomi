@@ -2,17 +2,16 @@ import React from 'react';
 import invariant from 'invariant';
 import { Link } from './Link';
 import { NavLinkPropTypes } from './propTypes';
-import router, { combinePath } from '../core/router';
+import { combinePath, match, restorePath } from '../core/router';
 import { isFunction } from '../utils';
 import { RouterContext } from './Context';
-import parser, { restorePath } from '../utils/parser';
+import parser from '../utils/parser';
 
 class NavLink extends Link {
   static propTypes = NavLinkPropTypes;
 
   static defaultProps = {
     to: '',
-    path: '',
     activeClassName: 'active',
     replace: false,
     reload: false,
@@ -20,13 +19,13 @@ class NavLink extends Link {
 
   isActive(location) {
     const { props } = this;
-    const { isActive, to, path } = props;
+    const { isActive, to } = props;
     const { pathname } = parser(restorePath(to));
-    const match = router.matchPath(location, path || pathname);
+    const matchLocation = match(location, { path: pathname }, false, true);
     if (isFunction(isActive)) {
-      return isActive(match, location, props) !== false;
+      return isActive(matchLocation, location, props) !== false;
     }
-    return match;
+    return matchLocation;
   }
 
   getActiveProps(location) {
@@ -43,7 +42,7 @@ class NavLink extends Link {
 
   render() {
     const {
-      to, path, reload, replace, activeClassName, activeStyle, isActive, forwardRef, ...rest
+      to, reload, replace, activeClassName, activeStyle, isActive, forwardRef, ...rest
     } = this.props;
     return (
       <RouterContext.Consumer>

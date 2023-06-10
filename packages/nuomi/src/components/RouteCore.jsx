@@ -17,14 +17,14 @@ export default class RouteCore extends React.PureComponent {
     this.wrapperRef = React.createRef();
     this.mounted = false;
     this.wrapper = null;
-    const { async } = this.props;
-    const loaded = !isFunction(async);
+    const { load } = this.props;
+    const isAsync = !isFunction(load);
     const nuomiProps = extendArray(configure(), [this.props]);
     this.state = {
-      // 是否异步加载完，async为函数时为false
-      loaded,
+      // 是否异步加载完，load为函数时为false
+      loaded: isAsync,
       // 是否显示路由组件，异步时为false，因为异步加载的props可能包含onEnter，非异步时，没有onEnter值为true
-      visible: loaded ? !nuomiProps.onEnter : false,
+      visible: isAsync ? !nuomiProps.onEnter : false,
       // 异步加载的props
       nuomiProps,
     };
@@ -97,20 +97,20 @@ export default class RouteCore extends React.PureComponent {
 
   // 异步加载props，可以使用require.ensure或import
   loadProps(cb) {
-    const { async } = this.props;
+    const { load } = this.props;
     const { nuomiProps } = this.state;
     /**
-     * async: ((cb) => {
+     * load: ((cb) => {
      *  require.ensure([], (require) => {
      *    cb(require(path).default);
      *  })
      * })
      */
-    const loadResult = async((props) => {
+    const loadResult = load((props) => {
       cb(extendArray(nuomiProps, [props]));
     });
     /**
-     * async: () => import(path);
+     * load: () => import(path);
      */
     if (loadResult && loadResult instanceof Promise) {
       loadResult.then((module) => cb(extendArray(nuomiProps, [module.default])));

@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux';
-import store, { setStore } from './store';
+import globalStore, { setStore, getStore } from './store';
 import { noop as rootReducer } from '../../utils';
+import globalWindow from '../../utils/globalWindow';
 
 const reducers = {};
 
 const replaceReducer = () => {
   if (Object.keys(reducers).length) {
-    store.replaceReducer(combineReducers(reducers));
+    globalStore.replaceReducer(combineReducers(reducers));
   } else {
-    store.replaceReducer(rootReducer);
+    globalStore.replaceReducer(rootReducer);
   }
 };
 
@@ -21,6 +22,13 @@ export const createReducer = (key, reducer) => {
 
 export const removeReducer = (key) => {
   if (reducers[key]) {
+    // 解决REDUX_DEVTOOLS缓存状态问题
+    if (process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+      const store = getStore(key);
+      if (store) {
+        store.restoreState();
+      }
+    }
     delete reducers[key];
     setStore(key, null);
     replaceReducer();

@@ -6,7 +6,7 @@ export default () => {
 
   return <div onClick={() => {
     router.push({
-      pathname: '/',
+      name: 'list',
       state: {
         a: 1
       }

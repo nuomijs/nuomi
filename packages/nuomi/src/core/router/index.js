@@ -1,6 +1,6 @@
 import warning from 'warning';
 import { isFunction, isObject, isString } from '../../utils';
-import parser, { pathToRegexp, normalizePath, restorePath } from '../../utils/parser';
+import parser, { pathToRegexp, normalizePath } from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
 
 let globalLocation = globalWindow.location;
@@ -16,7 +16,9 @@ let created = false;
 // 是否允许执行路由监听器
 let allowCallListener = true;
 // path对应的正则集合
-let pathRegexps = {};
+let pathRegexpMap = {};
+// name对应path集合
+let namePathMap = {};
 // 是否是hash类型
 let isHash = true;
 // 默认路由选项
@@ -119,6 +121,56 @@ function routerListener() {
   } else {
     allowCallListener = true;
   }
+}
+
+function restorePath(object) {
+  if (isString(object)) {
+    return object;
+  }
+  let path = '';
+  const {
+    pathname, name, params, query, search, url, hash,
+  } = object;
+  let { path: p } = object;
+  if (isString(url) && url !== '') {
+    path = url;
+  } else {
+    if (isString(name) && name !== '') {
+      p = namePathMap[name];
+    }
+    if (isString(p) && p !== '') {
+      path = p;
+      if (isObject(params)) {
+        Object.keys(params).forEach((key) => {
+          path = path.replace(new RegExp(`\\/:${key}`), params[key] || '');
+        });
+      }
+    } else if (isString(pathname) && pathname !== '') {
+      path = pathname;
+    }
+    if (!!search && isString(search)) {
+      if (search.indexOf('?') !== 0) {
+        path += `?${search}`;
+      } else {
+        path += search;
+      }
+    } else if (isObject(query) && Object.keys(query).length) {
+      path += '?';
+      const querys = [];
+      Object.keys(query).forEach((key) => {
+        querys.push(`${key}=${query[key]}`);
+      });
+      path += querys.join('&');
+    }
+    if (hash && isString(hash)) {
+      if (hash.indexOf('#') === 0) {
+        path += hash;
+      } else {
+        path += `#${hash}`;
+      }
+    }
+  }
+  return path;
 }
 
 function combinePath(path = '') {
@@ -306,7 +358,8 @@ function createRouter(routerOptions, staticLocation, callback) {
       created = false;
       globalWindow.removeEventListener(eventType, routerListener);
       removeListener();
-      pathRegexps = {};
+      pathRegexpMap = {};
+      namePathMap = {};
       options = defaultOptions;
       isHash = true;
       globalLocation = globalWindow.location;
@@ -320,19 +373,25 @@ function createRouter(routerOptions, staticLocation, callback) {
   }
 }
 
-function removeMatchPath(path) {
+function removeMatchMapData(path, name) {
   const normalPath = normalizePath(path);
-  delete pathRegexps[normalPath];
+  delete pathRegexpMap[normalPath];
+  delete namePathMap[name];
 }
 
-function match(locationObj, path, returns) {
+function match(locationObj, { path, name }, saveMap = false, returns = false) {
   const { pathname } = locationObj;
   const normalPath = normalizePath(path);
-  let pathRegexp = pathRegexps[normalPath];
+  let pathRegexp = pathRegexpMap[normalPath];
 
   if (!pathRegexp) {
     pathRegexp = pathToRegexp(normalPath);
-    pathRegexps[normalPath] = pathRegexp;
+    if (saveMap) {
+      pathRegexpMap[normalPath] = pathRegexp;
+      if (name) {
+        namePathMap[name] = path;
+      }
+    }
   }
 
   const pathnameMatch = pathname.match(pathRegexp);
@@ -343,10 +402,10 @@ function match(locationObj, path, returns) {
     if (pathMatch) {
       const params = {};
       pathMatch.forEach((param, i) => {
-        const name = param.replace(/^\/:/, '');
+        const key = param.replace(/^\/:/, '');
         const value = pathnameMatch[i + 1];
         if (value !== undefined) {
-          params[name] = value.replace(/^\//, '');
+          params[key] = value.replace(/^\//, '');
         }
       });
       return {
@@ -361,7 +420,7 @@ function match(locationObj, path, returns) {
 }
 
 function matchPath(...args) {
-  return match(args[0], args[1], true);
+  return match(args[0], { path: args[1] }, false, true);
 }
 
 function mergePath(...args) {
@@ -372,7 +431,14 @@ function mergePath(...args) {
 }
 
 export {
-  createRouter, blockData, combinePath, match, callShowedListener, addReloadListener, removeMatchPath,
+  createRouter,
+  blockData,
+  combinePath,
+  match,
+  callShowedListener,
+  addReloadListener,
+  removeMatchMapData,
+  restorePath,
 };
 
 export default {

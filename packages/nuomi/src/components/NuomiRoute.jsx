@@ -2,18 +2,25 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import Nuomi from './Nuomi';
-import { match } from '../core/router';
+import { match, removeMatchMapData } from '../core/router';
 import { isString } from '../utils';
 import { NuomiRoutePropTypes } from './propTypes';
 
 export default class NuomiRoute extends React.PureComponent {
   static propTypes = NuomiRoutePropTypes;
 
+  componentWillUnmount() {
+    const { path } = this.props;
+    if (path) {
+      removeMatchMapData(path);
+    }
+  }
+
   matchPath(location) {
     const { pathname } = location;
     const { pathPrefix, path } = this.props;
     if (path) {
-      return match(location, path);
+      return match(location, { path }, true, false);
     }
     if (pathPrefix instanceof RegExp) {
       return pathPrefix.test(pathname);

@@ -1,5 +1,3 @@
-import { isObject, isString } from './index';
-
 export function normalizePath(path) {
   return (
     `/${path}`
@@ -26,43 +24,6 @@ export function pathToRegexp(path) {
     // /* => (?:\/.*)?
     .replace(/(\\\/)?\*/g, '(?:$1.*)?');
   return new RegExp(`^${regexpPath}\\/?$`, 'i');
-}
-
-export function restorePath(object) {
-  if (isString(object)) {
-    return object;
-  }
-  let path = '';
-  const {
-    pathname, query, search, url, hash,
-  } = object;
-  if (!!url && isString(url)) {
-    path = url;
-  } else if (!!pathname && isString(pathname)) {
-    path = pathname;
-    if (!!search && isString(search)) {
-      if (search.indexOf('?') !== 0) {
-        path += `?${search}`;
-      } else {
-        path += search;
-      }
-    } else if (isObject(query) && Object.keys(query).length) {
-      path += '?';
-      const querys = [];
-      Object.keys(query).forEach((key) => {
-        querys.push(`${key}=${query[key]}`);
-      });
-      path += querys.join('&');
-    }
-    if (hash && isString(hash)) {
-      if (hash.indexOf('#') === 0) {
-        path += hash;
-      } else {
-        path += `#${hash}`;
-      }
-    }
-  }
-  return path;
 }
 
 export default function parser(path) {

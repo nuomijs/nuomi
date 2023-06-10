@@ -8,13 +8,15 @@ export default define({
     count: 0,
     routes: [{
       path: '/',
-      async: () => import('../pages/index')
+      name: 'home',
+      load: () => import('../pages/index')
     }, {
       path: '/list',
-      async: () => import('../pages/list')
+      name: 'list',
+      load: () => import('../pages/list')
     }, {
       path: '/404',
-      async: () => import('../pages/404')
+      load: () => import('../pages/404')
     }, {
       to: '/404'
     }]

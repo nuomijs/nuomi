@@ -25,13 +25,6 @@ export default class BaseNuomi extends React.PureComponent {
     this.initialize();
   }
 
-  componentWillUnmount() {
-    const { store } = this.props;
-    removeReducer(store.id);
-    store.id = null;
-    this.removeListener();
-  }
-
   getId() {
     const { id, store } = this.props;
     if (store.id) {
@@ -252,6 +245,13 @@ export default class BaseNuomi extends React.PureComponent {
     if (isFunction(props.onInit)) {
       props.onInit(this.getNuomiProps());
     }
+  }
+
+  componentWillUnmount() {
+    const { store } = this.props;
+    removeReducer(store.id);
+    store.id = null;
+    this.removeListener();
   }
 
   render() {
