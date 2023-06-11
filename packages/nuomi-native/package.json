@@ -1,6 +1,6 @@
 {
   "name": "nuomi-native",
-  "version": "0.8.19",
+  "version": "1.0.0-alpha.0",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
   "repository": {
@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "invariant": "^2.2.4",
-    "nuomi": "^0.8.19",
+    "nuomi": "^1.0.0-alpha.0",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
