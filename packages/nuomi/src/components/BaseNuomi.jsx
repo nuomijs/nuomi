@@ -153,7 +153,7 @@ export default class BaseNuomi extends React.PureComponent {
 
     store.getState = () => globalStore.getState()[store.id] || props.state;
 
-    store.setState = (...args) => {
+    store.commit = (...args) => {
       let [type, payload] = args;
       if (args.length) {
         if (args.length === 1) {
@@ -173,7 +173,7 @@ export default class BaseNuomi extends React.PureComponent {
           const reducer = type.substr(splitIndex + 1);
           const $store = getStore(id);
           if ($store) {
-            return $store.setState(reducer, payload);
+            return $store.commit(reducer, payload);
           }
         }
       }

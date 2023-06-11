@@ -7,24 +7,21 @@ title: API
 |  props   | value  |  介绍  |
 |  ----  | ----  | ---- |
 | id  | '' | store id，不设置会动态创建 |
-| async  | function | 异步加载props |
+| load  | function | 异步加载props |
 | state  | {} | 初始状态 |
-| data  | {} | 临时数据 |
-| store  | { dispatch, getState } | 派发和获取当前模块状态，内部创建，不可修改，也无需传递，dispatch可以调用effects中的方法，也可以调用其他模块的effects |
-| reducers  | { @update } | 更新状态 |
-| effects  | {} | 异步或者同步更新状态，异步处理使用async await，用于业务处理，支持对象和函数，函数必须返回对象，内部需dispatch调用reducers中的方法，方法名有$前缀时会被设置为loading状态，通过connect可以在loading中获取到，不需要开发时手动控制loading状态 |
+| reducers  | { @update/@replace/@loading } | 更新状态 |
+| effects  | {} | 通过async await异步更新状态，函数名使用$前缀会自动生成loading状态，函数第一个参数为store，第二个参数为payload |
 | render  | function | 渲染组件 |
-| onInit  | function | 状态被创建后回调，可以通过this.store更新状态 |
+| onInit  | function | 组件被创建后回调，此时内部store已经被创建，可以通过参数this.store访问，也可以通过this. |
 
 ### Ruoter
 |  props   | value  |  介绍  |
 |  ----  | ----  | ---- |
-| hashPrefix  | '' | hash前缀 (<span style={{ color: 'red' }}>0.7.0-</span>) |
-| type  | 'hash' or 'browser' | 路由类型，默认是hash (<span style={{ color: 'green' }}>0.7.0+</span>)  |
-| basename  | '/' | 通用路径 (<span style={{ color: 'green' }}>0.7.0+</span>) |
+| type  | 'hash' or 'browser' | 路由类型，默认是hash  |
+| basename  | '/' | 通用路径 |
 
 ### StaticRuoter
-用于服务器渲染 (<span style={{ color: 'green' }}>0.7.0+</span>)
+用于服务器渲染
 
 |  props   | value  |  介绍  |
 |  ----  | ----  | ---- |
@@ -36,10 +33,33 @@ title: API
 |  props   | value  |  介绍  |
 |  ----  | ----  | ---- |
 | pathPrefix  | '' | 路由path前缀，支持字符串和正则 |
-| path  | '' | 匹配path，优先级高于pathPrefix (<span style={{ color: 'green' }}>0.8.0+</span>) |
+| path  | '' | 匹配path，优先级高于pathPrefix |
+
+其他参数同Nuomi组件
+
+### Route
+|  props   | value  |  介绍
+|  ----  | ----  | ---- |
+| path  | '' | 路由path，支持动态参数 |
+| cache  | false | 是否给留有创建一个div容器，可实现缓存功能 |
+| reload  | false | 匹配路由后是否重置状态，值为null则不法刷新 |
+| onEnter  | function | 路由匹配后，在reducer被创建之前回调，返回false将无法展示内容，参数为强制展示回调，调用后可以展示内容 |
+| onShow  | function | 路由匹配时回调，支持函数和对象 |
+| onActivte  | function | 路由匹配时回调，支持函数和对象 |
+| onLeave  | function | 路由离开时回调，用于决定是否可以离开 |
+其他参数同Nuomi组件，
+回调的执行顺序是 onEnter > location.data > onChange > onInit，location.data下面路由跳转时会讲到
+<br /><b>注意：path和cache不能异步加载</b>
+
+### Redirect
+|  props   | value  |  介绍  |
+|  ----  | ----  | ---- |
+| from  | '' | 匹配当前路由path，会重定向至to设置的path |
+| to  | '' | 重定向路由path |
+| reload  | false | 跳转后是否重置状态 |
 
 ### ShapeRoute
-可视化设置路由 (<span style={{ color: 'green' }}>0.8.0+</span>)
+可视化设置路由
 
 |  props   | value  |  介绍  |
 |  ----  | ----  | ---- |
@@ -59,30 +79,6 @@ const routes = [{
   <ShapeRoute routes={routes} />
 </Router>
 ```
-
-其他参数同Nuomi组件
-
-### Route
-|  props   | value  |  介绍
-|  ----  | ----  | ---- |
-| path  | '' | 路由path，支持动态参数 |
-| location  | {} | 当前匹配的路由数据，内部创建，不可修改，也无需传递 |
-| wrapper  | false | 是否给留有创建一个div容器，可实现缓存功能  (<span style={{ color: 'red' }}>0.8.0-</span>) |
-| cache  | false | 是否给留有创建一个div容器，可实现缓存功能  (<span style={{ color: 'green' }}>0.8.0+</span>) |
-| reload  | false | 匹配路由后是否重置状态，值为null则不法刷新 |
-| onEnter  | function | 路由匹配后，在reducer被创建之前回调，返回false将无法展示内容，参数为强制展示回调，调用后可以展示内容 |
-| onChange  | function | 路由匹配时回调，支持函数和对象 |
-| onLeave  | function | 路由离开时回调，用于决定是否可以离开 |
-其他参数同Nuomi组件，
-回调的执行顺序是 onEnter > location.data > onChange > onInit，location.data下面路由跳转时会讲到
-<br /><b>注意：path和cache不能异步加载</b>
-
-### Redirect
-|  props   | value  |  介绍  |
-|  ----  | ----  | ---- |
-| from  | '' | 匹配当前路由path，会重定向至to设置的path |
-| to  | '' | 重定向路由path |
-| reload  | false | 跳转后是否重置状态 |
 
 ### Link
 |  props   | value  |  介绍  |

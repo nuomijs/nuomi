@@ -20,8 +20,8 @@ export interface NuomiStore<S = any> {
   id: string;
   dispatch: NuomiStoreDispatch;
   getState(): S;
-  setState(type: string, payload: any): S;
-  setState(payload: any): S;
+  commit(type: string, payload: any): S;
+  commit(payload: any): S;
   restoreState(): S;
 }
 

@@ -4,7 +4,7 @@ title: 功能速查
 
 ## 状态隔离
 
-框架为每个 `nuomiProps` 模块内部创建一个 `store` 对象，包含了 `getState` 和 `dispatch`
+框架为每个 `nuomiProps` 模块内部创建一个 `store` 对象，包含了 `getState` 和 `dispatch`等
 方法用于操作模块内的状态，可以在 `nuomiProps` 对象的方法内调用 `this.store` 去访问它们。
 
 ```js

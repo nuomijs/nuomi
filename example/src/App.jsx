@@ -1,40 +1,38 @@
-import React, { Fragment }  from 'react';
-import { ShapeRoute, configure, router, NavLink } from 'nuomi';
+// import React, { Fragment }  from 'react';
+// import { ShapeRoute, configure, router, NavLink } from 'nuomi';
 
-configure({
-  reload: true,
-})
-
-router.listener(() => {
-  NProgress.start();
-}, () => {
-  NProgress.done();
-})
-
-// const filesContext = require.context('./views', true, /index\.js$/, 'lazy');
-// filesContext.keys().map((file) => import(`./views/${file.replace(/^\.\//, '')}`)).forEach((m) => {
-//   m.then((e) => {
-//     console.log(e)
-//   })
+// configure({
+//   reload: true,
 // })
-// const files = filesContext.keys().map(filesContext);
 
-// files.forEach((module) => {
+// router.listener(() => {
+//   NProgress.start();
+// }, () => {
+//   NProgress.done();
+// })
 
-//   // Use the imported module here
-// });
+// export default () => {
+//   return (
+//     <ShapeRoute routes={[
+//       {
+//         path: '/login',
+//         load: () => import('./pages/login'),
+//       },
+//       {
+//         path: '/*',
+//         load: () => import('./layouts'),
+//       },
+//     ]} />
+//   )
+// }
 
-export default () => {
-  return (
-    <ShapeRoute routes={[
-      {
-        path: '/login',
-        load: () => import('./pages/login'),
-      },
-      {
-        path: '/*',
-        load: () => import('./layouts'),
-      },
-    ]} />
-  )
-}
+import React  from 'react';
+import { Nuomi } from 'nuomi';
+import list from './list';
+import List from './List.jsx';
+
+export default () => (
+  <Nuomi {...list}>
+    <List />
+  </Nuomi>
+)

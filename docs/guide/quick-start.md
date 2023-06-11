@@ -70,17 +70,19 @@ yarn start
 新增 `src/list.js`
 
 ```js
-export default {
+import { define } from 'nuomi';
+
+export default define({
   state: {
-    dataSource: []
+    data: []
   },
   reducers: {
-    updateState: (state, { payload }) => ({ ...state, ...payload })
+    updateData: (state, payload) => ({ ...state, ...payload })
   },
   effects: {
-    async $getList() {
+    async $getList({ commit }) {
       // 模拟请求
-      const dataSource = await new Promise((res) => {
+      const data = await new Promise((res) => {
         setTimeout(() => {
           res([
             { name: 'react' },
@@ -89,20 +91,12 @@ export default {
           ]);
         }, 500);
       });
-
-      this.dispatch({
-        type: 'updateState',
-        payload: { dataSource }
-      });
+      commit('updateData', { data });
     },
-    remove({ name }) {
-      const { dataSource } = this.getState();
-
-      this.dispatch({
-        type: 'updateState',
-        payload: {
-          dataSource: dataSource.filter((v) => v.name !== name)
-        }
+    remove({ getState, commit }, { name }) {
+      const { data } = getState();
+      commit('updateData', {
+        data: data.filter((v) => v.name !== name)
       });
     }
   },
@@ -111,7 +105,7 @@ export default {
       type: '$getList'
     });
   }
-}
+});
 ```
 
 该文件导出一个对象，`state` 定义初始状态；`reducers` 控制状态的更新；`effects` 管理业务逻辑；`onInit` 业务初始化。可以通过给 `effects` 中的方法添加 `$` 前缀可以做到程序 `auto loading` 功能。
@@ -126,7 +120,7 @@ import { Table, Button } from 'antd';
 import { useConnect } from 'nuomi';
 
 const List = () => {
-  const [{ dataSource, loading }, dispatch] = useConnect();
+  const [{ data, loading }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
     dispatch({
@@ -147,9 +141,9 @@ const List = () => {
 
   return (
     <Table
-      loading={!!loading.$getList}
+      loading={loading.$getList}
       rowKey="name"
-      dataSource={dataSource}
+      dataSource={data}
       columns={columns}
       bordered
     />
@@ -285,6 +279,6 @@ export default {
 }
 ```
 
-可以使用 `children` 属性渲染子组件，也可以使用 `render` 函数来渲染组件，共存时 `children` 不会被渲染，在 `render` 中可以通过 `this.children` 访问子组件，这一点可以用来做路由嵌套。
+可以使用 `children` 属性渲染子组件，也可以使用 `render` 函数来渲染组件。
 
 框架的特性远不及此，更多功能等待你去发现。

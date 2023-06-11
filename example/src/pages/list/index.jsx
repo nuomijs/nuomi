@@ -11,14 +11,14 @@ export default define({
   },
   effects: {
     async $initData(store) {
-      const { getState, setState } = store;
+      const { getState, commit } = store;
       const state = getState();
       const value = await new Promise((res) => {
         setTimeout(() => {
           res(state.value + 1);
         }, 1000)
       });
-      setState({
+      commit({
         value,
       });
     }
