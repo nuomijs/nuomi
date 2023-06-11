@@ -142,7 +142,7 @@ function restorePath(object) {
       path = p;
       if (isObject(params)) {
         Object.keys(params).forEach((key) => {
-          path = path.replace(new RegExp(`\\/:${key}`), params[key] || '');
+          path = path.replace(new RegExp(`\\/:${key}`), `/${params[key] || ''}`);
         });
       }
     } else if (isString(pathname) && pathname !== '') {
