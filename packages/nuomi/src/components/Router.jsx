@@ -32,7 +32,7 @@ export default class Router extends React.PureComponent {
         }
       }
     });
-    if (!this.clearRouter) {
+    if (process.env.NODE_ENV === 'production' && !this.clearRouter) {
       invariant(false, '<Router> 不能重复创建');
     }
   }
