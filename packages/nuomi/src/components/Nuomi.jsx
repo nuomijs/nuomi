@@ -58,12 +58,19 @@ export default class Nuomi extends React.PureComponent {
     }
   }
 
+  getNextProps() {
+    const { props } = this;
+    const { location } = props;
+    return { location };
+  }
+
   render() {
+    const props = this.getNextProps();
     const { loaded, nuomiProps } = this.state;
     const { children } = this.props;
     if (loaded) {
       return (
-        <BaseNuomi {...nuomiProps} store={this.store}>
+        <BaseNuomi {...nuomiProps} {...props} store={this.store}>
           {children}
         </BaseNuomi>
       );

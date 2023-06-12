@@ -14,7 +14,6 @@ export const NuomiPropTypes = {
 
 export const NuomiRoutePropTypes = {
   ...NuomiPropTypes,
-  pathPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   path: PropTypes.string,
 };
 

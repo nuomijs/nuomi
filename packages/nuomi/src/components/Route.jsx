@@ -66,9 +66,6 @@ export default class Route extends React.PureComponent {
           };
 
           if (matchLocation) {
-            if (context.matched) {
-              context.matched = null;
-            }
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>

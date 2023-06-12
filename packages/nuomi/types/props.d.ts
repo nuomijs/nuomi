@@ -42,7 +42,6 @@ export interface NuomiProps<S = any> {
 }
 
 export interface NuomiRouteProps<S = any> extends NuomiProps<S> {
-  pathPrefix?: string | RegExp;
   path?: string;
 }
 
