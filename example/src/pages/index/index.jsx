@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { define, useConnect } from 'nuomi';
+import { defineProps, useConnect } from 'nuomi';
 import Container from './components/Container';
 
 // const Demo = () => {
@@ -16,7 +16,7 @@ import Container from './components/Container';
 //   }}>{count}</div>
 // }
 
-export default define({
+export default defineProps({
   state: {
     count: 0,
     value: 1,

@@ -1,8 +1,8 @@
 import React from "react"
-import { define } from "nuomi";
+import { defineProps } from "nuomi";
 import Container from "./components/Container";
 
-export default define({
+export default defineProps({
   id: 'global',
   state: {
     count: 0,

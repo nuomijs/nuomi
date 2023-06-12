@@ -1,6 +1,6 @@
-import { define } from 'nuomi';
+import { defineProps } from 'nuomi';
 
-export default define({
+export default defineProps({
   state: {
     data: []
   },
