@@ -4,10 +4,10 @@ export default defineProps({
   state: {
     data: []
   },
-  reducers: {
+  reducer: {
     updateData: (state, payload) => ({ ...state, ...payload })
   },
-  effects: {
+  action: {
     async $getList({ commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
@@ -29,8 +29,6 @@ export default defineProps({
     }
   },
   onInit() {
-    this.store.dispatch({
-      type: '$getList'
-    });
+    this.store.dispatch('$getList');
   }
 });

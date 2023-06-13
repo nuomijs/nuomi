@@ -9,7 +9,7 @@ export default defineProps({
       $initData: false,
     },
   },
-  effects: {
+  action: {
     async $initData({ getState, commit }) {
       const state = getState();
       const value = await new Promise((res) => {
@@ -26,8 +26,6 @@ export default defineProps({
     return <Container />
   },
   onInit() {
-    this.store.dispatch({
-      type: '$initData'
-    })
+    this.store.dispatch('$initData')
   }
 });

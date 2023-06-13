@@ -2,20 +2,6 @@ import React, { memo } from 'react';
 import { defineProps, useConnect } from 'nuomi';
 import Container from './components/Container';
 
-// const Demo = () => {
-//   const [count, dispatch] = useConnect(({ count }) => {
-//     return count;
-//   });
-//   return <div onClick={() => {
-//     dispatch({
-//       type: '@update',
-//       payload: {
-//         count: count + 1
-//       }
-//     })
-//   }}>{count}</div>
-// }
-
 export default defineProps({
   state: {
     count: 0,
@@ -24,7 +10,7 @@ export default defineProps({
       $initData: false,
     },
   },
-  effects: {
+  action: {
     async $initData({ getState, commit }) {
       const state = getState();
       const value = await new Promise((res) => {
@@ -39,7 +25,6 @@ export default defineProps({
   },
   render() {
     return <>
-      {/* <Demo></Demo> */}
       <Container />
     </>
   },

@@ -2,11 +2,11 @@ export default {
   state: {
     dataSource: []
   },
-  reducers: {
+  reducer: {
     updateState: (state, { payload }) => ({ ...state, ...payload })
   },
-  effects: {
-    async $getList() {
+  action: {
+    async $getList({ commit }) {
       // 模拟请求
       const dataSource = await new Promise((res) => {
         setTimeout(() => {
@@ -17,26 +17,16 @@ export default {
           ]);
         }, 500);
       });
-
-      this.dispatch({
-        type: 'updateState',
-        payload: { dataSource }
-      });
+      commit('updateState', { dataSource });
     },
-    remove({ name }) {
+    remove({ commit }, { name }) {
       const { dataSource } = this.getState();
-
-      this.dispatch({
-        type: 'updateState',
-        payload: {
-          dataSource: dataSource.filter((v) => v.name !== name)
-        }
+      commit('updateState', {
+        dataSource: dataSource.filter((v) => v.name !== name)
       });
     }
   },
   onInit() {
-    this.store.dispatch({
-      type: '$getList'
-    });
+    this.store.dispatch('$getList');
   }
 }

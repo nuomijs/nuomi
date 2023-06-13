@@ -1,27 +1,25 @@
 declare module 'nuomi-native';
 
 import {
-  NuomiReducers,
-  NuomiEffects,
+  NuomiReducer,
+  NuomiAction,
 } from 'nuomi/types/props';
 import {
-  DispatchAction,
   NuomiStoreDispatch,
   NuomiStore,
   StoreAPI,
-  store
+  globalStore
 } from 'nuomi/types/store';
 import { withNuomi, connect } from 'nuomi/types/component';
 
 export * from 'nuomi/types/hooks';
 export {
-  NuomiReducers,
-  NuomiEffects,
-  DispatchAction,
+  NuomiReducer,
+  NuomiAction,
   NuomiStoreDispatch,
   NuomiStore,
   StoreAPI,
-  store,
+  globalStore,
   withNuomi,
   connect
 }

@@ -9,8 +9,8 @@ title: API
 | id  | '' | store id，不设置会动态创建 |
 | load  | function | 异步加载props |
 | state  | {} | 初始状态 |
-| reducers  | { @update/@replace/@loading } | 更新状态 |
-| effects  | {} | 通过async await异步更新状态，函数名使用$前缀会自动生成loading状态，函数第一个参数为store，第二个参数为payload |
+| reducer  | { @update/@replace/@loading } | 更新状态 |
+| action  | {} | 通过async await异步更新状态，函数名使用$前缀会自动生成loading状态，函数第一个参数为store，第二个参数为payload |
 | render  | function | 渲染组件 |
 | onInit  | function | 组件被创建后回调，此时内部store已经被创建，可以通过参数this.store访问，也可以通过this. |
 
@@ -141,12 +141,6 @@ withNuomi(List);
 router.location() // 获取当前路由数据
 router.location(path, true) // 跳转后刷新
 router.location(path, {}, true) // 跳转后传递临时参数并刷新
-router.location(path, ({ store }) => { // 跳转后更新状态
-    store.dispatch({
-        type,
-        payload
-    });
-}))
 // path支持对象，字段等同router.location()获取的对象字段
 router.location({ pathname: '/path', query: { a: 1 } }) // /path?a=1
 ```
@@ -207,7 +201,7 @@ router.location({ pathname: '/path', query: { a: 1 } }) // /path?a=1
     loading: {},
   },
   data: {},
-  reducers: {
+  reducer: {
     '@replace': (state, { payload }) => payload,
     '@update': (state, { payload }) => ({ ...state, ...payload }),
     '@loading': (state, { payload }) => ({
@@ -225,14 +219,14 @@ nuomi.config({
     state: {
         dataSource: [],
     },
-    reducers: {
+    reducer: {
         updateState: (state, { payload }) => ({ ...state, ...payload }),
     },
 });
 ```
 
 #### nuomi.extend
-合并props，state、reducers、data等会被浅合并
+合并props，state、reducer、data等会被浅合并
 
 ### store
 请参考 [redux store](https://cn.redux.js.org/docs/basics/Store.html)
@@ -240,7 +234,7 @@ nuomi.config({
 #### store.getState
 获取所有状态
 #### store.dispatch
-更新状态，只能触发reducers中的方法，如果想调用effects方法，请使用store.getStore替代
+更新状态，只能触发reducer中的方法，如果想调用action方法，请使用store.getStore替代
 #### store.getStore
 获取nuomi组件的store，参数是store id，返回对象包含getState和dispatch
 #### store.applyMiddleware

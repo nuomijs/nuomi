@@ -2,11 +2,11 @@ import { CSSProperties } from 'react';
 import { Location } from './router';
 import { NuomiStore } from './store';
 
-export interface NuomiReducers<S = any> {
+export interface NuomiReducer<S = any> {
   [key: string]: (state: S, payload?: any) => any;
 }
 
-export interface NuomiEffects<S = any> {
+export interface NuomiAction<S = any> {
   [key: string]: (store: NuomiStore<S>, payload?: any) => any;
 }
 
@@ -31,8 +31,8 @@ export type RoutePropValue = {
 export interface NuomiProps<S = any> {
   id?: string;
   state?: S;
-  reducers?: NuomiReducers<S>;
-  effects?: NuomiEffects<S>;
+  reducer?: NuomiReducer<S>;
+  action?: NuomiAction<S>;
   extends?: NuomiProps<S>[];
   load?: (cb?: (props: any) => void) => any;
   render?: (props: Props<S> & { children: any }) => any;

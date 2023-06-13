@@ -25,11 +25,8 @@ function HomeLayout() {
   const [{ count }, dispatch] = useConnect();
 
   const onPress = () => {
-    dispatch({
-      type: '@update',
-      payload: {
-        count: count + 1,
-      },
+    dispatch('@update', {
+      count: count + 1,
     });
   };
 

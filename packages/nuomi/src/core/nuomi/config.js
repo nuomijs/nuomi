@@ -4,7 +4,7 @@ const defaultNuomiProps = {
   state: {
     loading: {},
   },
-  reducers: {
+  reducer: {
     '@replace': (state, payload) => ({ ...payload }),
     '@update': (state, payload) => ({ ...state, ...payload }),
     '@loading': (state, payload) => ({

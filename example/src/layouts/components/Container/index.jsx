@@ -11,11 +11,8 @@ export default ({ children }) => {
       <NavLink to={{ name: 'list' }} style={{ marginLeft: 10 }}>列表</NavLink>
 
       <div onClick={() => {
-        dispatch({
-          type: '@update',
-          payload: {
-            routes: routes.filter(({ path }) => path !== '/list')
-          }
+        dispatch('@update', {
+          routes: routes.filter(({ path }) => path !== '/list')
         })
       }}>
         销毁list
@@ -26,11 +23,8 @@ export default ({ children }) => {
         刷新
       </div>
       <div onClick={() => {
-        dispatch({
-          type: '@update',
-          payload: {
-            count: count + 1
-          }
+        dispatch('@update', {
+          count: count + 1
         })
       }}>
         点击{count}

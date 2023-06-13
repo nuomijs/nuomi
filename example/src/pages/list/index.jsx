@@ -9,7 +9,7 @@ export default defineProps({
       $initData: false,
     },
   },
-  effects: {
+  action: {
     async $initData(store) {
       const { getState, commit } = store;
       const state = getState();
@@ -27,8 +27,6 @@ export default defineProps({
     return <Container />
   },
   onInit() {
-    this.store.dispatch({
-      type: '$initData'
-    })
+    this.store.dispatch('$initData')
   }
 });

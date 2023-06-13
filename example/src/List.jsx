@@ -6,11 +6,8 @@ const List = () => {
   const [{ data, loading }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
-    dispatch({
-      type: 'remove',
-      payload: {
-        name
-      }
+    dispatch('remove', {
+      name
     });
   };
 

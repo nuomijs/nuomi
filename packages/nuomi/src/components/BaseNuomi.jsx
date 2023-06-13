@@ -21,7 +21,7 @@ export default class BaseNuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.unListener = null;
-    this.effects = null;
+    this.action = null;
     this.initialize();
   }
 
@@ -47,27 +47,26 @@ export default class BaseNuomi extends React.PureComponent {
 
   createStore() {
     const { props } = this;
-    const { store, reducers } = props;
+    const { store, reducer } = props;
 
     store.id = this.getId();
 
-    store.dispatch = async (action) => {
-      const { type, payload } = action;
-      const { effects } = props;
+    store.dispatch = async (type, payload) => {
+      const { action } = props;
 
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = String(type).indexOf('/');
       if (splitIndex === -1) {
-        if (isObject(effects) && isFunction(effects[type])) {
+        if (isObject(action) && isFunction(action[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
           const loadingType = `${store.id}/@loading`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
-            const proxy = new Proxy(effects, {
+            const proxy = new Proxy(action, {
               // name是当前调用的方法或者属性名
               get: (target, name) => {
-                const effect = effects[name];
+                const effect = action[name];
                 if (isFunction(effect)) {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
@@ -117,26 +116,23 @@ export default class BaseNuomi extends React.PureComponent {
               });
             }
           }
-          // effects不存在就执行reducers中方法直接更新状态
-        } else if (reducers[type] && store.id) {
+          // action不存在就执行reducer中方法直接更新状态
+        } else if (reducer[type] && store.id) {
           return globalStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
         } else {
-          warning(false, `effects和reducers中不存在 ${type}`);
+          warning(false, `action和reducer中不存在 ${type}`);
           return action;
         }
         // dispatch其他模块方法
       } else {
         const id = type.substr(0, splitIndex);
-        const effect = type.substr(splitIndex + 1);
+        const otherAction = type.substr(splitIndex + 1);
         const $store = getStore(id);
         if ($store) {
-          const dispatchReturn = await $store.dispatch({
-            type: effect,
-            payload,
-          });
+          const dispatchReturn = await $store.dispatch(otherAction, payload);
           return dispatchReturn;
         }
         warning(false, `未创建id为 ${id} 的store`);
@@ -162,7 +158,7 @@ export default class BaseNuomi extends React.PureComponent {
         }
         const splitIndex = String(type).indexOf('/');
         if (splitIndex === -1) {
-          if (reducers[type] && store.id) {
+          if (reducer[type] && store.id) {
             globalStore.dispatch({
               type: `${store.id}/${type}`,
               payload,
@@ -170,10 +166,10 @@ export default class BaseNuomi extends React.PureComponent {
           }
         } else {
           const id = type.substr(0, splitIndex);
-          const reducer = type.substr(splitIndex + 1);
+          const otherReducer = type.substr(splitIndex + 1);
           const $store = getStore(id);
           if ($store) {
-            return $store.commit(reducer, payload);
+            return $store.commit(otherReducer, payload);
           }
         }
       }
@@ -185,10 +181,10 @@ export default class BaseNuomi extends React.PureComponent {
 
   createReducer() {
     const {
-      store, state: stateData, reducers, effects,
+      store, state: stateData, reducer, action,
     } = this.props;
     const loading = {};
-    Object.keys(effects).forEach((key) => {
+    Object.keys(action).forEach((key) => {
       if (key && key.startsWith('$')) {
         loading[key] = false;
       }
@@ -203,18 +199,17 @@ export default class BaseNuomi extends React.PureComponent {
     } else {
       defaultState = stateData;
     }
-    createReducer(store.id, (state = defaultState, action) => {
-      const { type } = action;
+    createReducer(store.id, (state = defaultState, { type, payload }) => {
       const typePrefix = `${store.id}/`;
       if (type.indexOf(typePrefix) === 0) {
         const key = type.replace(typePrefix, '');
-        if (reducers[key]) {
-          return reducers[key](state, action.payload);
+        if (reducer[key]) {
+          return reducer[key](state, payload);
         }
         warning(
           false,
-          `未定义actionType为 ${type} 的reducer，如果你想调用effects中的方法，请使用
-          \nstore.getStore('${store.id}').dispatch({\n  type: '${key}',\n  payload,\n})`,
+          `未定义actionType为 ${type} 的reducer，如果你想调用action中的方法，请使用
+          \nstore.getStore('${store.id}').dispatch('${key}', payload)`,
         );
       }
       return state;

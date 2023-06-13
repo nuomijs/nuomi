@@ -6,11 +6,8 @@ const List = () => {
   const [{ dataSource, loading }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
-    dispatch({
-      type: 'remove',
-      payload: {
-        name
-      }
+    dispatch('remove', {
+      name
     });
   };
 
@@ -23,9 +20,7 @@ const List = () => {
   }];
 
   const tryOne = () => {
-    dispatch({
-      type: '$getList'
-    });
+    dispatch('$getList');
   };
 
   if (!dataSource.length && !loading.$getList) {

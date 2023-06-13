@@ -12,8 +12,8 @@ export default class Route extends React.PureComponent {
   static defaultProps = {
     path: '',
     state: {},
-    reducers: {},
-    effects: {},
+    reducer: {},
+    action: {},
   };
 
   constructor(...args) {

@@ -1,11 +1,11 @@
-import { NuomiReducers, NuomiEffects } from 'nuomi/types/props';
+import { NuomiReducer, NuomiAction } from 'nuomi/types/props';
 import { NuomiStore } from 'nuomi/types/store';
 
 export interface NuomiNativeProps<S = any> {
   id?: string;
   state?: S;
-  reducers?: NuomiReducers<S>;
-  effects?: NuomiEffects<S>;
+  reducer?: NuomiReducer<S>;
+  action?: NuomiAction<S>;
   extends?: NuomiNativeProps<S>[];
   render?: (props: Props<S> & { children: any }) => any;
   onInit?: (props: Props<S>) => any;

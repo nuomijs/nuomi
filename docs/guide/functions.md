@@ -46,7 +46,7 @@ connect(state => state)(App);
 ## 状态操作
 
 在组件中可以通过 `useConnect` 或者 `connect` 高阶组件让组件与 `nuomiProps` 建立关联来获取状态，通过
-`dispatch` 可以调用 `effects` 和 `reducers` 中的方法更新状态。
+`dispatch` 可以调用 `action` 和 `reducer` 中的方法更新状态。
 
 ```js
 {
@@ -65,10 +65,7 @@ import { useConnect } from 'nuomi';
 
 const List = () => {
   const [{ state1, state2 }, dispatch] = useConnect();
-  dispatch({
-    type: 'save',
-    payload: { ... },
-  });
+  dispatch('save', {});
 }
 ```
 
@@ -78,17 +75,14 @@ const List = () => {
 import { connect } from 'nuomi';
 
 const List = ({ state1, state2, dispatch }) => {
-  dispatch({
-    type: 'delete',
-    payload: { ... },
-  });
+  dispatch('delete', {});
 }
 
 export default connect(state => state)(List);
 ```
 
 可以通过全局 `store` 操作所有模块状态，该对象就是通过 `redux` 中的 `createStore`
-创建的，只能调用 `reducers`，无法操作 `effects` ，使用时需要与 `id` 组合。
+创建的，只能调用 `reducer`，无法操作 `action` ，使用时需要与 `id` 组合。
 
 ```js
 import { store } from 'nuomi';
@@ -107,28 +101,25 @@ store.dispatch({
 
 ## 异步操作
 
-异步操作是指异步更新状态，定义在 `effects` 对象中，主要用于业务逻辑的处理，使用
-`async await` 语法糖。组件中调用 `dispatch` 访问 `effects` 中定义的方法，异步结束后再调用
-`reducers` 中定义的方法来更新状态，推荐使用 [nuomi-request](https://github.com/nuomijs/nuomi-request/wiki) 来进行请求操作。
+异步操作是指异步更新状态，定义在 `action` 对象中，主要用于业务逻辑的处理，使用
+`async await` 语法糖。组件中调用 `dispatch` 访问 `action` 中定义的方法，异步结束后再调用
+`reducer` 中定义的方法来更新状态，推荐使用 [nuomi-request](https://github.com/nuomijs/nuomi-request/wiki) 来进行请求操作。
 
 ```js
 {
-  async login() {
-    const { username, password } = this.getState();
+  async login({ getState }) {
+    const { username, password } = getState();
     await services.login({ username, password });
   },
-  async getData({ id }) {
+  async getData({ commit }, { id }) {
     const { data } =  await services.getData({ id });
-    this.dispatch({
-      type: '@update',
-      payload: { data }
-    });
+    commit('@update', { data })
   }
 }
 ```
 
 上面代码中 `getState` 和 `dispatch` 为内置方法，`getState` 可以获取当前模块最新状态，
-`dispatch` 用于调用 `reducers` 中的方法更新状态，除此之外还可以通过 `this.getNuomiProps()`
+`dispatch` 用于调用 `reducer` 中的方法更新状态，除此之外还可以通过 `this.getNuomiProps()`
 来访问当前模块的 `nuomiProps` 对象。
 
 异步方法也可以与其他方法组合使用，通过 `this` 访问。
@@ -154,19 +145,16 @@ store.dispatch({
 
 ```js
 {
-  updateState(payload) {
-    this.dispatch({
-      type: '@update',
-      payload,
-    });
+  updateState({ commit }, payload) {
+    commit('@update', payload)
   },
-  async getData1() {
+  async getData1(store) {
     const { data } = await services.getData1();
-    this.updateState(data);
+    this.updateState(store, data);
   },
-  async getData2() {
+  async getData2(store) {
     const { data } = await services.getData2();
-    this.updateState(data);
+    this.updateState(store, data);
   }
 }
 ```
@@ -207,13 +195,13 @@ const Login = () => {
 ## 跨模块通信
 
 应用中经常会出现多个模块通信问题，这时就需要给通信模块的 `nuomiProps` 设置 `id` 属性，`dispatch` 时通过 `id`
-与 `reducers` 和 `effects` 进行组合，就可以访问它们。
+与 `reducer` 和 `action` 进行组合，就可以访问它们。
 
 ```js
 // A nuomiProps
 {
   id: 'global',
-  effects: {
+  action: {
     async update() {
       // do something
     }
@@ -222,12 +210,9 @@ const Login = () => {
 
 // B nuomiProps
 {
-  effects() {
-    async remove() {
-      this.dispatch({
-        type: 'global/update',
-        payload: {...}
-      });
+  action() {
+    async remove({ dispatch }) {
+      dispatch('global/update', { ... })
     }
   }
 }
@@ -237,7 +222,7 @@ const Login = () => {
 const B = () => {
   const [, dispatch] = useConnect();
   const update = () => {
-    dispatch({ type: 'global/update', ... });
+    dispatch('global/update', {});
   };
   return <Button onClick={update}>更新</Button>;
 }
@@ -357,7 +342,7 @@ const App = () => {
 import { router } from 'nuomi';
 
 {
-  effects: {
+  action: {
     $login() {
       await services.login();
       router.replace('/index');
@@ -386,7 +371,7 @@ const A = () => {
 
 // B nuomiProps
 {
-  effects: {
+  action: {
     async getData() {
       const { data } = this.getNuomiProps();
       console.log(data); // { a: 1, b: 2 }
@@ -427,7 +412,7 @@ const A = () => {
 
 // B nuomiProps
 {
-  effects: {
+  action: {
     async getData() {
       // do something
     }
@@ -584,7 +569,7 @@ const App = () => {
 
 ```js
 {
-  effects: {
+  action: {
     async $getList() {
       // do something
     }
@@ -643,7 +628,7 @@ const App = () => {
 // home.js
 export default {
   state: {...},
-  effects: {...},
+  action: {...},
   ...
 }
 

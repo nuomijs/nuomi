@@ -76,10 +76,10 @@ export default define({
   state: {
     data: []
   },
-  reducers: {
+  reducer: {
     updateData: (state, payload) => ({ ...state, ...payload })
   },
-  effects: {
+  action: {
     async $getList({ commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
@@ -101,14 +101,12 @@ export default define({
     }
   },
   onInit() {
-    this.store.dispatch({
-      type: '$getList'
-    });
+    this.store.dispatch('$getList');
   }
 });
 ```
 
-该文件导出一个对象，`state` 定义初始状态；`reducers` 控制状态的更新；`effects` 管理业务逻辑；`onInit` 业务初始化。可以通过给 `effects` 中的方法添加 `$` 前缀可以做到程序 `auto loading` 功能。
+该文件导出一个对象，`state` 定义初始状态；`reducer` 控制状态的更新；`action` 管理业务逻辑；`onInit` 业务初始化。可以通过给 `action` 中的方法添加 `$` 前缀可以做到程序 `auto loading` 功能。
 
 ## 编写UI组件
 
@@ -123,11 +121,8 @@ const List = () => {
   const [{ data, loading }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
-    dispatch({
-      type: 'remove',
-      payload: {
-        name
-      }
+    dispatch('remove', {
+      name
     });
   };
 

@@ -21,10 +21,8 @@ export default defineProps({
       to: '/404'
     }]
   },
-  effects: {
-    $a() {
-
-    },
+  action: {
+    
   },
   extends: [{
     state: {
