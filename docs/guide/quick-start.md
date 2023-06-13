@@ -80,7 +80,7 @@ export default define({
     updateData: (state, payload) => ({ ...state, ...payload })
   },
   action: {
-    async $getList({ commit }) {
+    async $getList(e, { commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
         setTimeout(() => {

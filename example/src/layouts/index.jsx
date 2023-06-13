@@ -39,7 +39,7 @@ export default defineProps({
       console.log(store, b)
       await this.$getData2(store);
     },
-    async $initData({ getState }) {
+    async $initData(e, { getState }) {
       const state = getState();
       await this.$getData(111);
     }

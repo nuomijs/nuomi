@@ -90,7 +90,7 @@ export default class BaseNuomi extends React.PureComponent {
                     loadingQueue.push(name);
                   }
                   return function (p) {
-                    return actionFunc.call(proxy, { payload: p, ...store });
+                    return actionFunc.call(proxy, p, store);
                   };
                 }
                 // 返回当前调用对象

@@ -8,7 +8,7 @@ export default defineProps({
     updateData: (state, payload) => ({ ...state, ...payload })
   },
   action: {
-    async $getList({ commit }) {
+    async $getList(e, { commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
         setTimeout(() => {
@@ -21,7 +21,7 @@ export default defineProps({
       });
       commit('updateData', { data });
     },
-    remove({ getState, commit }, { name }) {
+    remove({ name }, { getState, commit }) {
       const { data } = getState();
       commit('updateData', {
         data: data.filter((v) => v.name !== name)
