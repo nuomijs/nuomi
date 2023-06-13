@@ -7,7 +7,7 @@ export interface NuomiReducer<S = any> {
 }
 
 export interface NuomiAction<S = any> {
-  [key: string]: (store: NuomiStore<S>, payload?: any) => any;
+  [key: string]: (store: NuomiStore<S> & { payload: any }) => any;
 }
 
 export type RoutePropValue = {

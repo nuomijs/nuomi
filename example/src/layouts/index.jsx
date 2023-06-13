@@ -5,6 +5,7 @@ import Container from "./components/Container";
 export default defineProps({
   id: 'global',
   state: {
+    name: '',
     count: 0,
     routes: [{
       path: '/',
@@ -22,7 +23,26 @@ export default defineProps({
     }]
   },
   action: {
-    
+    async $getData2(a) {
+      await new Promise((res) => {
+        setTimeout(() => {
+          res();
+        }, 500)
+      });
+    },
+    async $getData(store, b) {
+      await new Promise((res) => {
+        setTimeout(() => {
+          res();
+        }, 500)
+      });
+      console.log(store, b)
+      await this.$getData2(store);
+    },
+    async $initData({ getState }) {
+      const state = getState();
+      await this.$getData(111);
+    }
   },
   extends: [{
     state: {
@@ -37,4 +57,7 @@ export default defineProps({
   render() {
     return <Container />
   },
+  onInit({ store }) {
+    store.dispatch('$initData')
+  }
 });

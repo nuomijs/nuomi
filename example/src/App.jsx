@@ -21,7 +21,6 @@ export default () => {
       {
         path: '/*',
         load: () => import('./layouts'),
-        route: false,
       },
     ]} />
   )

@@ -51,7 +51,7 @@ export default class BaseNuomi extends React.PureComponent {
 
     store.id = this.getId();
 
-    store.dispatch = async (type, payload) => {
+    store.dispatch = async function (type, payload) {
       const { action } = props;
 
       // type中包含斜杠视为调用其他模块方法
@@ -65,19 +65,19 @@ export default class BaseNuomi extends React.PureComponent {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const proxy = new Proxy(action, {
               // name是当前调用的方法或者属性名
-              get: (target, name) => {
+              get(target, name) {
                 const actionFunc = action[name];
                 if (isFunction(actionFunc)) {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
                     // 获取上一次调用的方法
-                    const prevEffect = loadingQueue.slice(-1)[0];
+                    const prevName = loadingQueue.slice(-1)[0];
                     // 开启loading
                     const loadingPayload = { [name]: true };
                     // 当前方法调用，说明上一个方法肯定调用结束了，因此关闭上一个loading
                     // 需排除最外层调用方法，该方法在finally中处理
-                    if (prevEffect !== type && prevEffect) {
-                      loadingPayload[prevEffect] = false;
+                    if (prevName !== type && prevName) {
+                      loadingPayload[prevName] = false;
                       // 从队列中移除执行完的loading方法名
                       loadingQueue.pop();
                     }
@@ -89,7 +89,9 @@ export default class BaseNuomi extends React.PureComponent {
                     // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
                     loadingQueue.push(name);
                   }
-                  return (e) => target[name](store, e);
+                  return function (p) {
+                    return actionFunc.call(proxy, { payload: p, ...store });
+                  };
                 }
                 // 返回当前调用对象
                 return actionFunc;
@@ -139,7 +141,7 @@ export default class BaseNuomi extends React.PureComponent {
       }
     };
 
-    store.restoreState = () => {
+    store.restoreState = function () {
       globalStore.dispatch({
         type: `${store.id}/@replace`,
         payload: props.state,
@@ -147,9 +149,11 @@ export default class BaseNuomi extends React.PureComponent {
       return store.getState();
     };
 
-    store.getState = () => globalStore.getState()[store.id] || props.state;
+    store.getState = function () {
+      return globalStore.getState()[store.id] || props.state;
+    };
 
-    store.commit = (...args) => {
+    store.commit = function (...args) {
       let [type, payload] = args;
       if (args.length) {
         if (args.length === 1) {

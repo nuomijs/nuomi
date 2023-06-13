@@ -1,4 +1,4 @@
-export const extend = (obj1 = {}, obj2 = {}) => {
+export function extend(obj1 = {}, obj2 = {}) {
   const {
     state = {}, reducer = {}, action = {}, ...rest
   } = obj1;
@@ -25,9 +25,9 @@ export const extend = (obj1 = {}, obj2 = {}) => {
     ...rest,
     ...newRest,
   };
-};
+}
 
-export const extendArray = (obj = {}, array = []) => {
+export function extendArray(obj = {}, array = []) {
   const { extends: exts, ...rest } = obj;
   if (Array.isArray(exts) && exts.length) {
     obj = extendArray(exts[0], exts.slice(1).concat(rest));
@@ -36,4 +36,4 @@ export const extendArray = (obj = {}, array = []) => {
     return obj;
   }
   return extendArray(extend(obj, extendArray(array[0])), array.slice(1));
-};
+}

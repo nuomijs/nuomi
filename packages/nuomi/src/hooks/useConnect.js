@@ -5,7 +5,7 @@ import globalStore, { getStore } from '../core/redux/store';
 import { isFunction, shallowEqual } from '../utils';
 import useEffect from './useEffect';
 
-const useConnect = (callback) => {
+function useConnect(callback) {
   const { nuomi } = useContext(NuomiContext);
   invariant(nuomi, '不允许在 <Route>、<Nuomi>、<NuomiRoute> 外部使用 useConnect');
   // 获取最近的Nuomi组件store
@@ -16,7 +16,7 @@ const useConnect = (callback) => {
   const selectedState = useRef();
   // 获取最新状态
   // eslint-disable-next-line consistent-return
-  const getState = () => {
+  const getState = function () {
     if (getStore(store.id)) {
       if (isFunction(callback)) {
         // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
@@ -45,10 +45,12 @@ const useConnect = (callback) => {
       forceRender({});
     });
     // 组件卸载时取消订阅
-    return () => unSubcribe();
+    return function () {
+      return unSubcribe();
+    };
   }, []);
 
   return [selectedState.current, store.dispatch];
-};
+}
 
 export default useConnect;

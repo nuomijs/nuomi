@@ -23,24 +23,26 @@ const globalStore = createStore(
   ),
 );
 
-const getStore = (id) => stores[id];
+function getStore(id) {
+  return stores[id];
+}
 
-const setStore = (id, store) => {
+function setStore(id, store) {
   if (!stores[id]) {
     stores[id] = store;
   } else if (!store) {
     delete stores[id];
   }
-};
+}
 
-const clearStore = () => {
+function clearStore() {
   stores = {};
   globalStore.replaceReducer(rootReducer);
-};
+}
 
 globalStore.getStore = getStore;
 
-globalStore.applyMiddleware = (...args) => {
+globalStore.applyMiddleware = function (...args) {
   if (!usedDispatch) {
     middlewares = middlewares.concat(args.filter((middleware) => isFunction(middleware)));
   } else {
@@ -48,7 +50,7 @@ globalStore.applyMiddleware = (...args) => {
   }
 };
 
-globalStore.createState = (state = {}) => {
+globalStore.createState = function (state = {}) {
   if (isObject(state)) {
     Object.keys(state).forEach((key) => {
       if (!stores[key]) {

@@ -4,13 +4,15 @@ import { isFunction, isObject } from '../utils';
 import globalStore, { getStore } from '../core/redux/store';
 import { NuomiContext } from './Context';
 
-const defaultMergeProps = (props, stateProps, dispatchProps) => ({
-  ...props,
-  ...stateProps,
-  ...dispatchProps,
-});
+function defaultMergeProps(props, stateProps, dispatchProps) {
+  return {
+    ...props,
+    ...stateProps,
+    ...dispatchProps,
+  };
+}
 
-const connect = (...args) => {
+function connect(...args) {
   const [mapStateToProps, mapDispatch, merge, options] = args;
   const mapDispatchToProps = isFunction(mapDispatch) ? mapDispatch : () => {};
   const mergeProps = isFunction(merge) ? merge : defaultMergeProps;
@@ -79,6 +81,6 @@ const connect = (...args) => {
         return <WrapperComponent {...props} />;
       }
   };
-};
+}
 
 export default connect;

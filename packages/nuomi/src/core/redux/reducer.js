@@ -5,22 +5,22 @@ import globalWindow from '../../utils/globalWindow';
 
 const reducers = {};
 
-const replaceReducer = () => {
+function replaceReducer() {
   if (Object.keys(reducers).length) {
     globalStore.replaceReducer(combineReducers(reducers));
   } else {
     globalStore.replaceReducer(rootReducer);
   }
-};
+}
 
-export const createReducer = (key, reducer) => {
+export function createReducer(key, reducer) {
   if (key && reducer) {
     reducers[key] = reducer;
     replaceReducer();
   }
-};
+}
 
-export const removeReducer = (key) => {
+export function removeReducer(key) {
   if (reducers[key]) {
     // 解决REDUX_DEVTOOLS缓存状态问题
     if (process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
@@ -33,4 +33,4 @@ export const removeReducer = (key) => {
     setStore(key, null);
     replaceReducer();
   }
-};
+}

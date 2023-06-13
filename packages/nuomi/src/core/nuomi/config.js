@@ -16,9 +16,9 @@ const defaultNuomiProps = {
 
 let nuomiProps = extend({}, defaultNuomiProps);
 
-export default (props) => {
+export default function (props) {
   if (props) {
     nuomiProps = extendArray(nuomiProps, [props]);
   }
   return nuomiProps;
-};
+}
