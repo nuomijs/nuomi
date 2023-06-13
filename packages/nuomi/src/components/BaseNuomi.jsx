@@ -66,8 +66,8 @@ export default class BaseNuomi extends React.PureComponent {
             const proxy = new Proxy(action, {
               // name是当前调用的方法或者属性名
               get: (target, name) => {
-                const effect = action[name];
-                if (isFunction(effect)) {
+                const actionFunc = action[name];
+                if (isFunction(actionFunc)) {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
                     // 获取上一次调用的方法
@@ -92,7 +92,7 @@ export default class BaseNuomi extends React.PureComponent {
                   return (e) => target[name](store, e);
                 }
                 // 返回当前调用对象
-                return effect;
+                return actionFunc;
               },
             });
             return await proxy[type](payload);
@@ -208,8 +208,8 @@ export default class BaseNuomi extends React.PureComponent {
         }
         warning(
           false,
-          `未定义actionType为 ${type} 的reducer，如果你想调用action中的方法，请使用
-          \nstore.getStore('${store.id}').dispatch('${key}', payload)`,
+          `未定义名称为 ${type} 的reducer，如果你想调用action中的方法，请使用
+          \nglobalStore.getStore('${store.id}').dispatch('${key}', payload)`,
         );
       }
       return state;
