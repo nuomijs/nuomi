@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, ElementType } from 'react';
 import { Location } from './router';
 import { NuomiStore } from './store';
 
@@ -40,9 +40,10 @@ export interface NuomiProps<S = any, G = any> {
   getter?: NuomiGetter<S>;
   extends?: NuomiProps[];
   load?: (cb?: (props: any) => void) => any;
-  render?: (props: Props<S, G> & { children: any }) => any;
+  render?: ({ children: any }) => any;
   onInit?: (props: Props<S, G>) => any;
   children?: any;
+  component?: ElementType,
   [key: string]: any;
 }
 

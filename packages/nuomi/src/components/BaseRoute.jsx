@@ -78,9 +78,9 @@ export default class BaseRoute extends BaseNuomi {
   }
 
   render() {
-    const { props, state } = this;
+    const { state } = this;
     const nuomiProps = this.getNuomiProps();
-    const children = props.render ? props.render({ ...nuomiProps, children: props.children }) : props.children;
+    const children = this.getChildren();
     if (children != null) {
       return (
         <NuomiContext.Provider key={state.key} value={{ nuomi: nuomiProps }}>

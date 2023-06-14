@@ -1,7 +1,8 @@
 import React from 'react';
 import { useConnect, router } from 'nuomi';
 
-export default () => {
+function Container ({ children }) {
+  console.log(children)
   const [{ value, loading }, dispatch] = useConnect();
 
   return <div onClick={() => {
@@ -16,3 +17,5 @@ export default () => {
     <div>{value}</div>
   </div>
 }
+
+export default Container;

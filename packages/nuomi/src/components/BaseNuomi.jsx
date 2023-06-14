@@ -305,15 +305,26 @@ export default class BaseNuomi extends React.PureComponent {
     }
   }
 
+  getChildren() {
+    const { props } = this;
+    if (props.render) {
+      return props.render({ children: props.children });
+    }
+    if (props.component) {
+      const Component = props.component;
+      return <Component>{props.children}</Component>;
+    }
+    return props.children;
+  }
+
   componentWillUnmount() {
     this.removeStore();
     this.removeListener();
   }
 
   render() {
-    const { props } = this;
     const nuomiProps = this.getNuomiProps();
-    const children = props.render ? props.render({ ...nuomiProps, children: props.children }) : props.children;
+    const children = this.getChildren();
     if (children != null) {
       return <NuomiContext.Provider value={{ nuomi: nuomiProps }}>{children}</NuomiContext.Provider>;
     }

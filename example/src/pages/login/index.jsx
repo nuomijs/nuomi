@@ -22,10 +22,6 @@ export default defineProps({
       });
     }
   },
-  render() {
-    return <Container />
-  },
-  onInit() {
-    // this.store.dispatch('$initData')
-  }
+  component: Container,
+  children: 1
 });
