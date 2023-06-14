@@ -18,10 +18,10 @@ export default () => {
         path: '/login',
         load: () => import('./pages/login'),
       },
-      {
-        path: '/*',
-        load: () => import('./layouts'),
-      },
+      // {
+      //   path: '/*',
+      //   load: () => import('./layouts'),
+      // },
     ]} />
   )
 }

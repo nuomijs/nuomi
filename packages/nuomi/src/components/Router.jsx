@@ -1,8 +1,6 @@
 import React from 'react';
-import invariant from 'invariant';
 import { RouterContext } from './Context';
 import { createRouter } from '../core/router';
-import { clearStore } from '../core/redux/store';
 import { RouterPropTypes } from './propTypes';
 
 export default class Router extends React.PureComponent {
@@ -32,9 +30,6 @@ export default class Router extends React.PureComponent {
         }
       }
     });
-    if (process.env.NODE_ENV === 'production' && !this.clearRouter) {
-      invariant(false, '<Router> 不能重复创建');
-    }
   }
 
   componentDidMount() {
@@ -48,9 +43,9 @@ export default class Router extends React.PureComponent {
   componentWillUnmount() {
     if (this.clearRouter) {
       this.clearRouter();
+      this.clearRouter = null;
       this.mounted = false;
       this.location = null;
-      clearStore();
     }
   }
 
@@ -66,6 +61,9 @@ export default class Router extends React.PureComponent {
       basename,
       type,
     };
-    return <RouterContext.Provider value={contextValue}>{children}</RouterContext.Provider>;
+    if (location) {
+      return <RouterContext.Provider value={contextValue}>{children}</RouterContext.Provider>;
+    }
+    return null;
   }
 }

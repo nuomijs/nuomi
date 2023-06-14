@@ -11,8 +11,6 @@ let listeners = [];
 let extraData = {};
 // 是否允许清除额外数据
 let clearExtraData = true;
-// 是否创建过路由
-let created = false;
 // 是否允许执行路由监听器
 let allowCallListener = true;
 // path对应的正则集合
@@ -339,38 +337,33 @@ function addReloadListener(reloadCallback) {
 }
 
 function createRouter(routerOptions, staticLocation, callback) {
+  if (clear) {
+    clear();
+  }
   if (staticLocation) {
-    if (isFunction(clear)) {
-      clear();
-    }
     globalLocation = staticLocation;
   }
-  if (!created) {
-    created = true;
-    options = { ...options, ...routerOptions };
-    isHash = options.type !== 'browser';
-    const eventType = isHash ? 'hashchange' : 'popstate';
-    listener((from, to) => {
-      callback((currentLocation = to));
-    });
-    globalWindow.addEventListener(eventType, routerListener);
-    return (clear = () => {
-      created = false;
-      globalWindow.removeEventListener(eventType, routerListener);
-      removeListener();
-      pathRegexpMap = {};
-      namePathMap = {};
-      options = defaultOptions;
-      isHash = true;
-      globalLocation = globalWindow.location;
-      clear = null;
-      currentLocation = null;
-      blockCallback = null;
-      blockData = {};
-      clearExtraData = true;
-      extraData = {};
-    });
-  }
+  options = { ...options, ...routerOptions };
+  isHash = options.type !== 'browser';
+  const eventType = isHash ? 'hashchange' : 'popstate';
+  listener((from, to) => {
+    callback((currentLocation = to));
+  });
+  globalWindow.addEventListener(eventType, routerListener);
+  return (clear = () => {
+    globalWindow.removeEventListener(eventType, routerListener);
+    removeListener();
+    pathRegexpMap = {};
+    namePathMap = {};
+    options = defaultOptions;
+    isHash = true;
+    globalLocation = globalWindow.location;
+    currentLocation = null;
+    blockCallback = null;
+    blockData = {};
+    clearExtraData = true;
+    extraData = {};
+  });
 }
 
 function removeMatchMapData(path, name) {

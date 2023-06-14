@@ -61,9 +61,9 @@ export default class BaseNuomi extends React.PureComponent {
     const { store, reducer } = this.props;
     let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
-      defaultState = extend({ state: this.getDefaultState() }, { state: defaultState }).state;
+      defaultState = extend({ state: store.state }, { state: defaultState }).state;
     } else {
-      defaultState = this.getDefaultState();
+      defaultState = store.state;
     }
     createReducer(store.id, (state = defaultState, { type, payload }) => {
       const typePrefix = `${store.id}/`;
@@ -257,6 +257,7 @@ export default class BaseNuomi extends React.PureComponent {
     };
 
     setStore(store.id, store);
+    this.updateGetter();
     this.createReducer();
     this.createSubcribe();
   }

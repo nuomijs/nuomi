@@ -14,7 +14,6 @@ const composeEnhancers = process.env.NODE_ENV !== 'production' && globalWindow._
 
 const globalStore = createStore(
   rootReducer,
-  // eslint-disable-next-line no-return-assign
   composeEnhancers(
     applyMiddleware(
       () => middlewares,
