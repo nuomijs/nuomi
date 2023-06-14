@@ -22,8 +22,16 @@ export default defineProps({
       to: '/404'
     }]
   },
+  getter: {
+    aaa({ count }) {
+      return count + 1
+    },
+    bbb() {
+      return [1, 2]
+    }
+  },
   action: {
-    async $getData2(a) {
+    async $getData2({ getter }) {
       await new Promise((res) => {
         setTimeout(() => {
           res();
@@ -36,10 +44,9 @@ export default defineProps({
           res();
         }, 500)
       });
-      console.log(store, b)
       await this.$getData2(store);
     },
-    async $initData(e, { getState }) {
+    async $initData({ getState }) {
       const state = getState();
       await this.$getData(111);
     }
@@ -58,6 +65,6 @@ export default defineProps({
     return <Container />
   },
   onInit({ store }) {
-    store.dispatch('$initData')
+    // store.dispatch('$initData')
   }
 });

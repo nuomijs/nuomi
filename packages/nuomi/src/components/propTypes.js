@@ -6,6 +6,7 @@ export const NuomiPropTypes = {
   store: PropTypes.object,
   reducer: PropTypes.objectOf(PropTypes.func),
   action: PropTypes.objectOf(PropTypes.func),
+  getter: PropTypes.objectOf(PropTypes.func),
   extends: PropTypes.arrayOf(PropTypes.object),
   render: PropTypes.func,
   onInit: PropTypes.func,

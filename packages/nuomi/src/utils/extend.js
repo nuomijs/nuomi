@@ -1,9 +1,9 @@
 export function extend(obj1 = {}, obj2 = {}) {
   const {
-    state = {}, reducer = {}, action = {}, ...rest
+    state = {}, reducer = {}, action = {}, getter = {}, ...rest
   } = obj1;
   const {
-    state: s = {}, reducer: r = {}, action: a = {}, ...newRest
+    state: s = {}, reducer: r = {}, action: a = {}, getter: g = {}, ...newRest
   } = obj2;
   return {
     state: {
@@ -21,6 +21,10 @@ export function extend(obj1 = {}, obj2 = {}) {
     action: {
       ...action,
       ...a,
+    },
+    getter: {
+      ...getter,
+      ...g,
     },
     ...rest,
     ...newRest,

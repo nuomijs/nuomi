@@ -29,7 +29,6 @@ export default class BaseRoute extends BaseNuomi {
 
   initialize() {
     this.createStore();
-    this.createReducer();
     this.execInit();
     this.routerChange();
     callShowedListener();

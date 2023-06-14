@@ -1,3 +1,3 @@
-export interface ConnectGetState<S = any> {
-  (state: S, globalState: any): S;
+export interface ConnectGetState<S = any, G = any> {
+  (state: S & { getter: G }, globalState: any): any;
 }

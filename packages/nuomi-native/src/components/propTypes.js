@@ -5,6 +5,7 @@ export const NuomiNativeProps = {
   state: PropTypes.object,
   reducer: PropTypes.objectOf(PropTypes.func),
   action: PropTypes.objectOf(PropTypes.func),
+  getter: PropTypes.objectOf(PropTypes.func),
   render: PropTypes.func,
   onInit: PropTypes.func,
   onShow: PropTypes.func,

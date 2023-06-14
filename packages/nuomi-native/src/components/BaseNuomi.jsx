@@ -5,7 +5,6 @@ import { NavigationContext } from '@react-navigation/native';
 export default class BaseNuomi extends BaseNuomiSuper {
   initialize() {
     this.createStore();
-    this.createReducer();
     this.execInit();
     this.routerChange();
   }

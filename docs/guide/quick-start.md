@@ -70,9 +70,9 @@ yarn start
 新增 `src/list.js`
 
 ```js
-import { define } from 'nuomi';
+import { defineProps } from 'nuomi';
 
-export default define({
+export default defineProps({
   state: {
     data: []
   },
@@ -80,7 +80,7 @@ export default define({
     updateData: (state, payload) => ({ ...state, ...payload })
   },
   action: {
-    async $getList(e, { commit }) {
+    async $getList({ commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
         setTimeout(() => {
@@ -93,8 +93,8 @@ export default define({
       });
       commit('updateData', { data });
     },
-    remove({ getState, commit }, { name }) {
-      const { data } = getState();
+    remove({ state, commit }, { name }) {
+      const { data } = state;
       commit('updateData', {
         data: data.filter((v) => v.name !== name)
       });
@@ -106,7 +106,7 @@ export default define({
 });
 ```
 
-该文件导出一个对象，`state` 定义初始状态；`reducer` 控制状态的更新；`action` 管理业务逻辑；`onInit` 业务初始化。可以通过给 `action` 中的方法添加 `$` 前缀可以做到程序 `auto loading` 功能。
+该文件导出一个对象，`state` 定义初始状态；`reducer` 控制状态如何更新；`action` 用于提交状态更新；`onInit` 组件初始化。通过给 `action` 添加 `$` 前缀可以做到程序 `自动 loading` 功能。
 
 ## 编写UI组件
 

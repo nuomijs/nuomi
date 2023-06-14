@@ -1,27 +1,28 @@
-import { NuomiReducer, NuomiAction } from 'nuomi/types/props';
+import { NuomiReducer, NuomiAction, NuomiGetter } from 'nuomi/types/props';
 import { NuomiStore } from 'nuomi/types/store';
 
-export interface NuomiNativeProps<S = any> {
+export interface NuomiNativeProps<S = any, G = any> {
   id?: string;
   state?: S;
   reducer?: NuomiReducer<S>;
-  action?: NuomiAction<S>;
-  extends?: NuomiNativeProps<S>[];
-  render?: (props: Props<S> & { children: any }) => any;
-  onInit?: (props: Props<S>) => any;
-  onShow?: (props: Props<S>) => any;
+  action?: NuomiAction<S, G>;
+  getter?: NuomiGetter<S>;
+  extends?: NuomiNativeProps[];
+  render?: (props: Props<S, G> & { children: any }) => any;
+  onInit?: (props: Props<S, G>) => any;
+  onShow?: (props: Props<S, G>) => any;
   [key: string]: any;
 }
 
-export interface DefineProps<S = any> extends NuomiNativeProps<S> {
-  store?: NuomiStore<S>;
-  extends?: DefineProps<S>[];
+export interface DefineProps<S = any, G = any> extends NuomiNativeProps<S, G> {
+  store?: NuomiStore<S, G>;
+  extends?: DefineProps[];
   location?: any;
   parent?: Props;
 }
 
-export type Props<S = any> = {
-  store: NuomiStore<S>;
+export type Props<S = any, G = any> = {
+  store: NuomiStore<S, G>;
   location: any;
   parent?: Props;
 }

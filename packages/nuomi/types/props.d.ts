@@ -6,8 +6,12 @@ export interface NuomiReducer<S = any> {
   [key: string]: (state: S, payload?: any) => any;
 }
 
-export interface NuomiAction<S = any> {
-  [key: string]: (payload?: any, store?: NuomiStore<S>) => any;
+export interface NuomiAction<S = any, G = any> {
+  [key: string]: (store: NuomiStore<S, G>, payload?: any) => any;
+}
+
+export interface NuomiGetter<S = any> {
+  [key: string]: (state: S) => any;
 }
 
 export type RoutePropValue = {
@@ -28,44 +32,45 @@ export type RoutePropValue = {
   }
 }
 
-export interface NuomiProps<S = any> {
+export interface NuomiProps<S = any, G = any> {
   id?: string;
   state?: S;
   reducer?: NuomiReducer<S>;
-  action?: NuomiAction<S>;
-  extends?: NuomiProps<S>[];
+  action?: NuomiAction<S, G>;
+  getter?: NuomiGetter<S>;
+  extends?: NuomiProps[];
   load?: (cb?: (props: any) => void) => any;
-  render?: (props: Props<S> & { children: any }) => any;
-  onInit?: (props: Props<S>) => any;
+  render?: (props: Props<S, G> & { children: any }) => any;
+  onInit?: (props: Props<S, G>) => any;
   children?: any;
   [key: string]: any;
 }
 
-export interface NuomiRouteProps<S = any> extends NuomiProps<S> {
+export interface NuomiRouteProps<S = any, G = any> extends NuomiProps<S, G> {
   path?: string;
 }
 
-export interface RouteProps<S = any> extends NuomiProps<S> {
+export interface RouteProps<S = any, G = any> extends NuomiProps<S, G> {
   path?: string;
   name?: string;
   cache?: boolean | 'state';
   reload?: boolean;
-  extends?: RouteProps<S>[];
+  extends?: RouteProps[];
   onEnter?: (enter: () => void) => boolean;
-  onShow?: (props: Props<S>) => any;
-  onActivte?: (props: Props<S>) => any;
+  onShow?: (props: Props<S, G>) => any;
+  onActivte?: (props: Props<S, G>) => any;
   onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
-export interface DefineProps<S = any> extends RouteProps<S> {
-  extends?: DefineProps<S>[];
-  store?: NuomiStore<S>;
+export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {
+  extends?: DefineProps[];
+  store?: NuomiStore<S, G>;
   location?: Location;
   parent?: Props;
 }
 
-export type Props<S = any> = {
-  store: NuomiStore<S>;
+export type Props<S = any, G = any> = {
+  store: NuomiStore<S, G>;
   location: Location;
   parent?: Props;
 }

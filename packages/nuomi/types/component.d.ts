@@ -3,8 +3,8 @@ import { Props, NuomiProps, NuomiRouteProps, RouteProps, ShapeRouteProps, Router
 import { ConnectGetState } from './connect';
 import { NuomiStoreDispatch } from './store';
 
-export interface Connect<S = any> {
-  (getState?: ConnectGetState<S>, getDispatch?: NuomiStoreDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
+export interface Connect<S = any, G = any> {
+  (getState?: ConnectGetState<S, G>, getDispatch?: NuomiStoreDispatch, options?: { withRef: boolean }): <P>(Component: ComponentType<P>) => ComponentType<P>;
 }
 
 export class Nuomi<P extends NuomiProps> extends PureComponent<P, any> {

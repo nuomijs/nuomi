@@ -11,7 +11,7 @@ export default defineProps({
     },
   },
   action: {
-    async $initData(e, { getState, commit }) {
+    async $initData({ getState, commit }) {
       const state = getState();
       const value = await new Promise((res) => {
         setTimeout(() => {

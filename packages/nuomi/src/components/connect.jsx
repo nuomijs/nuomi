@@ -55,8 +55,8 @@ function connect(...args) {
 
       getState() {
         const { store } = this.context.nuomi;
-        const state = mapStateToProps(store.getState(), globalStore.getState());
-        return isObject(state) ? state : {};
+        const state = mapStateToProps({ ...store.state, getter: store.getter }, globalStore.getState());
+        return state || {};
       }
 
       getWrappedInstance() {

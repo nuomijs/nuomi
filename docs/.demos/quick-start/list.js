@@ -6,7 +6,7 @@ export default {
     updateState: (state, { payload }) => ({ ...state, ...payload })
   },
   action: {
-    async $getList(e, { commit }) {
+    async $getList({ commit }) {
       // 模拟请求
       const dataSource = await new Promise((res) => {
         setTimeout(() => {
@@ -19,7 +19,7 @@ export default {
       });
       commit('updateState', { dataSource });
     },
-    remove({ name }, { commit }) {
+    remove({ commit }, { name }) {
       const { dataSource } = this.getState();
       commit('updateState', {
         dataSource: dataSource.filter((v) => v.name !== name)

@@ -2,11 +2,8 @@ import React, { Component } from "react"
 import { NavLink, connect, useConnect, useNuomi, withNuomi, router, ShapeRoute } from "nuomi"
 
 export default ({ children }) => {
-  const [{ routes, count, loading }, dispatch] = useConnect(({ routes, count, loading }) => ({
-    routes, count,
-    loading: loading.$initData
-  }));
-  console.log(loading)
+  const [{ count, routes, ...rest }, dispatch] = useConnect();
+  console.log(rest)
   return (
     <div>
       <NavLink to={{ name: 'home' }}>首页</NavLink>

@@ -21,6 +21,7 @@ export default class BaseNuomi extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.unListener = null;
+    this.unSubcribe = null;
     this.action = null;
     this.initialize();
   }
@@ -39,10 +40,77 @@ export default class BaseNuomi extends React.PureComponent {
     return id;
   }
 
-  initialize() {
-    this.createStore();
-    this.createReducer();
-    this.execInit();
+  getDefaultState() {
+    const { state, action } = this.props;
+    const loading = {};
+    Object.keys(action).forEach((key) => {
+      if (key && key.startsWith('$')) {
+        loading[key] = false;
+      }
+    });
+    return {
+      ...state,
+      loading: {
+        ...loading,
+        ...state.loading,
+      },
+    };
+  }
+
+  createReducer() {
+    const { store, reducer } = this.props;
+    let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
+    if (defaultState) {
+      defaultState = extend({ state: this.getDefaultState() }, { state: defaultState }).state;
+    } else {
+      defaultState = this.getDefaultState();
+    }
+    createReducer(store.id, (state = defaultState, { type, payload }) => {
+      const typePrefix = `${store.id}/`;
+      if (type.indexOf(typePrefix) === 0) {
+        const key = type.replace(typePrefix, '');
+        if (reducer[key]) {
+          return reducer[key](state, payload);
+        }
+        warning(
+          false,
+          `未定义名称为 ${type} 的reducer，如果你想调用action中的方法，请使用
+          \nglobalStore.getStore('${store.id}').dispatch('${key}', payload)`,
+        );
+      }
+      return state;
+    });
+  }
+
+  updateGetter() {
+    const { store, getter: getters } = this.props;
+    const getter = {};
+    const proxy = new Proxy(getters, {
+      get(target, name) {
+        const getterFunc = target[name];
+        if (isFunction(getterFunc)) {
+          return function (e) {
+            // 计算过再次调用使用已计算值
+            return getter[name] === undefined ? getterFunc.call(proxy, e) : getter[name];
+          };
+        }
+        return function () {};
+      },
+    });
+    Object.keys(getters).forEach((key) => {
+      getter[key] = proxy[key](store.state);
+    });
+    store.getter = getter;
+  }
+
+  createSubcribe() {
+    const { store } = this.props;
+    this.unSubcribe = globalStore.subscribe(() => {
+      if (store.state !== store.getState()) {
+        store.state = store.getState();
+        this.updateGetter();
+      }
+    });
   }
 
   createStore() {
@@ -90,7 +158,7 @@ export default class BaseNuomi extends React.PureComponent {
                     loadingQueue.push(name);
                   }
                   return function (p) {
-                    return actionFunc.call(proxy, p, store);
+                    return actionFunc.call(proxy, store, p);
                   };
                 }
                 // 返回当前调用对象
@@ -141,17 +209,25 @@ export default class BaseNuomi extends React.PureComponent {
       }
     };
 
-    store.restoreState = function () {
+    store.restoreState = () => {
       globalStore.dispatch({
         type: `${store.id}/@replace`,
-        payload: props.state,
+        payload: this.getDefaultState(),
       });
-      return store.getState();
+      return store.state;
     };
 
-    store.getState = function () {
-      return globalStore.getState()[store.id] || props.state;
+    store.getState = () => {
+      const globalState = globalStore.getState();
+      if (globalState) {
+        return globalState[store.id] || this.getDefaultState();
+      }
+      return this.getDefaultState();
     };
+
+    store.state = store.getState();
+
+    store.getter = {};
 
     store.commit = function (...args) {
       let [type, payload] = args;
@@ -177,50 +253,24 @@ export default class BaseNuomi extends React.PureComponent {
           }
         }
       }
-      return store.getState();
+      return store.state;
     };
 
     setStore(store.id, store);
+    this.createReducer();
+    this.createSubcribe();
   }
 
-  createReducer() {
-    const {
-      store, state: stateData, reducer, action,
-    } = this.props;
-    const loading = {};
-    Object.keys(action).forEach((key) => {
-      if (key && key.startsWith('$')) {
-        loading[key] = false;
-      }
-    });
-    stateData.loading = {
-      ...loading,
-      ...stateData.loading,
-    };
-    let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
-    if (defaultState) {
-      defaultState = extend({ state: stateData }, { state: defaultState }).state;
-    } else {
-      defaultState = stateData;
-    }
-    createReducer(store.id, (state = defaultState, { type, payload }) => {
-      const typePrefix = `${store.id}/`;
-      if (type.indexOf(typePrefix) === 0) {
-        const key = type.replace(typePrefix, '');
-        if (reducer[key]) {
-          return reducer[key](state, payload);
-        }
-        warning(
-          false,
-          `未定义名称为 ${type} 的reducer，如果你想调用action中的方法，请使用
-          \nglobalStore.getStore('${store.id}').dispatch('${key}', payload)`,
-        );
-      }
-      return state;
-    });
+  initialize() {
+    this.createStore();
+    this.execInit();
   }
 
   removeListener() {
+    if (isFunction(this.unSubcribe)) {
+      this.unSubcribe();
+      this.unSubcribe = null;
+    }
     if (isFunction(this.unListener)) {
       this.unListener();
       this.unListener = null;
