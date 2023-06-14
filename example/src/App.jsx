@@ -1,5 +1,6 @@
-import React, { Fragment }  from 'react';
-import { ShapeRoute, configure, router, NavLink } from 'nuomi';
+import React, { Fragment, Component }  from 'react';
+import { ShapeRoute, configure, router, NavLink, Nuomi } from 'nuomi';
+import { Router } from 'nuomi';
 
 configure({
   reload: true,
@@ -11,19 +12,18 @@ router.listener(() => {
   NProgress.done();
 })
 
+const App = 1;
+
+class A extends Component {
+  render() {
+    return <>1111</>
+  }
+}
+
+console.log(typeof A)
+
 export default () => {
-  return (
-    <ShapeRoute routes={[
-      {
-        path: '/login',
-        load: () => import('./pages/login'),
-      },
-      // {
-      //   path: '/*',
-      //   load: () => import('./layouts'),
-      // },
-    ]} />
-  )
+  return <Nuomi render={A}></Nuomi>
 }
 
 // import React  from 'react';

@@ -40,10 +40,9 @@ export interface NuomiProps<S = any, G = any> {
   getter?: NuomiGetter<S>;
   extends?: NuomiProps[];
   load?: (cb?: (props: any) => void) => any;
-  render?: ({ children: any }) => any;
+  render?: Function;
   onInit?: (props: Props<S, G>) => any;
   children?: any;
-  component?: ElementType,
   [key: string]: any;
 }
 

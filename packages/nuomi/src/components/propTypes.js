@@ -10,7 +10,6 @@ export const NuomiPropTypes = {
   render: PropTypes.func,
   onInit: PropTypes.func,
   load: PropTypes.func,
-  component: PropTypes.elementType,
 };
 
 export const NuomiRoutePropTypes = {

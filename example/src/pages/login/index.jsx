@@ -22,6 +22,7 @@ export default defineProps({
       });
     }
   },
-  component: Container,
-  children: 1
+  render(e) {
+    return <Container />
+  },
 });

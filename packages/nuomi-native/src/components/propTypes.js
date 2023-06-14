@@ -9,5 +9,4 @@ export const NuomiNativeProps = {
   render: PropTypes.func,
   onInit: PropTypes.func,
   onShow: PropTypes.func,
-  component: PropTypes.elementType,
 };
