@@ -277,6 +277,14 @@ export default class BaseNuomi extends React.PureComponent {
     }
   }
 
+  removeStore() {
+    const { store } = this.props;
+    removeReducer(store.id);
+    Object.keys(store).forEach((key) => {
+      delete store[key];
+    });
+  }
+
   getNuomiProps() {
     const { store, location } = this.props;
     const nuomiProps = {
@@ -297,9 +305,7 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { store } = this.props;
-    removeReducer(store.id);
-    store.id = null;
+    this.removeStore();
     this.removeListener();
   }
 

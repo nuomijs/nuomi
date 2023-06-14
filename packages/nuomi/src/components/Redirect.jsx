@@ -31,10 +31,14 @@ export default class Redirect extends React.PureComponent {
 
           if (to && !context.redirecting && !this.redirected) {
             if ((from && match(location, { path: from }), false, false) || (!matched && !from)) {
-              this.redirected = true;
-              // 防止同时执行多个Redirect
-              context.redirecting = true;
-              router.replace(to, reload);
+              new Promise((res) => {
+                this.redirected = true;
+                // 防止同时执行多个Redirect
+                context.redirecting = true;
+                res();
+              }).then(() => {
+                router.replace(to, reload);
+              });
               // 服务器渲染时捕获重定向URL
               if (staticContext) {
                 staticContext.url = isObject(to) ? restorePath(to) : to;

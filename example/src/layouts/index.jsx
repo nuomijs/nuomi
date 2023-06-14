@@ -10,7 +10,8 @@ export default defineProps({
     routes: [{
       path: '/',
       name: 'home',
-      load: () => import('../pages/index')
+      cache: 'state',
+      load: () => import('../pages/index'),
     }, {
       path: '/list',
       name: 'list',

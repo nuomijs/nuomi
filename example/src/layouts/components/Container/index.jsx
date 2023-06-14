@@ -6,8 +6,8 @@ export default ({ children }) => {
   console.log(rest)
   return (
     <div>
-      <NavLink to={{ name: 'home' }}>首页</NavLink>
-      <NavLink to={{ name: 'list' }} style={{ marginLeft: 10 }}>列表</NavLink>
+      <NavLink to={{ path: '/' }}>首页</NavLink>
+      <NavLink to={{ path: '/list' }} style={{ marginLeft: 10 }}>列表</NavLink>
 
       <div onClick={() => {
         dispatch('@update', {

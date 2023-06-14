@@ -2,7 +2,6 @@ import React from 'react';
 import BaseNuomi from './BaseNuomi';
 import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
-import { removeReducer } from '../core/redux/reducer';
 import { NuomiContext } from './Context';
 import { callShowedListener, addReloadListener } from '../core/router';
 
@@ -50,10 +49,9 @@ export default class BaseRoute extends BaseNuomi {
   }
 
   componentWillUnmount() {
-    const { store, cache } = this.props;
+    const { cache } = this.props;
     if (cache !== 'state' && cache !== true) {
-      removeReducer(store.id);
-      store.id = null;
+      this.removeStore();
     }
     this.removeListener();
   }
