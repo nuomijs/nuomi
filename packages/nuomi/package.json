@@ -1,6 +1,6 @@
 {
   "name": "nuomi",
-  "version": "1.0.1-alpha.5",
+  "version": "1.0.1-alpha.6",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
   "repository": {
