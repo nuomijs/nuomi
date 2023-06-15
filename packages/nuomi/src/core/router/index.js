@@ -1,6 +1,6 @@
 import warning from 'warning';
 import { isFunction, isObject, isString } from '../../utils';
-import parser, { pathToRegexp, normalizePath } from '../../utils/parser';
+import parserPath, { pathToRegexp, normalizePath } from '../../utils/parser';
 import globalWindow from '../../utils/globalWindow';
 
 let globalLocation = globalWindow.location;
@@ -53,7 +53,7 @@ function getOriginPath() {
 
 function getLocation() {
   const originPath = getOriginPath();
-  return Object.assign(parser(originPath.replace(new RegExp(`^${options.basename}`), '')), {
+  return Object.assign(parserPath(originPath.replace(new RegExp(`^${options.basename}`), '')), {
     state: extraData.state || {},
   });
 }
@@ -444,5 +444,7 @@ export default {
   forward,
   matchPath,
   mergePath,
+  normalizePath,
+  parserPath,
   block,
 };

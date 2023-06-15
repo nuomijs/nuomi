@@ -24,6 +24,8 @@ export type RouterAPI = {
   forward(step?: number): void;
   matchPath(location: Location, path: string): Location | boolean;
   mergePath(...path: string[]): string;
+  normalizePath(path: string): string;
+  parserPath(path: string): Location;
   block(callback: (from: Location, to: Location, enter: () => void) => any): void;
 }
 
