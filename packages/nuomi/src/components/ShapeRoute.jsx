@@ -8,9 +8,15 @@ import Route from './Route';
 import Redirect from './Redirect';
 import NuomiRoute from './NuomiRoute';
 
-const getKey = (key, i) => {
+const getKey = ({ key, path, to }, i) => {
   if (key) {
-    return `${key}_${i}`;
+    return key;
+  }
+  if (path) {
+    return `path_${path}`;
+  }
+  if (to) {
+    return `to_${to}`;
   }
   return i;
 };
@@ -26,11 +32,9 @@ class ShapeComponent extends React.PureComponent {
       .filter((obj) => !!obj)
       .forEach((obj, i) => {
         if (React.isValidElement(obj)) {
-          components.push(React.cloneElement(obj, { key: getKey(obj.key, i) }));
+          components.push(React.cloneElement(obj, { key: getKey(obj, i) }));
         } else {
-          const {
-            key, route, children: childrenRoutes, ...props
-          } = obj;
+          const { route, children: childrenRoutes, ...props } = obj;
           const newProps = { ...props };
           const isRoutes = isArray(childrenRoutes) && childrenRoutes.length;
           let Component = Route;
@@ -44,7 +48,7 @@ class ShapeComponent extends React.PureComponent {
           }
           const children = isRoutes ? this.getComponents(childrenRoutes, newProps.path) : childrenRoutes;
           components.push(
-            <Component key={getKey(key, i)} {...newProps}>
+            <Component {...newProps} key={getKey(newProps, i)}>
               {children}
             </Component>,
           );
