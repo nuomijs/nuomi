@@ -21,6 +21,7 @@ export default class Route extends React.PureComponent {
     this.store = {};
     this.routeComponent = null;
     this.wrappers = [];
+    this.context = {};
   }
 
   componentWillUnmount() {

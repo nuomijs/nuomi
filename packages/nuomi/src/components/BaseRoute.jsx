@@ -1,29 +1,22 @@
-import React from 'react';
 import BaseNuomi from './BaseNuomi';
 import { isFunction } from '../utils';
 import { RoutePropTypes } from './propTypes';
-import { NuomiContext } from './Context';
 import { callShowedListener, addReloadListener } from '../core/router';
 
 export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
 
-  state = {
-    key: 0,
-  };
-
-  reloadRoute() {
+  reloadRoute = () => {
     const { props } = this;
-    // 子路由重新装载，render会优先于componentWillUnmount执行，导致无法渲染子路由，需前置清理数据
     if (props.store.id) {
-      props.getRouterContext().matched = null;
-      this.setState(({ key }) => ({
-        key: key + 1,
-      }));
-      this.replaceState();
-      this.execInit();
+      this.reload();
       this.routerChange();
     }
+  };
+
+  getContext() {
+    const context = super.getContext();
+    return { ...context, reload: this.reloadRoute };
   }
 
   initialize() {
@@ -33,18 +26,13 @@ export default class BaseRoute extends BaseNuomi {
     callShowedListener();
   }
 
-  replaceState() {
-    const { props } = this;
-    props.store.restoreState();
-  }
-
   routerChange(activate) {
     const { props } = this;
     if (isFunction(props.onShow)) {
-      props.onShow(this.getNuomiProps());
+      props.onShow(this.getContext());
     }
     if (activate && isFunction(props.onActivate)) {
-      props.onActivate(this.getNuomiProps());
+      props.onActivate(this.getContext());
     }
   }
 
@@ -75,19 +63,5 @@ export default class BaseRoute extends BaseNuomi {
       this.routerChange(true);
       callShowedListener();
     }
-  }
-
-  render() {
-    const { state } = this;
-    const nuomiProps = this.getNuomiProps();
-    const children = this.getChildren();
-    if (children != null) {
-      return (
-        <NuomiContext.Provider key={state.key} value={{ nuomi: nuomiProps }}>
-          {children}
-        </NuomiContext.Provider>
-      );
-    }
-    return null;
   }
 }

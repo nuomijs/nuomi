@@ -158,7 +158,8 @@ export default class RouteCore extends React.PureComponent {
     }
 
     if (this.wrapper) {
-      this.wrapper.style.display = 'block';
+      this.wrapper.style.display = '';
+      delete this.wrapper.__HIDE_DOM;
     }
   }
 
@@ -173,7 +174,10 @@ export default class RouteCore extends React.PureComponent {
   hideWrapper() {
     const { wrappers } = this.context;
     wrappers.forEach((wrapper) => {
-      wrapper.style.display = 'none';
+      if (!wrapper.__HIDE_DOM) {
+        wrapper.style.display = 'none';
+        wrapper.__HIDE_DOM = true;
+      }
     });
   }
 
@@ -183,7 +187,7 @@ export default class RouteCore extends React.PureComponent {
     const nextProps = { location };
     const { nuomiProps } = this.state;
 
-    ['cache', 'reload', 'children'].forEach((value) => {
+    ['cache', 'reload', 'children', 'render'].forEach((value) => {
       // 优先使用props
       nextProps[value] = props[value] === undefined ? nuomiProps[value] : props[value];
     });
@@ -191,14 +195,12 @@ export default class RouteCore extends React.PureComponent {
     return nextProps;
   }
 
-  getRouterContext = () => this.context;
-
   render() {
     const props = this.getNextProps();
     const { cache } = props;
     const { nuomiProps, visible, loaded } = this.state;
     if (cache === true || (loaded && visible)) {
-      const baseRoute = <BaseRoute {...nuomiProps} {...props} getRouterContext={this.getRouterContext} />;
+      const baseRoute = <BaseRoute {...nuomiProps} {...props} context={this.context} />;
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">

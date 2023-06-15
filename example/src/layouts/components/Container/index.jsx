@@ -3,7 +3,7 @@ import { NavLink, connect, useConnect, useNuomi, withNuomi, router, ShapeRoute }
 
 export default ({ children }) => {
   const [{ count, routes, ...rest }, dispatch] = useConnect();
-  console.log(rest)
+  const [nuomi] = useNuomi();
   return (
     <div>
       <NavLink to={{ path: '/' }}>首页</NavLink>
@@ -17,7 +17,7 @@ export default ({ children }) => {
         销毁list
       </div>
       <div onClick={() => {
-        router.reload();
+        nuomi.reload();
       }}>
         刷新
       </div>

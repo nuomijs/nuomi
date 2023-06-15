@@ -23,6 +23,9 @@ export default class BaseNuomi extends React.PureComponent {
     this.unListener = null;
     this.unSubcribe = null;
     this.action = null;
+    this.state = {
+      key: 0,
+    };
     this.initialize();
   }
 
@@ -262,6 +265,25 @@ export default class BaseNuomi extends React.PureComponent {
     this.createSubcribe();
   }
 
+  replaceState() {
+    const { props } = this;
+    props.store.restoreState();
+  }
+
+  reload = () => {
+    const { props } = this;
+    if (props.store.id) {
+      if (props.context) {
+        props.context.matched = null;
+      }
+      this.setState(({ key }) => ({
+        key: key + 1,
+      }));
+      props.store.restoreState();
+      this.execInit();
+    }
+  };
+
   initialize() {
     this.createStore();
     this.execInit();
@@ -286,22 +308,24 @@ export default class BaseNuomi extends React.PureComponent {
     });
   }
 
-  getNuomiProps() {
+  getContext() {
     const { store, location } = this.props;
-    const nuomiProps = {
+    const { reload } = this;
+    const nuomi = {
       store,
       location,
+      reload,
     };
     if (this.context) {
-      nuomiProps.parent = this.context.nuomi;
+      nuomi.parent = this.context.nuomi;
     }
-    return nuomiProps;
+    return nuomi;
   }
 
   execInit() {
     const { props } = this;
     if (isFunction(props.onInit)) {
-      props.onInit(this.getNuomiProps());
+      props.onInit(this.getContext());
     }
   }
 
@@ -320,10 +344,15 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   render() {
-    const nuomiProps = this.getNuomiProps();
+    const { state } = this;
+    const context = this.getContext();
     const children = this.getChildren();
     if (children != null) {
-      return <NuomiContext.Provider value={{ nuomi: nuomiProps }}>{children}</NuomiContext.Provider>;
+      return (
+        <NuomiContext.Provider key={state.key} value={{ nuomi: context }}>
+          {children}
+        </NuomiContext.Provider>
+      );
     }
     return null;
   }

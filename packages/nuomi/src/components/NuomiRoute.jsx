@@ -8,10 +8,18 @@ import { NuomiRoutePropTypes } from './propTypes';
 export default class NuomiRoute extends React.PureComponent {
   static propTypes = NuomiRoutePropTypes;
 
+  constructor(...args) {
+    super(...args);
+    this.context = {};
+  }
+
   componentWillUnmount() {
     const { path } = this.props;
     if (path) {
       removeMatchMapData(path);
+    }
+    if (this.context.matched === this) {
+      this.context.matched = null;
     }
   }
 
@@ -21,6 +29,7 @@ export default class NuomiRoute extends React.PureComponent {
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <NuomiRoute>');
+          this.context = context;
 
           // 同一个context只匹配一次
           const allowMatch = !context.matched || context.matched === this;
@@ -34,7 +43,9 @@ export default class NuomiRoute extends React.PureComponent {
             context.matched = this;
             return (
               <RouterContext.Provider value={{ ...context, matched: null }}>
-                <Nuomi {...this.props} location={matchLocation} />
+                <RouterContext.Consumer>
+                  {(cxt) => <Nuomi {...this.props} location={matchLocation} context={cxt} />}
+                </RouterContext.Consumer>
               </RouterContext.Provider>
             );
           }

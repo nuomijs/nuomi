@@ -1,8 +1,8 @@
-import BaseNuomiSuper from 'nuomi/lib/components/BaseNuomi';
+import BaseNuomi from 'nuomi/lib/components/BaseNuomi';
 import { isFunction } from 'nuomi/lib/utils';
 import { NavigationContext } from '@react-navigation/native';
 
-export default class BaseNuomi extends BaseNuomiSuper {
+export default class BaseNuomiNative extends BaseNuomi {
   initialize() {
     this.createStore();
     this.execInit();
@@ -11,12 +11,12 @@ export default class BaseNuomi extends BaseNuomiSuper {
 
   routerChange() {
     const { props } = this;
-    const nuomiProps = this.getNuomiProps();
+    const context = this.getContext();
     if (isFunction(props.onShow)) {
       this.unListener = this.context.addListener('focus', () => {
-        props.onShow(nuomiProps);
+        props.onShow(context);
       });
-      props.onShow(nuomiProps);
+      props.onShow(context);
     }
   }
 }

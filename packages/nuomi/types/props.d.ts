@@ -1,4 +1,4 @@
-import { CSSProperties, ElementType } from 'react';
+import { CSSProperties } from 'react';
 import { Location } from './router';
 import { NuomiStore } from './store';
 
@@ -39,9 +39,9 @@ export interface NuomiProps<S = any, G = any> {
   action?: NuomiAction<S, G>;
   getter?: NuomiGetter<S>;
   extends?: NuomiProps[];
-  load?: (cb?: (props: any) => void) => any;
+  load?: (cb?: (context: any) => void) => any;
   render?: Function;
-  onInit?: (props: Props<S, G>) => any;
+  onInit?: (context: Context<S, G>) => any;
   children?: any;
   [key: string]: any;
 }
@@ -57,8 +57,8 @@ export interface RouteProps<S = any, G = any> extends NuomiProps<S, G> {
   reload?: boolean;
   extends?: RouteProps[];
   onEnter?: (enter: () => void) => boolean;
-  onShow?: (props: Props<S, G>) => any;
-  onActivte?: (props: Props<S, G>) => any;
+  onShow?: (context: Context<S, G>) => any;
+  onActivte?: (context: Context<S, G>) => any;
   onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
@@ -66,13 +66,13 @@ export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {
   extends?: DefineProps[];
   store?: NuomiStore<S, G>;
   location?: Location;
-  parent?: Props;
+  parent?: Context;
 }
 
-export type Props<S = any, G = any> = {
+export type Context<S = any, G = any> = {
   store: NuomiStore<S, G>;
   location: Location;
-  parent?: Props;
+  parent?: Context;
 }
 
 export interface ShapeRouteObject extends RouteProps {

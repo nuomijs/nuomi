@@ -1,6 +1,6 @@
 import React, { Fragment, Component }  from 'react';
-import { ShapeRoute, configure, router, NavLink, Nuomi } from 'nuomi';
-import { Router } from 'nuomi';
+import { ShapeRoute, configure, router, NavLink, Nuomi, useConnect, useNuomi } from 'nuomi';
+import { Router, Route, NuomiRoute, defineProps } from 'nuomi';
 
 configure({
   reload: true,
@@ -12,27 +12,32 @@ router.listener(() => {
   NProgress.done();
 })
 
-const App = 1;
-
-class A extends Component {
-  render() {
-    return <>1111</>
-  }
+function App1({ children }) {
+  const [{ count }, dispatch] = useConnect();
+  const [nuomi] = useNuomi();
+  return <div>
+    <div onClick={() => {
+      nuomi.reload();
+    }}>刷新刷新</div>
+    <div onClick={() => dispatch('@update', { count: count + 1 })}>{count}</div>
+    {children}
+  </div>
 }
 
-console.log(typeof A)
-
-export default () => {
-  return <Nuomi render={A}></Nuomi>
+function App() {
+  return <Router>
+    <ShapeRoute routes={[{
+      path: '/login',
+      load: () => import('./pages/login')
+      
+    }, <NuomiRoute path="/*" render={App1} state={{ count: 0 }}>
+      <ShapeRoute routes={[{
+      path: '/*',
+      route: false,
+      load: () => import('./layouts')
+    }]} />
+    </NuomiRoute>]} />
+  </Router>
 }
 
-// import React  from 'react';
-// import { Nuomi } from 'nuomi';
-// import list from './list';
-// import List from './List.jsx';
-
-// export default () => (
-//   <Nuomi {...list}>
-//     <List />
-//   </Nuomi>
-// )
+export default App;

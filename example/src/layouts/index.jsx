@@ -10,11 +10,12 @@ export default defineProps({
     routes: [{
       path: '/',
       name: 'home',
-      cache: 'state',
+      cache: true,
       load: () => import('../pages/index'),
     }, {
       path: '/list',
       name: 'list',
+      cache: true,
       load: () => import('../pages/list')
     }, {
       path: '/404',
@@ -65,7 +66,5 @@ export default defineProps({
   render() {
     return <Container />
   },
-  onInit({ store }) {
-    // store.dispatch('$initData')
-  }
+  onInit() {}
 });
