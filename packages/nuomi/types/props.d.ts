@@ -72,6 +72,7 @@ export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {
 export type Context<S = any, G = any> = {
   store: NuomiStore<S, G>;
   location: Location;
+  reload: () => void;
   parent?: Context;
 }
 
