@@ -11,6 +11,9 @@ export default class NuomiRoute extends React.PureComponent {
   constructor(...args) {
     super(...args);
     this.context = {};
+    this.state = {
+      mounted: false,
+    };
   }
 
   componentWillUnmount() {
@@ -23,8 +26,18 @@ export default class NuomiRoute extends React.PureComponent {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      mounted: true,
+    });
+  }
+
   render() {
     const { path } = this.props;
+    const { mounted } = this.state;
+    if (!mounted) {
+      return null;
+    }
     return (
       <RouterContext.Consumer>
         {(context) => {
@@ -43,9 +56,7 @@ export default class NuomiRoute extends React.PureComponent {
             context.matched = this;
             return (
               <RouterContext.Provider value={{ ...context, matched: null }}>
-                <RouterContext.Consumer>
-                  {(cxt) => <Nuomi {...this.props} location={matchLocation} context={cxt} />}
-                </RouterContext.Consumer>
+                <Nuomi {...this.props} location={matchLocation} />
               </RouterContext.Provider>
             );
           }

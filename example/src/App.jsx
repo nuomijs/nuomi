@@ -1,9 +1,10 @@
-import React, { Fragment, Component }  from 'react';
+import React, { useMemo, useState }  from 'react';
 import { ShapeRoute, configure, router, NavLink, Nuomi, useConnect, useNuomi } from 'nuomi';
 import { Router, Route, NuomiRoute, defineProps } from 'nuomi';
 
 configure({
   reload: true,
+  cache: true,
 })
 
 router.listener(() => {
@@ -13,6 +14,43 @@ router.listener(() => {
 })
 
 function App1({ children }) {
+  // const [isLogin, login] = useState(false);
+  // const routes = useMemo(() => {
+  //   if (isLogin) {
+  //     return [{
+  //       path: '/main/*',
+  //       key: '/main/*',
+  //       children: '222'
+  //     }, {
+  //       to: '/main',
+  //       key: '/main'
+  //     }]
+  //   }
+  //   return [{
+  //     path: '/login',
+  //     key: '/login',
+  //     children: '1111'
+  //   }, {
+  //     path: '/login1',
+  //     key: '/login1',
+  //     children: '11112222'
+  //   }, {
+  //     path: '/login2',
+  //     key: '/login2',
+  //     children: '11112222'
+  //   }, {
+  //     to: '/login',
+  //     key: 'lo'
+  //   }]
+  // }, [isLogin])
+  // return (
+  //   <div>
+  //   <div onClick={() => {
+  //     login(true)
+  //   }}>登录</div>
+  //   <ShapeRoute routes={routes} />
+  // </div>
+  // )
   const [{ count }, dispatch] = useConnect();
   const [nuomi] = useNuomi();
   return <div>
@@ -26,17 +64,18 @@ function App1({ children }) {
 
 function App() {
   return <Router>
+    {/* <App1 />  */}
     <ShapeRoute routes={[{
       path: '/login',
       load: () => import('./pages/login')
       
-    }, <NuomiRoute path="/*" render={App1} state={{ count: 0 }}>
+    }, <Route path="/*" render={App1} state={{ count: 0 }}>
       <ShapeRoute routes={[{
       path: '/*',
       route: false,
       load: () => import('./layouts')
     }]} />
-    </NuomiRoute>]} />
+    </Route>]} />
   </Router>
 }
 

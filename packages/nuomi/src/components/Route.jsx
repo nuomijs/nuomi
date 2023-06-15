@@ -22,6 +22,9 @@ export default class Route extends React.PureComponent {
     this.routeComponent = null;
     this.wrappers = [];
     this.context = {};
+    this.state = {
+      mounted: false,
+    };
   }
 
   componentWillUnmount() {
@@ -34,9 +37,19 @@ export default class Route extends React.PureComponent {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      mounted: true,
+    });
+  }
+
   render() {
     const defaultProps = configure();
     const { path, name, cache = defaultProps.cache } = this.props;
+    const { mounted } = this.state;
+    if (!mounted) {
+      return null;
+    }
     return (
       <RouterContext.Consumer>
         {(context) => {

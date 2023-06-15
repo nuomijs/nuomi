@@ -18,19 +18,30 @@ export default class Redirect extends React.PureComponent {
     super(...args);
     // 防止死循环
     this.redirected = false;
+    this.state = {
+      mounted: false,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      mounted: true,
+    });
   }
 
   render() {
     const { from, to, reload } = this.props;
+    const { mounted } = this.state;
+    if (!mounted) {
+      return null;
+    }
     return (
       <RouterContext.Consumer>
         {(context) => {
           invariant(context, '不允许在 <Router> 外部使用 <Redirect>');
-
           const { matched, location, staticContext } = context;
-
           if (to && !context.redirecting && !this.redirected) {
-            if ((from && match(location, { path: from }), false, false) || (!matched && !from)) {
+            if ((from && match(location, { path: from }, false, false)) || (!matched && !from)) {
               new Promise((res) => {
                 this.redirected = true;
                 // 防止同时执行多个Redirect
@@ -47,7 +58,6 @@ export default class Redirect extends React.PureComponent {
           } else if (this.redirected) {
             this.redirected = false;
           }
-
           return null;
         }}
       </RouterContext.Consumer>
