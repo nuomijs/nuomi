@@ -265,11 +265,6 @@ export default class BaseNuomi extends React.PureComponent {
     this.createSubcribe();
   }
 
-  replaceState() {
-    const { props } = this;
-    props.store.restoreState();
-  }
-
   reload = () => {
     const { props } = this;
     if (props.store.id) {
