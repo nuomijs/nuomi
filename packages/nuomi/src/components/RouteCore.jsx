@@ -159,7 +159,7 @@ export default class RouteCore extends React.PureComponent {
 
     if (this.wrapper) {
       this.wrapper.style.display = '';
-      delete this.wrapper.__HIDE_DOM;
+      delete this.wrapper.__HIDE_NUOMI_ROUTE;
     }
   }
 
@@ -174,9 +174,9 @@ export default class RouteCore extends React.PureComponent {
   hideWrapper() {
     const { wrappers } = this.context;
     wrappers.forEach((wrapper) => {
-      if (!wrapper.__HIDE_DOM) {
+      if (!wrapper.__HIDE_NUOMI_ROUTE) {
         wrapper.style.display = 'none';
-        wrapper.__HIDE_DOM = true;
+        wrapper.__HIDE_NUOMI_ROUTE = true;
       }
     });
   }
