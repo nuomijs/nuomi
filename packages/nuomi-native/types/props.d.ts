@@ -6,7 +6,6 @@ export interface NuomiNativeProps<S = any, G = any> extends NuomiProps<S, G> {
 }
 
 export interface DefineProps<S = any, G = any> extends NuomiNativeProps<S, G> {
-  store?: NuomiStore<S, G>;
   extends?: DefineProps[];
   parent?: Context;
 }

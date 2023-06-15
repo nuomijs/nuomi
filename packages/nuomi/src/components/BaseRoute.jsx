@@ -7,8 +7,8 @@ export default class BaseRoute extends BaseNuomi {
   static propTypes = RoutePropTypes;
 
   reloadRoute = () => {
-    const { props } = this;
-    if (props.store.id) {
+    const { store } = this.props;
+    if (store && store.id) {
       this.reload();
       this.routerChange();
     }

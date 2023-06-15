@@ -35,6 +35,7 @@ export type RoutePropValue = {
 export interface NuomiProps<S = any, G = any> {
   id?: string;
   state?: S;
+  store?: NuomiStore<S, G> | null;
   reducer?: NuomiReducer<S>;
   action?: NuomiAction<S, G>;
   getter?: NuomiGetter<S>;
@@ -64,7 +65,6 @@ export interface RouteProps<S = any, G = any> extends NuomiProps<S, G> {
 
 export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {
   extends?: DefineProps[];
-  store?: NuomiStore<S, G>;
   location?: Location;
   parent?: Context;
 }

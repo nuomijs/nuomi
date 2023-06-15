@@ -26,7 +26,7 @@ function App1({ children }) {
     }
     return [{
       path: '/login',
-      children: '1111'
+      children: '1111',
     }, {
       path: '/login1',
       children: '11112222'
@@ -58,11 +58,11 @@ function App1({ children }) {
 
 function App() {
   return <Router>
-    <App1 /> 
+    <App1 />
     {/* <ShapeRoute routes={[{
       path: '/login',
       load: () => import('./pages/login')
-      
+
     }, <Route path="/*" render={App1} state={{ count: 0 }}>
       <ShapeRoute routes={[{
       path: '/*',

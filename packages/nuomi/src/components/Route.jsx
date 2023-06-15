@@ -45,7 +45,9 @@ export default class Route extends React.PureComponent {
 
   render() {
     const defaultProps = configure();
-    const { path, name, cache = defaultProps.cache } = this.props;
+    const {
+      path, name, cache = defaultProps.cache, store, ...rest
+    } = this.props;
     const { mounted } = this.state;
     if (!mounted) {
       return null;
@@ -83,7 +85,12 @@ export default class Route extends React.PureComponent {
             context.matched = this;
             this.routeComponent = (
               <RouterContext.Provider value={contextValue}>
-                <RouteCore {...this.props} cache={cache} location={matchLocation} store={this.store} />
+                <RouteCore
+                  {...rest}
+                  cache={cache}
+                  location={matchLocation}
+                  store={store === null ? null : this.store}
+                />
               </RouterContext.Provider>
             );
           }

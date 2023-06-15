@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 export const NuomiPropTypes = {
   id: PropTypes.string,
   state: PropTypes.object,
+  store: PropTypes.object,
   reducer: PropTypes.objectOf(PropTypes.func),
   action: PropTypes.objectOf(PropTypes.func),
   getter: PropTypes.objectOf(PropTypes.func),

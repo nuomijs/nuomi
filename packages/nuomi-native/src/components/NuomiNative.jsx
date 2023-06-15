@@ -1,7 +1,6 @@
 import React from 'react';
 import { configure } from 'nuomi/lib/core/nuomi';
 import { extendArray } from 'nuomi/lib/utils/extend';
-import { removeReducer } from 'nuomi/lib/core/redux/reducer';
 import BaseNuomiNative from './BaseNuomiNative';
 import { NuomiNativeProps } from './propTypes';
 
@@ -14,13 +13,13 @@ export default class NuomiNative extends React.PureComponent {
     };
   }
 
-  componentWillUnmount() {
-    removeReducer(this.store.id);
+  getNuomiProps() {
+    return { ...this.props, ...this.state.nuomiProps };
   }
 
   render() {
-    const { nuomiProps } = this.state;
-    return <BaseNuomiNative {...nuomiProps} store={this.store} />;
+    const { store, ...rest } = this.getNuomiProps();
+    return <BaseNuomiNative {...rest} store={store === null ? null : this.store} />;
   }
 }
 

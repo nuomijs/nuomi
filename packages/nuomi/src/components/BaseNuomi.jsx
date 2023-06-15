@@ -120,6 +120,10 @@ export default class BaseNuomi extends React.PureComponent {
     const { props } = this;
     const { store, reducer } = props;
 
+    if (!store) {
+      return;
+    }
+
     store.id = this.getId();
 
     store.dispatch = async function (type, payload) {
@@ -266,12 +270,12 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   reload = () => {
-    const { props } = this;
-    if (props.store.id) {
+    const { store } = this.props;
+    if (store && store.id) {
       this.setState(({ key }) => ({
         key: key + 1,
       }));
-      props.store.restoreState();
+      store.restoreState();
       this.execInit();
     }
   };
@@ -294,10 +298,12 @@ export default class BaseNuomi extends React.PureComponent {
 
   removeStore() {
     const { store } = this.props;
-    removeReducer(store.id);
-    Object.keys(store).forEach((key) => {
-      delete store[key];
-    });
+    if (store) {
+      removeReducer(store.id);
+      Object.keys(store).forEach((key) => {
+        delete store[key];
+      });
+    }
   }
 
   getContext() {
