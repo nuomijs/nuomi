@@ -87,6 +87,8 @@ export default class Route extends React.PureComponent {
               <RouterContext.Provider value={contextValue}>
                 <RouteCore
                   {...rest}
+                  path={path}
+                  name={name}
                   cache={cache}
                   location={matchLocation}
                   store={store === null ? null : this.store}

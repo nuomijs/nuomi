@@ -270,8 +270,11 @@ export default class BaseNuomi extends React.PureComponent {
   }
 
   reload = () => {
-    const { store } = this.props;
+    const { store, context } = this.props;
     if (store && store.id) {
+      if (context) {
+        context.matched = null;
+      }
       this.setState(({ key }) => ({
         key: key + 1,
       }));

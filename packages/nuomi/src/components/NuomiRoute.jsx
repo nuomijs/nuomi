@@ -56,7 +56,9 @@ export default class NuomiRoute extends React.PureComponent {
             context.matched = this;
             return (
               <RouterContext.Provider value={{ ...context, matched: null }}>
-                <Nuomi {...this.props} location={matchLocation} />
+                <RouterContext.Consumer>
+                  {(cxt) => <Nuomi {...this.props} location={matchLocation} context={cxt} />}
+                </RouterContext.Consumer>
               </RouterContext.Provider>
             );
           }

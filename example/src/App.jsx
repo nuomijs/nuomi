@@ -14,52 +14,52 @@ router.listener(() => {
 })
 
 function App1({ children }) {
-  const [isLogin, login] = useState(false);
-  const routes = useMemo(() => {
-    if (isLogin) {
-      return [{
-        path: '/main/*',
-        children: '222'
-      }, {
-        to: '/main',
-      }]
-    }
-    return [{
-      path: '/login',
-      children: '1111',
-    }, {
-      path: '/login1',
-      children: '11112222'
-    }, {
-      path: '/login2',
-      children: '11112222'
-    }, {
-      to: '/login',
-    }]
-  }, [isLogin])
-  return (
-    <div>
-    <div onClick={() => {
-      login(true)
-    }}>登录</div>
-    <ShapeRoute routes={routes} />
-  </div>
-  )
-  // const [{ count }, dispatch] = useConnect();
-  // const [nuomi] = useNuomi();
-  // return <div>
+  // const [isLogin, login] = useState(false);
+  // const routes = useMemo(() => {
+  //   if (isLogin) {
+  //     return [{
+  //       path: '/main/*',
+  //       children: '222'
+  //     }, {
+  //       to: '/main',
+  //     }]
+  //   }
+  //   return [{
+  //     path: '/login',
+  //     children: '1111',
+  //   }, {
+  //     path: '/login1',
+  //     children: '11112222'
+  //   }, {
+  //     path: '/login2',
+  //     children: '11112222'
+  //   }, {
+  //     to: '/login',
+  //   }]
+  // }, [isLogin])
+  // return (
+  //   <div>
   //   <div onClick={() => {
-  //     nuomi.reload();
-  //   }}>刷新刷新</div>
-  //   <div onClick={() => dispatch('@update', { count: count + 1 })}>{count}</div>
-  //   {children}
+  //     login(true)
+  //   }}>登录</div>
+  //   <ShapeRoute routes={routes} />
   // </div>
+  // )
+  const [{ count }, dispatch] = useConnect();
+  const [nuomi] = useNuomi();
+  return <div>
+    <div onClick={() => {
+      nuomi.reload();
+    }}>刷新刷新</div>
+    <div onClick={() => dispatch('@update', { count: count + 1 })}>{count}</div>
+    {children}
+  </div>
 }
 
 function App() {
   return <Router>
-    <App1 />
-    {/* <ShapeRoute routes={[{
+    {/* <App1 /> */}
+    <ShapeRoute routes={[{
       path: '/login',
       load: () => import('./pages/login')
 
@@ -69,7 +69,7 @@ function App() {
       route: false,
       load: () => import('./layouts')
     }]} />
-    </Route>]} /> */}
+    </Route>]} />
   </Router>
 }
 

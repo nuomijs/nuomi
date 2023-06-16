@@ -190,7 +190,7 @@ export default class RouteCore extends React.PureComponent {
     const { cache } = props;
     const { visible, loaded } = this.state;
     if (cache === true || (loaded && visible)) {
-      const baseRoute = <BaseRoute {...props} />;
+      const baseRoute = <BaseRoute {...props} context={this.context} />;
       if (cache === true) {
         return (
           <div ref={this.wrapperRef} className="nuomi-route-wrapper">
