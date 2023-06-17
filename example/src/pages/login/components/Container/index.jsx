@@ -2,7 +2,7 @@ import React from 'react';
 import { useConnect, router } from 'nuomi';
 
 function Container ({ children }) {
-  const [{ value, loading }, dispatch] = useConnect();
+  const [{ value, $initData }, dispatch] = useConnect();
 
   return <div onClick={() => {
     router.push({
@@ -12,7 +12,7 @@ function Container ({ children }) {
       }
     })
   }}>
-    <div>{loading.$initData ? 'loading': ''}</div>
+    <div>{$initData ? 'loading': ''}</div>
     <div>{value}</div>
   </div>
 }

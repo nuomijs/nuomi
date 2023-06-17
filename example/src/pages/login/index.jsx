@@ -5,9 +5,6 @@ import Container from './components/Container';
 export default defineProps({
   state: {
     value: 3,
-    loading: {
-      $initData: false,
-    },
   },
   action: {
     async $initData({ getState, commit }) {

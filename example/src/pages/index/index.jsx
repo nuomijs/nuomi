@@ -6,9 +6,12 @@ export default defineProps({
   state: {
     count: 0,
     value: 1,
-    loading: {
-      $initData: false,
-    },
+    $initData: true,
+  },
+  getter: {
+    total({ value }) {
+      return `${value}_111111`
+    }
   },
   action: {
     async $initData({ getState, commit }) {

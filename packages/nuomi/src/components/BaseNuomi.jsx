@@ -48,15 +48,16 @@ export default class BaseNuomi extends React.PureComponent {
     const loading = {};
     Object.keys(action).forEach((key) => {
       if (key && key.startsWith('$')) {
-        loading[key] = false;
+        if (typeof state[key] !== 'boolean') {
+          loading[key] = false;
+        } else {
+          loading[key] = state[key];
+        }
       }
     });
     return {
       ...state,
-      loading: {
-        ...loading,
-        ...state.loading,
-      },
+      ...loading,
     };
   }
 
@@ -135,7 +136,7 @@ export default class BaseNuomi extends React.PureComponent {
         if (isObject(action) && isFunction(action[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
-          const loadingType = `${store.id}/@loading`;
+          const loadingType = `${store.id}/@update`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
             const proxy = new Proxy(action, {
@@ -146,21 +147,29 @@ export default class BaseNuomi extends React.PureComponent {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
                     // 获取上一次调用的方法
-                    const prevName = loadingQueue.slice(-1)[0];
-                    // 开启loading
-                    const loadingPayload = { [name]: true };
+                    const prevAction = loadingQueue.slice(-1)[0];
+                    const loadingPayload = {};
+                    // 检测状态状态是否已设置true，防止重复渲染
+                    if (store.state[name] !== true) {
+                      // 开启loading
+                      loadingPayload[name] = true;
+                    }
                     // 当前方法调用，说明上一个方法肯定调用结束了，因此关闭上一个loading
                     // 需排除最外层调用方法，该方法在finally中处理
-                    if (prevName !== type && prevName) {
-                      loadingPayload[prevName] = false;
+                    if (prevAction !== type && prevAction) {
+                      if (store.state[prevAction] !== false) {
+                        loadingPayload[prevAction] = false;
+                      }
                       // 从队列中移除执行完的loading方法名
                       loadingQueue.pop();
                     }
                     // 更新loading状态
-                    globalStore.dispatch({
-                      type: loadingType,
-                      payload: loadingPayload,
-                    });
+                    if (Object.keys(loadingPayload).length) {
+                      globalStore.dispatch({
+                        type: loadingType,
+                        payload: loadingPayload,
+                      });
+                    }
                     // 将当前loading方法名添加到队列中，如果最后执行的方法带有loading，在finally中处理
                     loadingQueue.push(name);
                   }
@@ -180,17 +189,24 @@ export default class BaseNuomi extends React.PureComponent {
           } finally {
             // 所有方法全部执行完，检测队列中是否有值，关闭剩余的loading
             if (store.id && loadingQueue.length) {
-              // 最初的loading
-              const loadingPayload = { [loadingQueue[0]]: false };
-              // 末尾的loading
-              const lastEffect = loadingQueue.slice(-1)[0];
-              if (lastEffect) {
-                loadingPayload[lastEffect] = false;
+              const loadingPayload = {};
+              if (store.state[loadingQueue[0]] !== false) {
+                // 最初的loading
+                loadingPayload[loadingQueue[0]] = false;
               }
-              globalStore.dispatch({
-                type: loadingType,
-                payload: loadingPayload,
-              });
+              // 末尾的loading
+              const lastAction = loadingQueue.slice(-1)[0];
+              if (lastAction) {
+                if (store.state[lastAction] !== false) {
+                  loadingPayload[lastAction] = false;
+                }
+              }
+              if (Object.keys(loadingPayload).length) {
+                globalStore.dispatch({
+                  type: loadingType,
+                  payload: loadingPayload,
+                });
+              }
             }
           }
           // action不存在就执行reducer中方法直接更新状态

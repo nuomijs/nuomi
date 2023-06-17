@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useConnect, router } from 'nuomi';
 
 export default () => {
-  const [{ value, loading }, dispatch] = useConnect();
+  const [{ value, $initData, total }, dispatch] = useConnect();
+  console.log($initData)
   useEffect(() => {
     dispatch('$initData')
   }, [])
@@ -12,7 +13,7 @@ export default () => {
       value: value + 1
     })
   }}>
-    <div>{loading.$initData ? 'loading': ''}</div>
-    <div>{value}</div>
+    <div>{$initData ? 'loading': ''}</div>
+    <div>{value}</div>{total}
   </div>
 }
