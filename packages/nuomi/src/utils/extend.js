@@ -9,10 +9,6 @@ export function extend(obj1 = {}, obj2 = {}) {
     state: {
       ...state,
       ...s,
-      loading: {
-        ...state.loading,
-        ...s.loading,
-      },
     },
     reducer: {
       ...reducer,

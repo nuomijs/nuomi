@@ -19,7 +19,7 @@ function connect(...args) {
   return (WrapperComponent) => class Connect extends React.PureComponent {
       static contextType = NuomiContext;
 
-      static displayName = `connect(...)(${WrapperComponent.displayName || WrapperComponent.name})`;
+      static displayName = `connect()(${WrapperComponent.displayName || WrapperComponent.name})`;
 
       constructor(...arg) {
         super(...arg);
@@ -29,16 +29,17 @@ function connect(...args) {
         if (isObject(options) && options.withRef === true) {
           this.ref = React.createRef();
         }
-        if (isFunction(mapStateToProps)) {
-          // 初始化state
-          this.state = this.getState();
-          // 订阅更新状态
-          this.unSubcribe = globalStore.subscribe(() => {
-            if (this.mounted && getStore(nuomi.store.id)) {
-              this.setState(this.getState());
+        this.state = this.getState();
+        this.unSubcribe = globalStore.subscribe(() => {
+          if (getStore(nuomi.store.id) != null) {
+            const state = this.getState();
+            if (this.mounted) {
+              this.setState(state);
+            } else {
+              this.state = state;
             }
-          });
-        }
+          }
+        });
       }
 
       componentDidMount() {
@@ -46,20 +47,25 @@ function connect(...args) {
       }
 
       componentWillUnmount() {
+        this.mounted = false;
         if (this.unSubcribe) {
-          // 为了防止组件在销毁时执行setState导致报错
-          this.mounted = false;
           this.unSubcribe();
         }
       }
 
       getState() {
         const { store } = this.context.nuomi;
-        const state = mapStateToProps({ ...store.state, ...store.getter }, globalStore.getState());
-        if (state == null) {
-          return {};
+        if (getStore(store.id) != null) {
+          if (isFunction(mapStateToProps)) {
+            // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
+            const state = mapStateToProps({ ...store.state, ...store.getter }, globalStore.getState());
+            if (state != null) {
+              return state;
+            }
+            return {};
+          }
+          return { ...store.state, ...store.getter };
         }
-        return state;
       }
 
       getWrappedInstance() {

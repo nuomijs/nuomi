@@ -4,7 +4,6 @@ import { NavLink, connect, useConnect, useNuomi, withNuomi, router, ShapeRoute }
 export default ({ children }) => {
   const [{ count, routes }, dispatch] = useConnect(({ routes, count }) => ({ routes, count }));
   const [nuomi] = useNuomi();
-  console.log(routes)
   return (
     <div>
       <NavLink to={{ path: '/' }}>首页</NavLink>
