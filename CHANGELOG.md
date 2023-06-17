@@ -3,7 +3,7 @@
 ## 1.0.0 (2023-06-10)
 * Nuomi组件
   - async更名为load
-  - reducers更名为reducer，移除默认reducer中的_updatState/_updateLoading/_replaceState，新增@update/@replace/@loading
+  - reducers更名为reducer，移除默认reducer中的_updatState/_updateLoading/_replaceState，新增@update/@replace
   - effects更名为action，定义的方法接受2个参数，第一个是store，第二个是payload
   - 新增extends属性，类型为数组，可以拓展多个，取代0.x的nuomi.extend
   - 新增getter属性，用于过滤或者组合state值

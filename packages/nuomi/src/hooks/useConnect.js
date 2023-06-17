@@ -20,7 +20,7 @@ function useConnect(callback) {
     if (getStore(store.id)) {
       if (isFunction(callback)) {
         // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
-        return callback({ ...store.state, getter: store.getter }, globalStore.getState());
+        return callback({ ...store.state, ...store.getter }, globalStore.getState());
       }
       return { ...store.state, ...store.getter };
     }
