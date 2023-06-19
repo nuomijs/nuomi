@@ -2,15 +2,15 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 
-const withRouter = (WrapperComponent) => class WithRouter extends React.PureComponent {
+const withLocation = (WrapperComponent) => class WithLocation extends React.PureComponent {
     static contextType = RouterContext;
 
-    static displayName = `withRouter(${WrapperComponent.displayName || WrapperComponent.name})`;
+    static displayName = `withLocation(${WrapperComponent.displayName || WrapperComponent.name})`;
 
     constructor(...args) {
       super(...args);
       const { location } = this.context;
-      invariant(!!location, `不允许在 <Router>、<Route>、<NuomiRoute> 外部使用 ${WithRouter.displayName}`);
+      invariant(!!location, `不允许在 <Router>、<Route>、<NuomiRoute> 外部使用 ${WithLocation.displayName}`);
     }
 
     render() {
@@ -19,4 +19,4 @@ const withRouter = (WrapperComponent) => class WithRouter extends React.PureComp
     }
 };
 
-export default withRouter;
+export default withLocation;

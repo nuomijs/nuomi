@@ -47,4 +47,4 @@ export const connect: Connect;
 
 export function withNuomi<P extends { nuomi: Context }>(Component: ComponentType<P>): ComponentType<P>;
 
-export function withRouter<P extends { location: Location }>(Component: ComponentType<P>): ComponentType<P>;
+export function withLocation<P extends { location: Location }>(Component: ComponentType<P>): ComponentType<P>;
