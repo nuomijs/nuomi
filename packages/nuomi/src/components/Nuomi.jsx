@@ -8,12 +8,6 @@ import { NuomiPropTypes } from './propTypes';
 export default class Nuomi extends React.PureComponent {
   static propTypes = NuomiPropTypes;
 
-  static defaultProps = {
-    state: {},
-    reducer: {},
-    action: {},
-  };
-
   constructor(...args) {
     super(...args);
     this.mounted = false;
@@ -59,7 +53,7 @@ export default class Nuomi extends React.PureComponent {
   }
 
   getNuomiProps() {
-    return { ...this.props, ...this.state.nuomiProps };
+    return { ...this.state.nuomiProps, ...this.props };
   }
 
   render() {

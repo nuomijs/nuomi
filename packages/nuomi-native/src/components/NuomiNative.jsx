@@ -14,7 +14,7 @@ export default class NuomiNative extends React.PureComponent {
   }
 
   getNuomiProps() {
-    return { ...this.props, ...this.state.nuomiProps };
+    return { ...this.state.nuomiProps, ...this.props };
   }
 
   render() {

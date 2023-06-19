@@ -182,7 +182,7 @@ export default class RouteCore extends React.PureComponent {
   }
 
   getNuomiProps() {
-    return { ...this.props, ...this.state.nuomiProps };
+    return { ...this.state.nuomiProps, ...this.props };
   }
 
   render() {

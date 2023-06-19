@@ -1,5 +1,5 @@
 import React, { useMemo, useState }  from 'react';
-import { ShapeRoute, configure, router, NavLink, Nuomi, useConnect, useNuomi } from 'nuomi';
+import { ShapeRoute, configure, router, NavLink, Nuomi, useConnect, useNuomi, useLocation } from 'nuomi';
 import { Router, Route, NuomiRoute, defineProps } from 'nuomi';
 
 configure({
@@ -46,7 +46,9 @@ function App1({ children }) {
   // </div>
   // )
   const [{ count }, dispatch] = useConnect();
-  const [nuomi] = useNuomi();
+  const nuomi = useNuomi();
+  const location = useLocation();
+  console.log(location)
   return <div>
     <div onClick={() => {
       nuomi.reload();
@@ -63,13 +65,13 @@ function App() {
       path: '/login',
       load: () => import('./pages/login')
 
-    }, <Route path="/*" render={App1} state={{ count: 0 }}>
+    }, <NuomiRoute path="/*" render={App1} state={{ count: 0 }}>
       <ShapeRoute routes={[{
       path: '/*',
       route: false,
       load: () => import('./layouts')
     }]} />
-    </Route>]} />
+    </NuomiRoute>]} />
   </Router>
 }
 

@@ -1,9 +1,14 @@
 # 更新日志：
 
+## 1.1.1 (2023-06-19)
+* useNuomi返回值由数组改为对象
+* 增加withRouter高阶组件
+
 ## 1.1.0 (2023-06-17)
 * 取消state中的loading对象，与state数据进行合并，删除reducer中的@loading方法
 * getter在通过connect获取时和state合并，无需通过getter对象获取
 * useConnect增加state依赖收集
+* withNuomi和useNuomi返回的属性增加了reload方法，用于刷新单个Nuomi/Route组件状态
 
 ## 1.0.0 (2023-06-10)
 * Nuomi组件
@@ -24,8 +29,8 @@
   - 路由监听器增加第二个回调参数，路由渲染完成执行
 * 导出的store更名为globalStore
 * 移除导出nuomi对象，新增defineProps、configure方法，configure取代0.x的nuomi.config和nuomi.getDefaultProps，defineProps用来定义nuomiProps，包含代码提示，增强了开发体验
-* withNuomi获取的nuomiProps属性改为nuomi，useNuomi返回的nuomiProps改为数组包裹
-* withNuomi和useNuomi获取到nuomiProps，由之前的所有props改为仅能获取store/location/parent，其中parent可以获取到父组件定义的nuomiProps
+* withNuomi获取的数据属性名改为nuomi，useNuomi返回的数据改为数组包裹
+* withNuomi和useNuomi获取到数据，由之前的所有props改为仅能获取store/location/parent，其中parent可以获取到父组件定义的nuomiProps
 
 ## 0.8.19 (2020-07-04)
 * 修复ShapeRoute组件报错问题

@@ -11,7 +11,7 @@ import { NuomiContext } from './Context';
 import globalWindow from '../utils/globalWindow';
 import { NuomiPropTypes } from './propTypes';
 
-export default class BaseNuomi extends React.PureComponent {
+export default class BaseNuomi extends React.Component {
   static propTypes = NuomiPropTypes;
 
   static contextType = NuomiContext;
@@ -287,6 +287,7 @@ export default class BaseNuomi extends React.PureComponent {
 
   reload = () => {
     const { store, context } = this.props;
+    this.nuomiComponent = null;
     if (store && store.id) {
       if (context) {
         context.matched = null;
@@ -320,7 +321,9 @@ export default class BaseNuomi extends React.PureComponent {
     if (store) {
       removeReducer(store.id);
       Object.keys(store).forEach((key) => {
-        delete store[key];
+        if (key !== 'id') {
+          delete store[key];
+        }
       });
     }
   }
@@ -364,13 +367,13 @@ export default class BaseNuomi extends React.PureComponent {
     const { state } = this;
     const context = this.getContext();
     const children = this.getChildren();
-    if (children != null) {
-      return (
+    if (!this.nuomiComponent) {
+      this.nuomiComponent = (
         <NuomiContext.Provider key={state.key} value={{ nuomi: context }}>
           {children}
         </NuomiContext.Provider>
       );
     }
-    return null;
+    return this.nuomiComponent;
   }
 }

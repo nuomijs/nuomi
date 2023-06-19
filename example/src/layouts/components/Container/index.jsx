@@ -3,13 +3,13 @@ import { NavLink, connect, useConnect, useNuomi, withNuomi, router, ShapeRoute }
 
 export default ({ children }) => {
   const [{ count, routes }, dispatch] = useConnect(({ routes, count }) => ({ routes, count }));
-  const [nuomi] = useNuomi();
+  const nuomi = useNuomi();
   return (
     <div>
-      <NavLink to={{ path: '/' }}>首页</NavLink>
+      <NavLink to={{ path: '/', state: { a: 1 } }}>首页</NavLink>
       <NavLink to={{ path: '/list' }} style={{ marginLeft: 10 }}>列表</NavLink>
 
-      <div onClick={() => {
+      <div onClick={() => { 
         dispatch('@update', {
           routes: routes.filter(({ path }) => path !== '/list')
         })
