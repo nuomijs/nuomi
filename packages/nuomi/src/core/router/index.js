@@ -31,7 +31,7 @@ let options = defaultOptions;
 // 清理路由数据
 let clear = null;
 // 当前location
-let currentLocation = null;
+let currentLocation = {};
 // 阻塞路由控制
 // eslint-disable-next-line import/no-mutable-exports
 let blockData = {};
@@ -359,7 +359,7 @@ function createRouter(routerOptions, staticLocation, callback) {
     options = defaultOptions;
     isHash = true;
     globalLocation = globalWindow.location;
-    currentLocation = null;
+    currentLocation = {};
     blockCallback = null;
     blockData = {};
     clearExtraData = true;
