@@ -9,7 +9,7 @@ let stores = {};
 let middlewares = [];
 let usedDispatch = false;
 const composeEnhancers = process.env.NODE_ENV !== 'production' && globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  ? globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 20 })
+  ? globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   : compose;
 
 const globalStore = createStore(
