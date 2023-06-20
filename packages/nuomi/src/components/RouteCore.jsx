@@ -3,7 +3,7 @@ import { RouterContext } from './Context';
 import BaseRoute from './BaseRoute';
 import { isFunction } from '../utils';
 import { configure } from '../core/nuomi';
-import { extendArray } from '../utils/extend';
+import { extendArray, extend } from '../utils/extend';
 import { blockData } from '../core/router';
 import { RoutePropTypes } from './propTypes';
 
@@ -107,13 +107,13 @@ export default class RouteCore extends React.PureComponent {
      * })
      */
     const loadResult = load((props) => {
-      cb(extendArray(nuomiProps, [props]));
+      cb(extendArray(props, [nuomiProps]));
     });
     /**
      * load: () => import(path);
      */
     if (loadResult && loadResult instanceof Promise) {
-      loadResult.then((module) => cb(extendArray(nuomiProps, [module.default])));
+      loadResult.then((module) => cb(extendArray(module.default, [nuomiProps])));
     }
   }
 
@@ -182,7 +182,7 @@ export default class RouteCore extends React.PureComponent {
   }
 
   getNuomiProps() {
-    return { ...this.state.nuomiProps, ...this.props };
+    return extend(this.state.nuomiProps, this.props);
   }
 
   render() {
