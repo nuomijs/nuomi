@@ -22,7 +22,7 @@ export default defineProps({
   render() {
     return <Container />
   },
-  onInit() {
-    this.store.dispatch('$initData')
+  onInit({ store }) {
+    store.dispatch('$initData')
   }
 });

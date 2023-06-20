@@ -63,15 +63,10 @@ export interface RouteProps<S = any, G = any> extends NuomiProps<S, G> {
   onLeave?: (leave: () => void, to: Location) => boolean;
 }
 
-export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {
-  extends?: DefineProps[];
-  location?: Location;
-  parent?: Context;
-}
+export interface DefineProps<S = any, G = any> extends RouteProps<S, G> {}
 
 export type Context<S = any, G = any> = {
   store: NuomiStore<S, G>;
-  location: Location;
   reload: () => void;
   parent?: Context;
 }

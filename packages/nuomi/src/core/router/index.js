@@ -197,7 +197,7 @@ function routerHandle(...args) {
     clearExtraData = false;
     extraData = {};
 
-    if (typeof isReload === 'boolean') {
+    if (isReload === true) {
       extraData.reload = isReload;
     }
 
@@ -242,6 +242,7 @@ function replace(...args) {
 }
 
 function reload() {
+  extraData = {};
   callReloadListener();
 }
 

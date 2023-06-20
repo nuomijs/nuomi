@@ -1,12 +1,11 @@
 import React, { memo } from 'react';
-import { defineProps, useConnect } from 'nuomi';
+import { defineProps, useConnect, globalStore } from 'nuomi';
 import Container from './components/Container';
 
 export default defineProps({
   state: {
     count: 0,
     value: 1,
-    $initData: true,
   },
   getter: {
     total({ value }) {
@@ -19,7 +18,7 @@ export default defineProps({
       const value = await new Promise((res) => {
         setTimeout(() => {
           res(state.value + 1);
-        }, 1000)
+        }, 500)
       });
       commit({
         value,
@@ -31,4 +30,7 @@ export default defineProps({
       <Container />
     </>
   },
+  onShow() {
+    
+  }
 });

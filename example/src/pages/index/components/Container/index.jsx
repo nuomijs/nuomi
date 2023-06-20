@@ -4,7 +4,6 @@ import Footer from '../Footer';
 
 export default () => {
   const [{ value, $initData }, dispatch] = useConnect();
-  console.log(1)
   useEffect(() => {
     dispatch('$initData')
   }, [])

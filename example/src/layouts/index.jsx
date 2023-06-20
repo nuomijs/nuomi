@@ -10,12 +10,10 @@ export default defineProps({
     routes: [{
       path: '/',
       name: 'home',
-      cache: true,
       load: () => import('../pages/index'),
     }, {
       path: '/list',
       name: 'list',
-      cache: true,
       load: () => import('../pages/list')
     }, {
       path: '/404',

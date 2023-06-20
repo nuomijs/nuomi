@@ -30,10 +30,7 @@ export default class BaseNuomi extends React.Component {
   }
 
   getId() {
-    const { id, store } = this.props;
-    if (store.id) {
-      return store.id;
-    }
+    const { id } = this.props;
     if (!id) {
       return `@@nuomi_${++BaseNuomi.nuomiId}`;
     }
@@ -143,7 +140,7 @@ export default class BaseNuomi extends React.Component {
               // name是当前调用的方法或者属性名
               get(target, name) {
                 const actionFunc = action[name];
-                if (isFunction(actionFunc)) {
+                if (store.id && isFunction(actionFunc)) {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
                     // 获取上一次调用的方法
@@ -233,10 +230,12 @@ export default class BaseNuomi extends React.Component {
     };
 
     store.restoreState = () => {
-      globalStore.dispatch({
-        type: `${store.id}/@replace`,
-        payload: this.getDefaultState(),
-      });
+      if (store.id) {
+        globalStore.dispatch({
+          type: `${store.id}/@replace`,
+          payload: this.getDefaultState(),
+        });
+      }
       return store.state;
     };
 
@@ -317,23 +316,26 @@ export default class BaseNuomi extends React.Component {
   }
 
   removeStore() {
-    const { store } = this.props;
+    const { store, id } = this.props;
     if (store) {
-      removeReducer(store.id);
-      Object.keys(store).forEach((key) => {
-        if (key !== 'id') {
-          delete store[key];
+      // 解决REDUX_DEVTOOLS缓存状态问题
+      if (process.env.NODE_ENV !== 'production') {
+        if (globalWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+          if (id) {
+            store.restoreState();
+          }
         }
-      });
+      }
+      removeReducer(store.id);
+      delete store.id;
     }
   }
 
   getContext() {
-    const { store, location } = this.props;
+    const { store } = this.props;
     const { reload } = this;
     const nuomi = {
       store,
-      location,
       reload,
     };
     if (this.context) {
@@ -343,9 +345,9 @@ export default class BaseNuomi extends React.Component {
   }
 
   execInit() {
-    const { props } = this;
-    if (isFunction(props.onInit)) {
-      props.onInit(this.getContext());
+    const { onInit } = this.props;
+    if (isFunction(onInit)) {
+      onInit(this.getContext());
     }
   }
 

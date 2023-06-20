@@ -10,13 +10,13 @@ export default class BaseNuomiNative extends BaseNuomi {
   }
 
   routerChange() {
-    const { props } = this;
+    const { onShow } = this.props;
     const context = this.getContext();
-    if (isFunction(props.onShow)) {
+    if (isFunction(onShow)) {
       this.unListener = this.context.addListener('focus', () => {
-        props.onShow(context);
+        onShow(context);
       });
-      props.onShow(context);
+      onShow(context);
     }
   }
 }

@@ -4,7 +4,6 @@ import { Router, Route, NuomiRoute, defineProps } from 'nuomi';
 
 configure({
   reload: true,
-  cache: true,
 })
 
 router.listener(() => {
@@ -48,7 +47,6 @@ function App1({ children }) {
   const [{ count }, dispatch] = useConnect();
   const nuomi = useNuomi();
   const location = useLocation();
-  console.log(location)
   return <div>
     <div onClick={() => {
       nuomi.reload();
@@ -66,12 +64,12 @@ function App() {
       load: () => import('./pages/login')
 
     }, <NuomiRoute path="/*" render={App1} state={{ count: 0 }}>
-      <ShapeRoute routes={[{
-      path: '/*',
-      route: false,
-      load: () => import('./layouts')
-    }]} />
-    </NuomiRoute>]} />
+        <ShapeRoute routes={[{
+          path: '/*',
+          route: false,
+          load: () => import('./layouts')
+        }]} />
+      </NuomiRoute>]} />
   </Router>
 }
 

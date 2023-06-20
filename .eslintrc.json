@@ -19,7 +19,8 @@
     "react/sort-comp": "off",
     "react/destructuring-assignment": "off",
     "react/jsx-props-no-spreading": "off",
-    "jsx-a11y/anchor-has-content": "off"
+    "jsx-a11y/anchor-has-content": "off",
+    "no-empty": "off"
   },
   "globals": {
     "global": true,

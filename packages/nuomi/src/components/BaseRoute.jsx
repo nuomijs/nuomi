@@ -27,12 +27,12 @@ export default class BaseRoute extends BaseNuomi {
   }
 
   routerChange(activate) {
-    const { props } = this;
-    if (isFunction(props.onShow)) {
-      props.onShow(this.getContext());
+    const { onShow, onActivate } = this.props;
+    if (isFunction(onShow)) {
+      onShow(this.getContext());
     }
-    if (activate && isFunction(props.onActivate)) {
-      props.onActivate(this.getContext());
+    if (activate && isFunction(onActivate)) {
+      onActivate(this.getContext());
     }
   }
 
@@ -47,7 +47,7 @@ export default class BaseRoute extends BaseNuomi {
   componentDidMount() {
     this.unListener = addReloadListener((currentLocation) => {
       const { reload, location } = this.props;
-      if (reload && location === currentLocation) {
+      if (reload !== false && location === currentLocation) {
         this.reloadRoute();
       }
     });
@@ -58,9 +58,14 @@ export default class BaseRoute extends BaseNuomi {
     if (props === prevProps) {
       return;
     }
-    const isChange = prevProps.location !== props.location;
+    const { location, reload } = props;
+    const isChange = prevProps.location !== location;
     if (isChange) {
-      this.routerChange(true);
+      if (reload !== false && location.reload === true) {
+        this.reloadRoute();
+      } else {
+        this.routerChange(true);
+      }
       callShowedListener();
     }
   }
