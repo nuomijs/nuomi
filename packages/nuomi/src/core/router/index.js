@@ -365,6 +365,7 @@ function namePath(name, path) {
   if (name && path && !namePathMap[name]) {
     const normalPath = normalizePath(path);
     namePathMap[name] = normalPath;
+    namePathMap[normalPath] = name;
   }
 }
 
@@ -380,6 +381,7 @@ function match(locationData, { path, name }, returns = false) {
 
   if (name && !namePathMap[name]) {
     namePathMap[name] = normalPath;
+    namePathMap[normalPath] = name;
   }
 
   const pathnameMatch = pathname.match(pathRegexp);
@@ -407,8 +409,8 @@ function match(locationData, { path, name }, returns = false) {
     if (normalPath) {
       matchLocation.path = normalPath;
     }
-    if (name) {
-      matchLocation.name = name;
+    if (namePathMap[normalPath]) {
+      matchLocation.name = namePathMap[normalPath];
     }
     return matchLocation;
   }

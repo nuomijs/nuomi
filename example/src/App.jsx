@@ -6,6 +6,8 @@ configure({
   reload: true,
 })
 
+router.namePath('aaa', '/*')
+
 router.listener(() => {
   NProgress.start();
 }, () => {

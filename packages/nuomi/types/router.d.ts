@@ -20,12 +20,13 @@ export type RouterAPI = {
   location(): Location;
   push(path?: string | Location, reload?: boolean): void;
   replace(path?: string | Location, reload?: boolean): void;
-  listener(callback: (location: Location, isInit?: boolean) => void): Function;
+  listener(beforeCallback: (location: Location, isInit?: boolean) => void, afterCallback?: (location: Location) => void): Function;
   reload(): void;
   back(step?: number): void;
   forward(step?: number): void;
   matchPath(location: Location, path: string): Location | boolean;
   mergePath(...path: string[]): string;
+  namePath(name: string, path: string): void;
   normalizePath(path: string): string;
   parserPath(path: string): Location;
   block(callback: (from: Location, to: Location, enter: () => void) => any): void;
