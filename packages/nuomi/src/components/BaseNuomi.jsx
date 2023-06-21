@@ -332,12 +332,15 @@ export default class BaseNuomi extends React.Component {
   }
 
   getContext() {
-    const { store } = this.props;
+    const { store, location } = this.props;
     const { reload } = this;
     const nuomi = {
       store,
       reload,
     };
+    if (location) {
+      nuomi.location = location;
+    }
     if (this.context) {
       nuomi.parent = this.context.nuomi;
     }

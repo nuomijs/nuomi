@@ -14,6 +14,10 @@ export type Location = {
   }
 }
 
+export type MatchLocation = Location & {
+  path: string;
+}
+
 export type RouterAPI = {
   location(): Location;
   push(path?: string | Location, reload?: boolean): void;

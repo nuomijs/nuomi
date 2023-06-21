@@ -35,6 +35,13 @@ export default class BaseRoute extends BaseNuomi {
     }
   }
 
+  showedListener() {
+    const { location, path } = this.props;
+    Promise.resolve().then(() => {
+      callShowedListener({ path, ...location });
+    });
+  }
+
   componentWillUnmount() {
     const { cache } = this.props;
     if (cache !== 'state' && cache !== true) {
@@ -50,7 +57,7 @@ export default class BaseRoute extends BaseNuomi {
         this.reloadRoute();
       }
     });
-    callShowedListener();
+    this.showedListener();
   }
 
   componentDidUpdate(prevProps) {
@@ -66,7 +73,7 @@ export default class BaseRoute extends BaseNuomi {
       } else {
         this.routerChange(true);
       }
-      callShowedListener();
+      this.showedListener();
     }
   }
 }

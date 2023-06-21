@@ -130,23 +130,23 @@ function restorePath(object) {
     pathname, name, params, query, search, url, hash,
   } = object;
   let { path: p } = object;
-  if (isString(url) && url !== '') {
+  if (isString(url) && url) {
     path = url;
   } else {
-    if (isString(name) && name !== '') {
+    if (isString(name) && name) {
       p = namePathMap[name];
     }
-    if (isString(p) && p !== '') {
+    if (isString(p) && p && !pathname) {
       path = p;
       if (isObject(params)) {
         Object.keys(params).forEach((key) => {
           path = path.replace(new RegExp(`\\/:${key}`), `/${params[key] || ''}`);
         });
       }
-    } else if (isString(pathname) && pathname !== '') {
+    } else if (isString(pathname) && pathname) {
       path = pathname;
     }
-    if (!!search && isString(search)) {
+    if (isString(search) && search) {
       if (search.indexOf('?') !== 0) {
         path += `?${search}`;
       } else {
@@ -257,28 +257,19 @@ function forward(step) {
 function callListener() {
   // 一次change可能有多个listeners，只创建一次location
   let current = null;
-  const [beforeListeners = [], afterListeners = []] = listeners;
+  const [beforeListeners = []] = listeners;
   beforeListeners.forEach((callback) => {
     if (!current) {
       current = getMergeLocation();
     }
     callback(currentLocation, current);
   });
-  afterListeners.forEach((callback) => {
-    delete callback.execed;
-  });
 }
 
-function callShowedListener() {
-  Promise.resolve().then(() => {
-    const [, afterListeners = []] = listeners;
-    afterListeners.forEach((callback) => {
-      // 防止多次执行
-      if (!callback.execed) {
-        callback.execed = true;
-        callback(currentLocation);
-      }
-    });
+function callShowedListener(matchLocation) {
+  const [, afterListeners = []] = listeners;
+  afterListeners.forEach((callback) => {
+    callback(matchLocation);
   });
 }
 
