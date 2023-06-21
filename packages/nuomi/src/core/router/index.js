@@ -270,13 +270,15 @@ function callListener() {
 }
 
 function callShowedListener() {
-  const [, afterListeners = []] = listeners;
-  afterListeners.forEach((callback) => {
-    // 防止多次执行
-    if (!callback.execed) {
-      callback.execed = true;
-      callback(currentLocation);
-    }
+  Promise.resolve().then(() => {
+    const [, afterListeners = []] = listeners;
+    afterListeners.forEach((callback) => {
+      // 防止多次执行
+      if (!callback.execed) {
+        callback.execed = true;
+        callback(currentLocation);
+      }
+    });
   });
 }
 

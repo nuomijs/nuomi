@@ -23,7 +23,6 @@ export default class BaseRoute extends BaseNuomi {
     this.createStore();
     this.execInit();
     this.routerChange();
-    callShowedListener();
   }
 
   routerChange(activate) {
@@ -51,6 +50,7 @@ export default class BaseRoute extends BaseNuomi {
         this.reloadRoute();
       }
     });
+    callShowedListener();
   }
 
   componentDidUpdate(prevProps) {
