@@ -16,6 +16,7 @@ export const NuomiPropTypes = {
 export const NuomiRoutePropTypes = {
   ...NuomiPropTypes,
   path: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export const RoutePropTypes = {

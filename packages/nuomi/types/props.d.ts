@@ -49,6 +49,7 @@ export interface NuomiProps<S = any, G = any> {
 
 export interface NuomiRouteProps<S = any, G = any> extends NuomiProps<S, G> {
   path?: string;
+  name?: string;
 }
 
 export interface RouteProps<S = any, G = any> extends NuomiProps<S, G> {
@@ -69,6 +70,7 @@ export type Context<S = any, G = any> = {
   store: NuomiStore<S, G>;
   reload: () => void;
   parent?: Context;
+  location?: Location;
 }
 
 export interface ShapeRouteObject extends RouteProps {

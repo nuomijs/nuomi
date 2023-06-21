@@ -1,4 +1,6 @@
 export type Location = {
+  path?: string;
+  name?: string;
   pathname: string;
   url: string;
   search: string;
@@ -12,10 +14,6 @@ export type Location = {
   state: {
     [key: string]: any;
   }
-}
-
-export type MatchLocation = Location & {
-  path: string;
 }
 
 export type RouterAPI = {

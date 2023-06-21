@@ -36,9 +36,9 @@ export default class BaseRoute extends BaseNuomi {
   }
 
   showedListener() {
-    const { location, path } = this.props;
+    const { location } = this.props;
     Promise.resolve().then(() => {
-      callShowedListener({ path, ...location });
+      callShowedListener(location);
     });
   }
 

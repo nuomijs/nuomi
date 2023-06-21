@@ -21,7 +21,7 @@ class NavLink extends Link {
     const { props } = this;
     const { isActive, to } = props;
     const { pathname } = parser(restorePath(to));
-    const matchLocation = match(location, { path: pathname }, false, true);
+    const matchLocation = match(location, { path: pathname }, true);
     if (isFunction(isActive)) {
       return isActive(matchLocation, location, props) !== false;
     }

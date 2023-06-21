@@ -41,7 +41,7 @@ export default class Redirect extends React.PureComponent {
           invariant(context, '不允许在 <Router> 外部使用 <Redirect>');
           const { matched, location, staticContext } = context;
           if (to && !context.redirecting && !this.redirected) {
-            if ((from && match(location, { path: from }, false, false)) || (!matched && !from)) {
+            if ((from && match(location, { path: from }, false)) || (!matched && !from)) {
               new Promise((res) => {
                 this.redirected = true;
                 // 防止同时执行多个Redirect

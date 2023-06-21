@@ -140,9 +140,10 @@ function restorePath(object) {
       path = p;
       if (isObject(params)) {
         Object.keys(params).forEach((key) => {
-          path = path.replace(new RegExp(`\\/:${key}`), `/${params[key] || ''}`);
+          path = path.replace(new RegExp(`\\/:${key}`), `/${params[key] || '0'}`);
         });
       }
+      path = path.replace(/\/*/g, '');
     } else if (isString(pathname) && pathname) {
       path = pathname;
     }
@@ -360,32 +361,33 @@ function createRouter(routerOptions, staticLocation, callback) {
   });
 }
 
-function removeMatchMapData(path, name) {
-  const normalPath = normalizePath(path);
-  delete pathRegexpMap[normalPath];
-  delete namePathMap[name];
+function namePath(name, path) {
+  if (name && path && !namePathMap[name]) {
+    const normalPath = normalizePath(path);
+    namePathMap[name] = normalPath;
+  }
 }
 
-function match(locationObj, { path, name }, saveMap = false, returns = false) {
-  const { pathname } = locationObj;
+function match(locationData, { path, name }, returns = false) {
+  const { pathname } = locationData;
   const normalPath = normalizePath(path);
   let pathRegexp = pathRegexpMap[normalPath];
 
   if (!pathRegexp) {
     pathRegexp = pathToRegexp(normalPath);
-    if (saveMap) {
-      pathRegexpMap[normalPath] = pathRegexp;
-      if (name) {
-        namePathMap[name] = path;
-      }
-    }
+    pathRegexpMap[normalPath] = pathRegexp;
+  }
+
+  if (name && !namePathMap[name]) {
+    namePathMap[name] = normalPath;
   }
 
   const pathnameMatch = pathname.match(pathRegexp);
   const isMatch = !!pathnameMatch;
 
   if (isMatch && returns) {
-    const pathMatch = path.match(/\/:(\w+)/g);
+    let matchLocation;
+    const pathMatch = path.match(/\/:([\w-]+)/g);
     if (pathMatch) {
       const params = {};
       pathMatch.forEach((param, i) => {
@@ -395,19 +397,27 @@ function match(locationObj, { path, name }, saveMap = false, returns = false) {
           params[key] = value.replace(/^\//, '');
         }
       });
-      return {
-        ...locationObj,
+      matchLocation = {
+        ...locationData,
         params,
       };
+    } else {
+      matchLocation = { ...locationData };
     }
-    return locationObj;
+    if (normalPath) {
+      matchLocation.path = normalPath;
+    }
+    if (name) {
+      matchLocation.name = name;
+    }
+    return matchLocation;
   }
 
   return isMatch;
 }
 
 function matchPath(...args) {
-  return match(args[0], { path: args[1] }, false, true);
+  return match(args[0], { path: args[1] }, true);
 }
 
 function mergePath(...args) {
@@ -418,14 +428,7 @@ function mergePath(...args) {
 }
 
 export {
-  createRouter,
-  blockData,
-  combinePath,
-  match,
-  callShowedListener,
-  addReloadListener,
-  removeMatchMapData,
-  restorePath,
+  createRouter, blockData, combinePath, match, callShowedListener, addReloadListener, restorePath,
 };
 
 export default {
@@ -440,5 +443,6 @@ export default {
   mergePath,
   normalizePath,
   parserPath,
+  namePath,
   block,
 };

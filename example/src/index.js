@@ -4,7 +4,7 @@ import App from './App';
 import logger from 'redux-logger';
 import { globalStore } from 'nuomi';
 
-globalStore.applyMiddleware(logger);
+// globalStore.applyMiddleware(logger);
 
 ReactDOM.render((
   <App />

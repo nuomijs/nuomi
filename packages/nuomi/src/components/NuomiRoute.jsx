@@ -2,7 +2,7 @@ import React from 'react';
 import invariant from 'invariant';
 import { RouterContext } from './Context';
 import Nuomi from './Nuomi';
-import { match, removeMatchMapData } from '../core/router';
+import { match } from '../core/router';
 import { NuomiRoutePropTypes } from './propTypes';
 
 export default class NuomiRoute extends React.PureComponent {
@@ -17,10 +17,6 @@ export default class NuomiRoute extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    const { path } = this.props;
-    if (path) {
-      removeMatchMapData(path);
-    }
     if (this.context.matched === this) {
       this.context.matched = null;
     }
@@ -33,7 +29,7 @@ export default class NuomiRoute extends React.PureComponent {
   }
 
   render() {
-    const { path } = this.props;
+    const { path, name } = this.props;
     const { mounted } = this.state;
     if (!mounted) {
       return null;
@@ -46,7 +42,7 @@ export default class NuomiRoute extends React.PureComponent {
 
           // 同一个context只匹配一次
           const allowMatch = !context.matched || context.matched === this;
-          let matchLocation = match(context.location, { path }, true, true);
+          let matchLocation = match(context.location, { path, name }, true);
 
           if (!allowMatch) {
             matchLocation = false;
@@ -55,7 +51,7 @@ export default class NuomiRoute extends React.PureComponent {
           if (matchLocation) {
             context.matched = this;
             return (
-              <RouterContext.Provider value={{ ...context, matched: null }}>
+              <RouterContext.Provider value={{ ...context, location: matchLocation, matched: null }}>
                 <RouterContext.Consumer>
                   {(cxt) => <Nuomi {...this.props} location={matchLocation} context={cxt} />}
                 </RouterContext.Consumer>

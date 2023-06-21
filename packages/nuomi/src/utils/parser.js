@@ -16,7 +16,7 @@ export function pathToRegexp(path) {
     // (?: => (?:
     .replace(/(\()(?!\?[:=!<>])/g, '$1?:')
     // /:id => /(\/\w+)
-    .replace(/\/:\w+/g, '(/\\w+)')
+    .replace(/\/:[\w-]+/g, '(/[\\w-]+)')
     // /a/b => \/a\/b
     // a.html => a\.html
     .replace(/([./])/g, '\\$1')
