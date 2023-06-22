@@ -143,7 +143,7 @@ function restorePath(object) {
           path = path.replace(new RegExp(`\\/:${key}`), `/${params[key] || '0'}`);
         });
       }
-      path = path.replace(/\/*/g, '');
+      path = path.replace(/\*/g, '');
     } else if (isString(pathname) && pathname) {
       path = pathname;
     }
