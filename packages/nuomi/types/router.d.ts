@@ -16,6 +16,11 @@ export type Location = {
   }
 }
 
+export interface NamePathObject {
+  name: string;
+  path: string;
+}
+
 export type RouterAPI = {
   location(): Location;
   push(path?: string | Location, reload?: boolean): void;
@@ -27,6 +32,7 @@ export type RouterAPI = {
   matchPath(location: Location, path: string): Location | boolean;
   mergePath(...path: string[]): string;
   namePath(name: string, path: string): void;
+  namePath(data: NamePathObject[]): void;
   normalizePath(path: string): string;
   parserPath(path: string): Location;
   block(callback: (from: Location, to: Location, enter: () => void) => any): void;

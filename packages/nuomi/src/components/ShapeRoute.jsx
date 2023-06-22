@@ -45,6 +45,9 @@ class ShapeComponent extends React.PureComponent {
           }
           if (newProps.path) {
             newProps.path = router.mergePath(parentPath, newProps.path, isRoutes ? '/*' : '');
+            if (newProps.name) {
+              router.namePath(newProps.name, newProps.path);
+            }
           }
           const children = isRoutes ? this.getComponents(childrenRoutes, newProps.path) : childrenRoutes;
           components.push(

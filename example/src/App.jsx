@@ -64,7 +64,7 @@ function App2({ children }) {
     if (isLogin) {
       return [{
         path: '/main/*',
-        children: '222'
+        children: '222',
       }, {
         to: '/main',
       }]
@@ -74,10 +74,12 @@ function App2({ children }) {
       children: '1111',
     }, {
       path: '/login1',
-      children: '11112222'
+      children: '11112222',
+      name: 'a'
     }, {
       path: '/login2',
-      children: '11112222'
+      children: '11112222',
+      name: 'b'
     }, {
       to: '/login',
     }]

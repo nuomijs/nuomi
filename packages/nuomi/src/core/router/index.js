@@ -362,10 +362,17 @@ function createRouter(routerOptions, staticLocation, callback) {
 }
 
 function namePath(name, path) {
-  if (name && path && !namePathMap[name]) {
-    const normalPath = normalizePath(path);
-    namePathMap[name] = normalPath;
-    namePathMap[normalPath] = name;
+  if (isString(name) && isString(path)) {
+    if (name && path && !namePathMap[name]) {
+      const normalPath = normalizePath(path);
+      namePathMap[name] = normalPath;
+      namePathMap[normalPath] = name;
+    }
+  } else if (Array.isArray(name)) {
+    name.forEach((item) => {
+      const { name: n, path: p } = item || {};
+      namePath(n, p);
+    });
   }
 }
 
