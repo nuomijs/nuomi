@@ -4,7 +4,7 @@
 * 增加useLocation hoosk函数，返回location对象
 * 增加withLocation高阶组件，子组件props会增加location对象
 * useNuomi返回值由数组改为对象
-* 移除useNuomi和withNuomi返回的location对象，可使用useLocation/withLocation/router.location获取
+* 增加router.namePath方法
 
 ## 1.1.0 (2023-06-17)
 * 取消state中的loading对象，与state数据进行合并，删除reducer中的@loading方法
