@@ -5,12 +5,12 @@ title: 功能速查
 ## 状态隔离
 
 框架为每个 `nuomiProps` 模块内部创建一个 `store` 对象，包含了 `getState` 和 `dispatch`等
-方法用于操作模块内的状态，可以在 `nuomiProps` 对象的方法内调用 `this.store` 去访问它们。
+方法用于操作模块内的状态。
 
 ```js
 {
-  onInit() {
-    this.store.dispatch(...);
+  onInit({ store }) {
+    store.dispatch(...);
   }
 }
 ```
@@ -103,7 +103,7 @@ store.dispatch({
 
 异步操作是指异步更新状态，定义在 `action` 对象中，主要用于业务逻辑的处理，使用
 `async await` 语法糖。组件中调用 `dispatch` 访问 `action` 中定义的方法，异步结束后再调用
-`reducer` 中定义的方法来更新状态，推荐使用 [nuomi-request](https://github.com/nuomijs/nuomi-request/wiki) 来进行请求操作。
+`reducer` 中定义的方法来更新状态。
 
 ```js
 {
@@ -117,10 +117,6 @@ store.dispatch({
   }
 }
 ```
-
-上面代码中 `getState` 和 `dispatch` 为内置方法，`getState` 可以获取当前模块最新状态，
-`dispatch` 用于调用 `reducer` 中的方法更新状态，除此之外还可以通过 `this.getNuomiProps()`
-来访问当前模块的 `nuomiProps` 对象。
 
 异步方法也可以与其他方法组合使用，通过 `this` 访问。
 
@@ -159,7 +155,7 @@ store.dispatch({
 }
 ```
 
-给方法名添加 `$` 前缀可以自动创建 `loading` ，无需手动开关，在组件中通过 `loading.$方法名` 获取状态。
+给方法名添加 `$` 前缀可以自动创建 `loading` ，无需手动开关，在组件中通过 `$方法名` 获取状态。
 
 ```js
 {
@@ -170,26 +166,14 @@ store.dispatch({
 ```
 ```js
 const Login = () => {
-  const [{ loading }] = useConnect();
+  const [{ $login }] = useConnect();
   return (
     <Form>
       ...
-      <Button>{loading.$login ? '正在登录...' : '登录'}</Button>
+      <Button>{$login ? '正在登录...' : '登录'}</Button>
     </Form>
   );
 };
-```
-
-首次获取的 loading 状态是 undefined，可以在状态中定义默认值。
-
-```js
-{
-  state: {
-    loading: {
-      $login: false
-    }
-  }
-}
 ```
 
 ## 跨模块通信
@@ -314,6 +298,7 @@ path: /api/1[^\\d]+
   query,      // 查询参数对象
   params,     // 动态参数对象
   hash        // hash
+  state       // 临时状态
 }
 ```
 
@@ -336,7 +321,7 @@ const App = () => {
 ```
 
 通过使用 `window.location` 和 `location.replace`，可以控制浏览器的跳转，路由提供与之对等的方法
-`router.location` 与 `router.replace`，它们参数相同，只不过前者会记入历史，后者替换历史。
+`router.push` 与 `router.replace`，它们参数相同，只不过前者会记入历史，后者替换历史。
 
 ```js
 import { router } from 'nuomi';
@@ -364,7 +349,7 @@ import { router } from 'nuomi';
 ```js
 const A = () => {
   const go = () => {
-    router.location('/b', { a: 1, b: 2 });
+    router.location({ pathname: '/b': state: { a: 1, b: 2 } });
   };
   return <Button onClick={go}></Button>
 }
@@ -373,49 +358,12 @@ const A = () => {
 {
   action: {
     async getData() {
-      const { data } = this.getNuomiProps();
-      console.log(data); // { a: 1, b: 2 }
+      const { state } = router.location();
+      console.log(state); // { a: 1, b: 2 }
     }
   },
-  onInit() {
-    console.log(this.data); // { a: 1, b: 2 }
-  }
-}
-```
-
-目标页面 `nuomiProps` 的 `data` 属性用于存放临时数据，当路由切换时会自动被销毁，也可以为 `data` 定义默认值。
-
-```js
-{
-  data: {
-    a: 0,
-    b: 0
-  },
-  onInit() {
-    console.log(this.data); // { a: 0, b: 0 }
-  }
-}
-```
-
-跳转时还可以通过传递函数来对目标页面做一些处理，函数接收目标页面的 `nuomiProps`
-作为参数，可以获取 `store` 来操作目标页的状态。
-
-```js
-const A = () => {
-  const go = () => {
-    router.location('/b', ({ store }) => {
-      store.dispatch({ type: 'getData', payload: {...} });
-    });
-  };
-  return <Button onClick={go}></Button>
-}
-
-// B nuomiProps
-{
-  action: {
-    async getData() {
-      // do something
-    }
+  onInit({ location }) {
+    console.log(location.state); // { a: 1, b: 2 }
   }
 }
 ```
@@ -574,47 +522,49 @@ const App = () => {
       // do something
     }
   },
-  onInit() {
-    this.store.dispatch({
-      type: '$getList'
-    });
-  }
-}
-```
-
-在 `onInit` 中还可以做一些监听操作，并返回一个函数用于取消监听，用法类似 `useEffect`。
-
-```js
-{
-  onInit() {
-    const resize = () => {};
-    window.addEventListener('resize', resize);
-    return () => {
-      window.removeEventListener('resize', resize);
-    }
+  onInit({ store }) {
+    store.dispatch('$getList');
   }
 }
 ```
 
 如果设置了路由缓存，`onInit` 在组件生命周期内只会被执行一次，除非调用路由刷新
-，如果希望每次路由切换都执行，可以使用 `onChange` 钩子。
+，如果希望每次路由切换都执行，可以使用 `onShow` 钩子。
 
 > 路由没有设置缓存功能，`onInit` 每次路由切换都会执行。
 
-`onChange` 支持函数和对象写法，如果设置了路由缓存，在对象写法时给方法名添加 `$`
-前缀，首次加载和路由刷新时都不会执行，只有路由切换时才会执行。如果业务场景是首次进来需要初始化数据
-，离开后再进入这个页面只需要更新某一部分数据，那么这个功能十分有用。
+`onShow` 是每次路由切换都会执行
 
 ```js
 {
-  cache: true,
-  onChange: {
-    initData() {
-      this.store.dispatch({ ... });
-    },
-    $initList() {
-      this.store.dispatch({ ... });
+  action: {
+    async $getList() {
+      // do something
     }
+  },
+  onShow({ store }) {
+    store.dispatch('$getList');
+  }
+}
+```
+
+当路由设置了缓存，切换路由需要更新某一部分数据，可以使用 `onActivte`
+
+```js
+{
+  action: {
+    async $initData() {
+      // do something
+    },
+    async $getList() {
+      // do something
+    }
+  },
+  onInit({ store }) {
+    store.dispatch('$initData');
+  },
+  onActivte({ store }) {
+    store.dispatch('$getList');
   }
 }
 ```
@@ -622,7 +572,7 @@ const App = () => {
 ## 按需加载
 
 单页应用是将所有模块打包到一个文件里，模块越多则文件越大，首次加载的速度也会越慢，有些模块可能永远不会被用户访问。
-`nuomiProps` 中可以使用 `async` 方法来对模块进行按需加载。
+`nuomiProps` 中可以使用 `load` 方法来对模块进行按需加载。
 
 ```js
 // home.js
@@ -636,8 +586,8 @@ export default {
 const App = () => {
   return (
     <Router>
-      <Route path="/" async={() => import('./home')} />
-      <Route path="/list" async={() => import('./list')} />
+      <Route path="/" load={() => import('./home')} />
+      <Route path="/list" load={() => import('./list')} />
     </Router>
   );
 };

@@ -93,15 +93,15 @@ export default defineProps({
       });
       commit('updateData', { data });
     },
-    remove({ state, commit }, { name }) {
-      const { data } = state;
+    remove({ getState, commit }, { name }) {
+      const { data } = getState();
       commit('updateData', {
         data: data.filter((v) => v.name !== name)
       });
     }
   },
-  onInit() {
-    this.store.dispatch('$getList');
+  onInit({ store }) {
+    store.dispatch('$getList');
   }
 });
 ```
@@ -118,7 +118,7 @@ import { Table, Button } from 'antd';
 import { useConnect } from 'nuomi';
 
 const List = () => {
-  const [{ data, loading }, dispatch] = useConnect();
+  const [{ data, $getList }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
     dispatch('remove', {
@@ -136,7 +136,7 @@ const List = () => {
 
   return (
     <Table
-      loading={loading.$getList}
+      loading={$getList}
       rowKey="name"
       dataSource={data}
       columns={columns}
@@ -148,7 +148,7 @@ const List = () => {
 export default List;
 ```
 
-通过 `useConnect` 可以让 `List` 组件和 `nuomiProps` 关联起来，但此时 `List` 还无法正常渲染。
+通过 `useConnect` 可以让 `List` 组件和 `store` 关联起来，但此时 `List` 还无法正常渲染。
 
 ## 渲染组件
 

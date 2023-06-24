@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 import { useConnect } from '@nuomi';
 
 const List = () => {
-  const [{ dataSource, loading }, dispatch] = useConnect();
+  const [{ data, $getList }, dispatch] = useConnect();
 
   const remove = ({ name }) => {
     dispatch('remove', {
@@ -23,15 +23,15 @@ const List = () => {
     dispatch('$getList');
   };
 
-  if (!dataSource.length && !loading.$getList) {
+  if (!data.length && !$getList) {
     return <Button type="primary" onClick={tryOne}>再试一次</Button>
   }
 
   return (
     <Table
-      loading={!!loading.$getList}
+      loading={$getList}
       rowKey="name"
-      dataSource={dataSource}
+      dataSource={data}
       columns={columns}
       bordered
     />
