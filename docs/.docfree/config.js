@@ -12,7 +12,10 @@ module.exports = {
     to: '/api',
   }, {
     text: `v${require('../../lerna.json').version}`,
-    to: `${repositoryPath}/blob/master/CHANGELOG.md`,
+    menus: [{
+      text: '0.x',
+      to: 'https://nuomijs.github.io/0.x',
+    }],
   }, {
     text: 'GitHub',
     to: repositoryPath,
