@@ -46,7 +46,7 @@ connect(state => state)(App);
 ## 状态操作
 
 在组件中可以通过 `useConnect` 或者 `connect` 高阶组件让组件与 `nuomiProps` 建立关联来获取状态，通过
-`dispatch` 可以调用 `action` 和 `reducer` 中的方法更新状态。
+`dispatch` 可以调用 `actions` 和 `reducers` 中的方法更新状态。
 
 ```js
 {
@@ -101,9 +101,9 @@ store.dispatch({
 
 ## 异步操作
 
-异步操作是指异步更新状态，定义在 `action` 对象中，主要用于业务逻辑的处理，使用
-`async await` 语法糖。组件中调用 `dispatch` 访问 `action` 中定义的方法，异步结束后再调用
-`reducer` 中定义的方法来更新状态。
+异步操作是指异步更新状态，定义在 `actions` 对象中，主要用于业务逻辑的处理，使用
+`async await` 语法糖。组件中调用 `dispatch` 访问 `actions` 中定义的方法，异步结束后再调用
+`reducers` 中定义的方法来更新状态。
 
 ```js
 {
@@ -185,7 +185,7 @@ const Login = () => {
 // A nuomiProps
 {
   id: 'global',
-  action: {
+  actions: {
     async update() {
       // do something
     }
@@ -194,7 +194,7 @@ const Login = () => {
 
 // B nuomiProps
 {
-  action() {
+  actions() {
     async remove({ dispatch }) {
       dispatch('global/update', { ... })
     }
@@ -327,7 +327,7 @@ const App = () => {
 import { router } from 'nuomi';
 
 {
-  action: {
+  actions: {
     $login() {
       await services.login();
       router.replace('/index');
@@ -356,7 +356,7 @@ const A = () => {
 
 // B nuomiProps
 {
-  action: {
+  actions: {
     async getData() {
       const { state } = router.location();
       console.log(state); // { a: 1, b: 2 }
@@ -517,7 +517,7 @@ const App = () => {
 
 ```js
 {
-  action: {
+  actions: {
     async $getList() {
       // do something
     }
@@ -537,7 +537,7 @@ const App = () => {
 
 ```js
 {
-  action: {
+  actions: {
     async $getList() {
       // do something
     }
@@ -552,7 +552,7 @@ const App = () => {
 
 ```js
 {
-  action: {
+  actions: {
     async $initData() {
       // do something
     },
@@ -578,7 +578,7 @@ const App = () => {
 // home.js
 export default {
   state: {...},
-  action: {...},
+  actions: {...},
   ...
 }
 

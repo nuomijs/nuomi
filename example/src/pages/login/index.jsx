@@ -6,7 +6,7 @@ export default defineProps({
   state: {
     value: 3,
   },
-  action: {
+  actions: {
     async $initData({ getState, commit }) {
       const state = getState();
       const value = await new Promise((res) => {

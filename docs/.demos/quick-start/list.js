@@ -2,10 +2,10 @@ export default {
   state: {
     data: []
   },
-  reducer: {
+  reducers: {
     updateState: (state, payload) => ({ ...state, ...payload })
   },
-  action: {
+  actions: {
     async $getList({ commit }) {
       // 模拟请求
       const data = await new Promise((res) => {

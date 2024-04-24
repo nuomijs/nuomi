@@ -96,8 +96,7 @@ function App2({ children }) {
 
 function App() {
   return <Router>
-    <App2 />
-    {/* <ShapeRoute routes={[{
+    <ShapeRoute routes={[{
       path: '/login',
       load: () => import('./pages/login')
 
@@ -107,7 +106,7 @@ function App() {
           route: false,
           load: () => import('./layouts')
         }]} />
-      </NuomiRoute>]} /> */}
+      </NuomiRoute>]} />
   </Router>
 }
 

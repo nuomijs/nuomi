@@ -76,10 +76,10 @@ export default defineProps({
   state: {
     data: []
   },
-  reducer: {
+  reducers: {
     updateData: (state, payload) => ({ ...state, ...payload })
   },
-  action: {
+  actions: {
     async $getList({ commit }) {
       // 模拟请求
       const data = await new Promise((res) => {
@@ -106,7 +106,7 @@ export default defineProps({
 });
 ```
 
-该文件导出一个对象，`state` 定义初始状态；`reducer` 控制状态如何更新；`action` 用于提交状态更新；`onInit` 组件初始化。通过给 `action` 添加 `$` 前缀可以做到程序 `自动 loading` 功能。
+该文件导出一个对象，`state` 定义初始状态；`reducers` 控制状态如何更新；`actions` 用于提交状态更新；`onInit` 组件初始化。通过给 `action` 添加 `$` 前缀可以做到程序 `自动 loading` 功能。
 
 ## 编写UI组件
 

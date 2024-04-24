@@ -20,7 +20,7 @@ export interface NuomiStore<S = any, G = any> {
   commit(payload: any): S;
   restoreState(): S;
   state: S;
-  getter: G;
+  getters: G;
 }
 
 export interface StoreAPI extends Store {

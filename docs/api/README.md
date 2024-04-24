@@ -9,8 +9,8 @@ title: API
 | id  | '' | store id，不设置会动态创建 |
 | load  | function | 异步加载props |
 | state  | {} | 初始状态 |
-| reducer  | { @update/@replace } | 更新状态 |
-| action  | {} | 通过async await异步更新状态，函数名使用$前缀会自动生成loading状态，函数第一个参数为store，第二个参数为payload |
+| reducers  | { @update/@replace } | 更新状态 |
+| actions  | {} | 通过async await异步更新状态，函数名使用$前缀会自动生成loading状态，函数第一个参数为store，第二个参数为payload |
 | render  | function | 渲染组件 |
 | onInit  | function | 组件被创建后回调，此时内部store已经被创建，可以通过参数this.store访问，也可以通过this. |
 
@@ -45,11 +45,10 @@ title: API
 | cache  | false | 是否给留有创建一个div容器，可实现缓存功能 |
 | reload  | false | 匹配路由后是否重置状态，值为null则不法刷新 |
 | onEnter  | function | 路由匹配后，在reducer被创建之前回调，返回false将无法展示内容，参数为强制展示回调，调用后可以展示内容 |
-| onShow  | function | 路由匹配时回调，支持函数和对象 |
-| onActivte  | function | 路由匹配时回调，支持函数和对象 |
+| onShow  | function | 路由匹配时回调 |
+| onActivte  | function | 路由匹配时回调 |
 | onLeave  | function | 路由离开时回调，用于决定是否可以离开 |
-其他参数同Nuomi组件，
-回调的执行顺序是 onEnter > location.data > onChange > onInit，location.data下面路由跳转时会讲到
+其他参数同Nuomi组件
 <br /><b>注意：path和cache不能异步加载</b>
 
 ### Redirect
@@ -208,7 +207,7 @@ configure({
     state: {
         dataSource: [],
     },
-    reducer: {
+    reducers: {
         updateState: (state, payload) => ({ ...state, ...payload }),
     },
 });

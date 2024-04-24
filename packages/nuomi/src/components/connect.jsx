@@ -58,13 +58,13 @@ function connect(...args) {
         if (getStore(store.id) != null) {
           if (isFunction(mapStateToProps)) {
             // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
-            const state = mapStateToProps({ ...store.state, ...store.getter }, globalStore.getState());
+            const state = mapStateToProps({ ...store.state, ...store.getters }, globalStore.getState());
             if (state != null) {
               return state;
             }
             return {};
           }
-          return { ...store.state, ...store.getter };
+          return { ...store.state, ...store.getters };
         }
       }
 

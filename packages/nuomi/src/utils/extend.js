@@ -1,25 +1,25 @@
 export function extend(obj1 = {}, obj2 = {}) {
   const {
-    state = {}, reducer = {}, action = {}, getter = {}, ...rest
+    state = {}, reducers = {}, actions = {}, getters = {}, ...rest
   } = obj1;
   const {
-    state: s = {}, reducer: r = {}, action: a = {}, getter: g = {}, ...newRest
+    state: s = {}, reducers: r = {}, actions: a = {}, getters: g = {}, ...newRest
   } = obj2;
   return {
     state: {
       ...state,
       ...s,
     },
-    reducer: {
-      ...reducer,
+    reducers: {
+      ...reducers,
       ...r,
     },
-    action: {
-      ...action,
+    actions: {
+      ...actions,
       ...a,
     },
-    getter: {
-      ...getter,
+    getters: {
+      ...getters,
       ...g,
     },
     ...rest,

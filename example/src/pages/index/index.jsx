@@ -7,12 +7,12 @@ export default defineProps({
     count: 0,
     value: 1,
   },
-  getter: {
+  getters: {
     total({ value }) {
       return `${value}_111111`
     }
   },
-  action: {
+  actions: {
     async $initData({ getState, commit }) {
       const state = getState();
       const value = await new Promise((res) => {
@@ -31,6 +31,6 @@ export default defineProps({
     </>
   },
   onShow() {
-    
+
   }
 });

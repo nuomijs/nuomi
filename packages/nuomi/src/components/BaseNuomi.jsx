@@ -22,7 +22,6 @@ export default class BaseNuomi extends React.Component {
     super(...args);
     this.unListener = null;
     this.unSubcribe = null;
-    this.action = null;
     this.state = {
       key: 0,
     };
@@ -41,9 +40,9 @@ export default class BaseNuomi extends React.Component {
   }
 
   getDefaultState() {
-    const { state, action } = this.props;
+    const { state, actions } = this.props;
     const loading = {};
-    Object.keys(action).forEach((key) => {
+    Object.keys(actions).forEach((key) => {
       if (key && key.startsWith('$')) {
         if (typeof state[key] !== 'boolean') {
           loading[key] = false;
@@ -59,7 +58,7 @@ export default class BaseNuomi extends React.Component {
   }
 
   createReducer() {
-    const { store, reducer } = this.props;
+    const { store, reducers } = this.props;
     let defaultState = (globalWindow[INITIALISE_STATE] || initialiseState || {})[store.id];
     if (defaultState) {
       defaultState = extend({ state: store.state }, { state: defaultState }).state;
@@ -70,12 +69,12 @@ export default class BaseNuomi extends React.Component {
       const typePrefix = `${store.id}/`;
       if (type.indexOf(typePrefix) === 0) {
         const key = type.replace(typePrefix, '');
-        if (reducer[key]) {
-          return reducer[key](state, payload);
+        if (reducers[key]) {
+          return reducers[key](state, payload);
         }
         warning(
           false,
-          `未定义名称为 ${type} 的reducer，如果你想调用action中的方法，请使用
+          `未定义名称为 ${type} 的reducer，如果你想调用actions中的方法，请使用
           \nglobalStore.getStore('${store.id}').dispatch('${key}', payload)`,
         );
       }
@@ -84,7 +83,7 @@ export default class BaseNuomi extends React.Component {
   }
 
   updateGetter() {
-    const { store, getter: getters } = this.props;
+    const { store, getters } = this.props;
     const getter = {};
     const proxy = new Proxy(getters, {
       get(target, name) {
@@ -101,7 +100,7 @@ export default class BaseNuomi extends React.Component {
     Object.keys(getters).forEach((key) => {
       getter[key] = proxy[key](store.state);
     });
-    store.getter = getter;
+    store.getters = getter;
   }
 
   createSubcribe() {
@@ -116,7 +115,7 @@ export default class BaseNuomi extends React.Component {
 
   createStore() {
     const { props } = this;
-    const { store, reducer } = props;
+    const { store, reducers } = props;
 
     if (!store) {
       return;
@@ -125,21 +124,21 @@ export default class BaseNuomi extends React.Component {
     store.id = this.getId();
 
     store.dispatch = async function (type, payload) {
-      const { action } = props;
+      const { actions } = props;
 
       // type中包含斜杠视为调用其他模块方法
       const splitIndex = String(type).indexOf('/');
       if (splitIndex === -1) {
-        if (isObject(action) && isFunction(action[type])) {
+        if (isObject(actions) && isFunction(actions[type])) {
           // 带有loading功能的方法队列
           const loadingQueue = [];
           const loadingType = `${store.id}/@update`;
           try {
             // 通过代理可以知道调用的方法内部调用情况，调用的函数本身以及函数内部调用的方法或者属性都会走get
-            const proxy = new Proxy(action, {
+            const proxy = new Proxy(actions, {
               // name是当前调用的方法或者属性名
               get(target, name) {
-                const actionFunc = action[name];
+                const actionFunc = actions[name];
                 if (store.id && isFunction(actionFunc)) {
                   // $开头的方法进行loading特殊处理
                   if (name.startsWith('$')) {
@@ -207,14 +206,13 @@ export default class BaseNuomi extends React.Component {
             }
           }
           // action不存在就执行reducer中方法直接更新状态
-        } else if (reducer[type] && store.id) {
+        } else if (reducers[type] && store.id) {
           return globalStore.dispatch({
             type: `${store.id}/${type}`,
             payload,
           });
         } else {
-          warning(false, `action和reducer中不存在 ${type}`);
-          return action;
+          warning(false, `actions和reducers中不存在 ${type}`);
         }
         // dispatch其他模块方法
       } else {
@@ -249,7 +247,7 @@ export default class BaseNuomi extends React.Component {
 
     store.state = store.getState();
 
-    store.getter = {};
+    store.getters = {};
 
     store.commit = function (...args) {
       let [type, payload] = args;
@@ -260,7 +258,7 @@ export default class BaseNuomi extends React.Component {
         }
         const splitIndex = String(type).indexOf('/');
         if (splitIndex === -1) {
-          if (reducer[type] && store.id) {
+          if (reducers[type] && store.id) {
             globalStore.dispatch({
               type: `${store.id}/${type}`,
               payload,

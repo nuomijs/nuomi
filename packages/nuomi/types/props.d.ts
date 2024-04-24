@@ -36,9 +36,9 @@ export interface NuomiProps<S = any, G = any> {
   id?: string;
   state?: S;
   store?: NuomiStore<S, G> | null;
-  reducer?: NuomiReducer<S>;
-  action?: NuomiAction<S, G>;
-  getter?: NuomiGetter<S>;
+  reducers?: NuomiReducer<S>;
+  actions?: NuomiAction<S, G>;
+  getters?: NuomiGetter<S>;
   extends?: NuomiProps[];
   load?: (cb?: (context: any) => void) => any;
   render?: Function;

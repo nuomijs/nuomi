@@ -1,5 +1,11 @@
 # 更新日志：
 
+## 1.2.0 (2024-04-24)
+* Nuomi组件
+  - 移除reducer，新增reducers
+  - 移除action，新增actions
+  - 移除getter，新增getters
+
 ## 1.1.1 (2023-06-20)
 * 增加useLocation hoosk函数，返回location对象
 * 增加withLocation高阶组件，子组件props会增加location对象

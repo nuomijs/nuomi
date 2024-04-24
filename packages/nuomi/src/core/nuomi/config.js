@@ -2,7 +2,7 @@ import { extend, extendArray } from '../../utils/extend';
 
 const defaultNuomiProps = {
   state: {},
-  reducer: {
+  reducers: {
     '@replace': (state, payload) => ({ ...payload }),
     '@update': (state, payload) => ({ ...state, ...payload }),
   },

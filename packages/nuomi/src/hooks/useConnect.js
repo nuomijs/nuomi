@@ -22,13 +22,13 @@ function useConnect(callback) {
     if (getStore(store.id) != null) {
       if (isFunction(callback)) {
         // 第一个参数是当前Nuomi组件状态，第二个参数是所有组件状态
-        const state = callback({ ...store.state, ...store.getter }, globalStore.getState());
+        const state = callback({ ...store.state, ...store.getters }, globalStore.getState());
         if (state != null) {
           return state;
         }
         return {};
       }
-      const state = { ...store.state, ...store.getter };
+      const state = { ...store.state, ...store.getters };
       if (selectedRef.current) {
         const selectedState = {};
         Object.keys(selectedRef.current).forEach((key) => {

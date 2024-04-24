@@ -22,7 +22,7 @@ export default defineProps({
       to: '/404'
     }]
   },
-  getter: {
+  getters: {
     aaa({ count }) {
       return count + 1
     },
@@ -30,8 +30,8 @@ export default defineProps({
       return [1, 2]
     }
   },
-  action: {
-    async $getData2({ getter }) {
+  actions: {
+    async $getData2() {
       await new Promise((res) => {
         setTimeout(() => {
           res();
