@@ -4,6 +4,7 @@ module.exports = {
   title: 'NuomiJS',
   mode: 'doc',
   langTheme: 'tomorrow',
+  type: 'browser',
   nav: [{
     text: '指南',
     to: '/guide',
