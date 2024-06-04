@@ -25,7 +25,7 @@
     "babel-jest": "^25.1.0",
     "babel-plugin-import": "^1.13.0",
     "cross-env": "^5.2.0",
-    "docfree": "^0.7.3",
+    "docfree": "^0.7.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.20.1",
